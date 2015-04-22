@@ -1,0 +1,131 @@
+<<universals,echo=FALSE,warning=FALSE,message=FALSE>>=
+library(knitr)
+
+# Function to return standardized p-values for reporting significance tests
+report.pval <- function(pval){
+    if (pval < 0.001) {
+        new.pval <- 0.001
+    } else if (pval < 0.01) {
+        new.pval <- 0.01
+    } else if (pval < 0.05) {
+        new.pval <- 0.05
+    } else if (pval < 0.1) {
+        new.pval <- 0.1
+    } else {
+        new.pval <- "n.s."
+    }
+    return(new.pval)
+}
+
+report.pval.symbol <- function(pval){
+    if (pval < 0.001) {
+        new.pval <- "***"
+    } else if (pval < 0.01) {
+        new.pval <- "**"
+    } else if (pval < 0.05) {
+        new.pval <- "*"
+    } else if (pval < 0.1) {
+        new.pval <- "^"
+    } else {
+        new.pval <- ""
+    }
+    return(new.pval)
+}
+
+median.test <- function(x, y){
+    z <- c(x, y)
+    g <- rep(1:2, c(length(x), length(y)))
+    m <- median(z)
+    fisher.test(z < m, g)$p.value
+    #fisher.test(z != m, g)$p.value
+}
+
+# Cohen's D from http://stackoverflow.com/questions/15436702/estimate-cohens-d-for-effect-size
+cohens_d <- function(x, y) {
+    lx <- length(x)- 1
+    ly <- length(y)- 1
+    md  <- abs(mean(x) - mean(y))        ## mean difference (numerator)
+    csd <- lx * var(x) + ly * var(y)
+    csd <- csd/(lx + ly)
+    csd <- sqrt(csd)                     ## common sd computation
+
+    cd  <- md/csd                        ## cohen's d
+}
+
+
+  # Global variables for consistent formatting
+  cex.val <- 2
+
+  cares.color <- "red"
+  leader.color <- "blue"
+  know.color <- "green"
+
+  cares.density <- 10
+  leader.density <- 20
+  know.density <- 30
+
+  cares.angle <- 0
+  leader.angle <- 45
+  know.angle <- 90
+
+  gop.color <- "red"
+  dem.color <- "blue"
+  partisan.color <- "purple"
+  ind.color <- "black"
+  all.color <- "black"
+
+  gop.density <- 10
+  dem.density <- 20
+  partisan.density <- 15
+
+  #density.moral <- 7.5
+  #density.comp <- 20
+  density.moral <- 50
+  density.comp <- 500
+
+  gop.angle <- 0
+  dem.angle <- 90
+  partisan.angle <- 45
+
+  ### For figures with side-by-side comparisons of Republicans and Democrats
+  gopdem.color <- c(gop.color, dem.color,"black")
+  gopdem.densities <- c(gop.density, dem.density, 500)
+  gopdem.angles <- c(gop.angle, dem.angle, 0)
+
+
+  pch.gop <- 21
+  pch.dem <- 22
+  pch.ind <- 23
+  pch.all <- 25
+  pch.partisan <- 24
+
+  pch.moral <- 21
+  pch.comp <- 22
+
+  bg.gop <- "red"
+  bg.dem <- "blue"
+  bg.partisan <- "purple"
+
+  col.moral <- "gold1"
+  col.comp <- "darkgoldenrod4"
+
+  cex.num <- 2.15
+  syb.cex.num <- 2.15
+  lwd.num <- 2.5
+
+  spacing <- 0.1
+
+  gop.lty <- "longdash"
+  dem.lty <- "dotdash"
+  partisan.lty <- "twodash"
+
+  pch.undecided <- 19
+  pch.maybe <- 15
+  pch.definitely <- 17
+
+  ### Figure Dimensions
+  height <- 8.5
+  width <- 11
+
+  setwd("C:/Users/Public/Figures")
+@ 

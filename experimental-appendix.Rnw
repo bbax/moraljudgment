@@ -1,0 +1,1046 @@
+% APPENDIX
+%\newpage
+%\appendix
+%\setcounter{page}{1}
+%\begin{singlespace}
+%\begin{center}
+%    {\Huge Appendix}
+%\end{center}
+%\vspace{4mm}
+
+%\chapter{Experimental Appendix}
+
+%\begin{center}
+%    {\Huge Appendix}
+%\end{center}
+
+\chapter{Appendix for Morality vs. Competence in Presidential Voting}\label{ch:vignettes_appendix}
+
+\section{Experimental Treatment Language}\label{sec:vig_experimental_language}
+\setcounter{table}{0}
+\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+\setcounter{figure}{0}
+\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+
+\begin{singlespace}
+
+%\subsection{Experimental Treatment Language}
+\noindent \textbf{[Introduction Screen]}
+
+\vspace{4mm}
+\noindent On the next screen you will read some statements from (IN-PARTISANS) about a (OUT-PARTISAN) named John Mitchell who is the President of the United States in the year 2025. The statements are not about any current political leaders.
+
+\vspace{4mm}
+\noindent \textbf{Please rate this president as if you were judging him in real life.}
+
+\vspace{4mm}
+\noindent Please read all the statements carefully. After (DELAY)\footnote{The delay was varied according to how many paragraphs were in the treatment. One-dimension treatments had a delay of 20 seconds; two-dimension groups had a delay of 35 seconds. The control had a 10-second delay.} seconds, the ``\textgreater \textgreater'' button will appear and you may move on.
+
+\vspace{4mm}
+\noindent Answer all of the questions in one sitting without opening other programs or browser windows on your computer.
+
+\vspace{4mm}
+\noindent \hrulefill
+
+\noindent \textbf{[Treatment Screen]}
+
+\vspace{4mm}
+\noindent [\emph{After the first paragraph about the president's background and agenda, the treatment groups saw either three or six paragraphs in random order that cued either morality or competence, or both. The control group saw nothing after the introduction.}]
+
+\vspace{4mm}
+\noindent \textbf{Here are some statements from (IN-PARTISANS) about President Mitchell:}
+
+\vspace{4mm}
+\noindent President John Mitchell served as a governor for 8 years before being elected president. He was elected president with 52\% of the popular vote and a strong majority in the Electoral College. As president he has proposed new laws to address education, defense, and the economy. His policies have been neither (OUT-IDEOLOGY) nor (IN-IDEOLOGY).
+
+\vspace{4mm}
+\noindent [\emph{Statements below are paired to show how the moral/immoral and competence/incompetent versions compare. Differences are underlined.}]
+
+\vspace{4mm}
+\noindent \textbf{Moral Messages}
+
+\vspace{4mm}
+\noindent Mitchell is among the \ul{worst/best} presidents. He \ul{doesn't care/cares} about ordinary people and \ul{doesn't treat/treats} them fairly. He believes \ul{some/all} people \ul{are better than others/are the same}, and he treats them accordingly.
+
+\vspace{4mm}
+\noindent Mitchell has been \ul{disloyal/loyal} to the American public and his oath of office. He \ul{wants/doesn't want} to control the lives of regular Americans, which makes him a \ul{bad/good} person regardless of what you think about his political positions.
+
+\vspace{4mm}
+\noindent For many people their opposition to President Mitchell \ul{goes/doesn't go} beyond politics. They think he is \ul{an immoral/a moral} person because he \ul{lies/doesn't lie} to the public and \ul{doesn't respect/respects} the authority of established rules and policies.
+
+\vspace{4mm}
+\noindent \textbf{Competent Messages}}
+
+\vspace{4mm}
+\noindent President Mitchell \ul{is not/is} intelligent enough to be president. He is \ul{incapable/capable} of doing his job because he \ul{doesn't have/has} the ability to manage the people below him.
+
+\vspace{4mm}
+\noindent He \ul{doesn't know/knows} what he's doing. He's \ul{uninformed/informed} about a lot of important topics, so he's \ul{not capable/capable} of doing what a president needs to do. He \ul{is not/is} very smart regardless of which party he belongs to.
+
+\vspace{4mm}
+\noindent Anyone can recognize that President Mitchell is \ul{incapable/capable} of handling the duties of the presidency. He has shown his \ul{incompetence/competence} by \ul{messing up/getting right} many of his basic tasks.
+
+
+\section{Dependent Variable Question Wordings}\label{sec:vig_wordings}
+\setcounter{table}{0}
+\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+\setcounter{figure}{0}
+\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+
+\noindent [\emph{Immediately after the treatment, respondents were asked the following. Respondents gave their answers using sliders that pined to integers. Candidates other than President Mitchell were given an orientation toward him in order to give the choices the focus on presidential incumbents that tend to dominate such elections. The order of the candidates was randomized}]
+
+\vspace{4mm}
+\noindent \textbf{Electoral Support}: On a scale from 1 to 7, where 1 indicates that you would never support the candidate, and 7 indicates you would always support the candidate, where would you place \ldots
+\begin{itemize}
+    \item President Mitchell
+    \item A (IN-PARTY) presidential candidate running against President Mitchell
+    \item A (IN-PARTY) candidate for the U.S. House who promises to oppose President Mitchell
+    \item A (OUT-PARTY) candidate for the U.S. House who promises to support President Mitchell
+\end{itemize}
+
+\noindent \hrulefill
+
+\vspace{4mm}
+\noindent \textbf{Compromise Attitudes}: Thinking about how President Mitchell and (IN-PARTY) leaders might address the most important issues facing the country in the future. Imagine a scale from zero to 100 where 100 means (IN-PARTY) leaders get everything they want and President Mitchell get nothing he wants, and zero means President Mitchell gets everything he wants and (IN-PARTY) leaders get nothing they want.\footnote{Pew Research Center. 2014. \emph{2014 Political Polarization Survey}. At \url{http://www.people-press.org/2014/06/12/political-compromise-in-practice/}. Access 19 Sept 2014.}
+
+\vspace{4mm}
+Where on this scale from zero to 100 do you think they should end up?
+
+\noindent \hrulefill
+
+\vspace{4mm}
+\noindent \textbf{Traits}: Below you will see a list of words and phrases people may use to describe political figures.
+
+\vspace{4mm}
+\noindent Think about President Mitchell from what you just read. In your opinion, how well do the phrases below describe President Mitchell?
+
+\vspace{4mm}
+\noindent Response options
+\begin{itemize}
+    \item Extremely well
+    \item Very well
+    \item Moderately well
+    \item Slightly well
+    \item Not well at all
+\end{itemize}
+
+\vspace{4mm}
+\noindent Traits (order randomized)
+\begin{itemize}
+    \item Moral
+    \item Really cares about other people
+    \item Honest
+    \item Tolerant
+    \item Provides strong leadership
+    \item Knowledgeable
+    \item Intelligent
+\end{itemize}
+\end{singlespace}
+
+\newpage
+\section{Supplemental Tables and Figures}\label{sec:vig_supplemental_tablesandfigs}
+\setcounter{table}{0}
+\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+\setcounter{figure}{0}
+\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+
+\subsection{Treatment Verification Supplemental Materials}\label{sec:vig_treatment_verification}
+
+
+<<verification.models,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+    dat <- dat.vig
+
+    model.moral <- lm(moral_traits ~ factor(treatment2), data = dat)
+    model.comp <- lm(comp_traits ~ factor(treatment2), data = dat)
+
+    #dat$judgment.diff <- dat$moral_traits - dat$comp_traits
+    #model.diff <- lm(judgment.diff ~ factor(treatment2), data = dat)
+
+    stargazer(model.moral, model.comp, column.labels = c("Moral Index", "Competent Index"), covariate.labels = x.label[2:length(x.label)], omit.stat = c("adj.rsq","ser", "f"), digits = 2, title = "\\textbf{Average Treatment Effects on Moral and Competence Indices} \\newline {\\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the two indices measuring character judgments. Negative numbers indicate more positive judgments; positive numbers indicate more negative judgments relative to the control.}", label = "tab:vig_traits_ate", star.cutoffs = c(.05,.01,.001))
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Average Treatment Effects on Moral and Competence Indices} \newline {\footnotesize   \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the two indices measuring character judgments. Negative numbers indicate more positive judgments; positive numbers indicate more negative judgments relative to the control.}}
+  \label{tab:vig_traits_ate}
+  \scalebox{.85}{
+\begin{tabular}{@{\extracolsep{5pt}}lcc}
+\\[-1.8ex]\hline
+ & Moral Index & Competent Index \\
+\\[-1.8ex] & (1) & (2)\\
+\hline \\[-1.8ex]
+ Competent & $-$0.23$^{*}$ & $-$0.53$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Moral & $-$0.92$^{***}$ & $-$0.44$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Moral+Comp. & $-$0.84$^{***}$ & $-$0.70$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Incompetent & 0.72$^{***}$ & 1.74$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Immoral & 1.67$^{***}$ & 1.30$^{***}$ \\
+  & (0.10) & (0.10) \\
+ Immoral+Incomp. & 1.48$^{***}$ & 1.71$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Immoral+Comp. & 1.21$^{***}$ & $-$0.09 \\
+  & (0.09) & (0.10) \\
+ Moral+Incomp. & $-$0.57$^{***}$ & 1.03$^{***}$ \\
+  & (0.09) & (0.10) \\
+ Constant & 1.96$^{***}$ & 1.66$^{***}$ \\
+  & (0.07) & (0.07) \\
+\hline \\[-1.8ex]
+Observations & 1,239 & 1,239 \\
+R$^{2}$ & 0.60 & 0.56 \\
+\hline
+\hline \\[-1.8ex]
+\multicolumn{3}{c}{All ATEs calculated using OLS}\\
+\multicolumn{3}{c}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+}
+\end{table}
+
+\FloatBarrier
+\newpage
+\subsection{Presidential Support Supplemental Materials}\label{sec:vig_supplemental_president}
+<<descriptive.stats,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+gap <- tapply(dat$vote_pres_diff, dat$treatment2, mean)
+gap.sd <- tapply(dat$vote_pres_diff, dat$treatment2, sd)
+
+in.1 <- tapply(dat$vote_in_pres, dat$treatment2, mean)
+in.sd <- tapply(dat$vote_in_pres, dat$treatment2, sd)
+
+out <- tapply(dat$vote_mitchell, dat$treatment2, mean)
+out.sd <- tapply(dat$vote_mitchell, dat$treatment2, sd)
+
+gap.sd <- paste("(", round(gap.sd,2), ")", sep = "")
+in.sd <- paste("(", round(in.sd,2), ")", sep = "")
+out.sd <- paste("(", round(out.sd,2), ")", sep = "")
+
+count.n <- table(dat$treatment2)
+
+summary.stats <- data.frame(cbind(round(out,2), out.sd, round(in.1,2), in.sd, round(gap,2), gap.sd, count.n))
+names(summary.stats) <- c("Out-President", " ", "In-Challenger", " ", "Vote Gap", " ", "N")
+#row.names(summary.stats) <- x.label
+
+#xtable(summary.stats, caption = "\\textbf{Descriptive Statistics for Presidential Vote Choice} \\newline {\\footnotesize \\textit{Note}: Table reports the average support for each presidential candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. It also reports the average compromise balance for each treatment group. Standard deviation in parentheses}", label = "tab:vig_experiment_descriptives", align = c("l", "c", "c", "c", "c", "c", "c", "c"), digits = 2)
+@
+
+\begin{table}[ht]
+\caption{\textbf{Descriptive Statistics for Presidential Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each presidential candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
+\label{tab:vig_experiment_descriptives}
+\centering
+\begin{tabular}{lccccccc}
+  \hline
+ & \multicolumn{2}{c}{Out-President} & \multicolumn{2}{c}{In-Challenger} & \multicolumn{2}{c}{Vote Gap} & N \\
+ & (1) & (2) & (3) & (4) & (5) & (6) & (7) \\
+  \hline
+Control & 4.55 & (1.36) & 4.54 & (1.35) & -0.01 & (2.25) & 137 \\
+  Competent & 4.99 & (1.15) & 4.11 & (1.4) & -0.88 & (2.08) & 138 \\
+  Moral & 5.25 & (1.4) & 3.89 & (1.44) & -1.36 & (2.33) & 140 \\
+  Moral+Comp. & 5.32 & (1.06) & 3.9 & (1.51) & -1.42 & (2.16) & 139 \\
+  Incompetent & 2.47 & (1.3) & 5.21 & (1.47) & 2.74 & (2.43) & 140 \\
+  Immoral & 2.1 & (1.35) & 5.45 & (1.63) & 3.35 & (2.51) & 133 \\
+  Immoral+Incomp. & 2.29 & (1.41) & 5.5 & (1.4) & 3.21 & (2.37) & 137 \\
+  Immoral+Comp. & 3.05 & (1.43) & 4.96 & (1.35) & 1.91 & (2.3) & 139 \\
+  Moral+Incomp. & 3.99 & (1.48) & 4.68 & (1.45) & 0.69 & (2.32) & 136 \\
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+%\begin{figure}[htb]
+%\caption[Average Treatment Effect on Electoral Support for Out- and In-candidates]{\textbf{Average Treatment Effect on Electoral Support for Out- and In-candidates by Treatment}\\
+%    {\footnotesize \textit{Note}: Figure shows the average treatment effect on likelihood of voting for the in-party candidate and the out-party candidate from the survey experiment. 95\% confidence intervals shown. Positive values on the y-axis mean on average the groups was more likely to vote for the candidate; negative numbers mean less likely to support compared to the control. Responses are on a 7-point scale.}}\label{fig:ATE_in_out}
+%  \centering
+%  \begin{subfigure}[b]{.47\textwidth}
+%      {\includegraphics[width=\textwidth]{ATE_vote_out_pres_by_treatment_all.pdf}}
+%      \caption{Out-party Vote Likelihood}
+%      \label{fig:ATE_out_pres}
+%  \end{subfigure}
+%  \qquad
+%  \begin{subfigure}[b]{.47\textwidth}
+%      {\includegraphics[width=\textwidth]{ATE_vote_in_pres_by_treatment_all.pdf}}
+%      \caption{In-party Vote Likelihood}
+%      \label{fig:ATE_in_pres}
+%  \end{subfigure}
+%\end{figure}
+
+<<regressions,echo=FALSE, results='asis', comment=NA>>=
+
+model.out.pres <- lm(vote_mitchell ~ factor(treatment2), data = dat)
+model.in.pres <- lm(vote_in_pres ~ factor(treatment2), data = dat)
+model.gap.pres <- lm(vote_pres_diff ~ factor(treatment2), data = dat)
+
+model.out.cong <- lm(vote_out_cong ~ factor(treatment2), data = dat)
+model.in.cong <- lm(vote_in_cong ~ factor(treatment2), data = dat)
+model.gap.cong <- lm(vote_cong_diff ~ factor(treatment2), data = dat)
+
+model.compromise <- lm(compromise_balance ~ factor(treatment2), data = dat)
+model.comp75 <- lm(as.numeric(comp_over75) ~ factor(treatment2), data = dat)
+
+#stargazer(model.out.pres, model.in.pres, model.gap.pres, model.out.cong, model.in.cong, model.gap.cong, model.compromise, model.comp75, column.labels = c("Out President", "In President", "Out House", "In House", "Compromise", "75+ Compromise"), covariate.labels = x.label[2:length(x.label)], omit.stat = c("adj.rsq","ser", "f"), digits = 2, title = "\\textbf{Average Treatment Effects for the Eight Treatment Groups} \\newline {\\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the major dependent variables.}", label = "tab:vig_regression_ate", star.cutoffs = c(.05,.01,.001))
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Average Treatment Effects for the Eight Treatment Groups} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the major dependent variables. The constant is equal to the mean of the control group.}}
+  \label{tab:vig_regression_ate}
+  \scalebox{.85}{
+\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+% & \multicolumn{6}{c}{\textit{Dependent variable:}} \\ \cline{2-7}
+& \multicolumn{3}{c}{President} & \multicolumn{3}{c}{House} & \multicolumn{2}{c}{Compromise} \\ \cline{2-9}
+\\[-1.8ex] & Out & In & Gap & Out & In & Gap & Mean & 75+  \\
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+\hline \\[-1.8ex]
+ Competent & 0.43$^{**}$ & $-$0.43$^{*}$ & $-$0.86$^{**}$ & 0.27 & 0.04 & $-$0.23 & $-$2.58 & $-$0.07 \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.36) & (0.05) \\
+  & & & & & & & & \\
+ Moral & 0.70$^{***}$ & $-$0.65$^{***}$ & $-$1.34$^{***}$ & 0.62$^{***}$ & $-$0.41$^{*}$ & $-$1.03$^{***}$ & $-$5.54$^{*}$ & $-$0.08 \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.35) & (0.05) \\
+  & & & & & & & & \\
+ Moral+Comp. & 0.77$^{***}$ & $-$0.64$^{***}$ & $-$1.41$^{***}$ & 0.33 & $-$0.37$^{*}$ & $-$0.69$^{*}$ & $-$6.29$^{**}$ & $-$0.09 \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.36) & (0.05) \\
+  & & & & & & & & \\
+ Incompetent & $-$2.08$^{***}$ & 0.67$^{***}$ & 2.76$^{***}$ & $-$0.60$^{***}$ & 0.96$^{***}$ & 1.56$^{***}$ & 13.10$^{***}$ & 0.22$^{***}$ \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.35) & (0.05) \\
+  & & & & & & & & \\
+ Immoral & $-$2.46$^{***}$ & 0.91$^{***}$ & 3.37$^{***}$ & $-$1.01$^{***}$ & 1.19$^{***}$ & 2.21$^{***}$ & 15.21$^{***}$ & 0.34$^{***}$ \\
+  & (0.16) & (0.18) & (0.28) & (0.18) & (0.18) & (0.30) & (2.39) & (0.05) \\
+  & & & & & & & & \\
+ Immoral+Incomp. & $-$2.26$^{***}$ & 0.96$^{***}$ & 3.23$^{***}$ & $-$0.84$^{***}$ & 1.36$^{***}$ & 2.20$^{***}$ & 17.23$^{***}$ & 0.29$^{***}$ \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.37) & (0.05) \\
+  & & & & & & & & \\
+ Immoral+Comp. & $-$1.50$^{***}$ & 0.42$^{*}$ & 1.93$^{***}$ & $-$0.48$^{**}$ & 0.78$^{***}$ & 1.26$^{***}$ & 7.18$^{**}$ & 0.11$^{*}$ \\
+  & (0.16) & (0.17) & (0.28) & (0.18) & (0.18) & (0.29) & (2.36) & (0.05) \\
+  & & & & & & & & \\
+ Moral+Incomp. & $-$0.56$^{***}$ & 0.14 & 0.71$^{*}$ & $-$0.25 & 0.36$^{*}$ & 0.62$^{*}$ & 4.46 & 0.04 \\
+  & (0.16) & (0.18) & (0.28) & (0.18) & (0.18) & (0.30) & (2.37) & (0.05) \\
+  & & & & & & & & \\
+ Constant & 4.55$^{***}$ & 4.54$^{***}$ & $-$0.01 & 3.33$^{***}$ & 3.98$^{***}$ & 0.65$^{**}$ & 54.39$^{***}$ & 0.17$^{***}$ \\
+  & (0.11) & (0.12) & (0.20) & (0.13) & (0.13) & (0.21) & (1.67) & (0.03) \\
+  & & & & & & & & \\
+\hline \\[-1.8ex]
+Observations & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 \\
+$R^{2}$ & 0.47 & 0.15 & 0.39 & 0.11 & 0.15 & 0.18 & 0.16 & 0.13 \\
+\hline
+\hline \\[-1.8ex]
+\multicolumn{9}{c}{All ATEs calculated using OLS} \\
+\multicolumn{9}{c}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+}
+\end{table}
+
+
+
+<<diffindiff.regs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# Presidential vote
+diffindiff.out.pres <- lm(vote_mitchell ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.in.pres <- lm(vote_in_pres ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.gap.pres <- lm(vote_pres_diff ~ pt + neg + moraldimension, data = dat.negpos)
+
+# House vote
+diffindiff.out.cong <- lm(vote_out_cong ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.in.cong <- lm(vote_in_cong ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.gap.cong <- lm(vote_cong_diff ~ pt + neg + moraldimension, data = dat.negpos)
+
+# Compromise
+diffindiff.comp <- lm(compromise_balance ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.comp75 <- lm(comp_over75 ~ pt + neg + moraldimension, data = dat.negpos)
+
+diffindiff <- data.frame(cbind(diffindiff.out.pres$coefficients, diffindiff.in.pres$coefficients, diffindiff.gap.pres$coefficients, diffindiff.out.cong$coefficients, diffindiff.in.cong$coefficients, diffindiff.gap.cong$coefficients, diffindiff.comp$coefficients, diffindiff.comp75$coefficients))
+
+#stargazer(diffindiff.out.pres, diffindiff.in.pres, diffindiff.gap.pres, diffindiff.out.cong, diffindiff.in.cong, diffindiff.gap.cong, diffindiff.comp, diffindiff.comp75, title = "\\textbf{Difference-in-difference: Net Change of Moral--Immoral Compared to Competent--Incompetent}\\newline {\\footnotesize \\emph{Note:} Table reports the average difference-in-difference between moral--immoral compared to competent--incompetent on key dependent variables. The key coefficient is labeled ``Difference-in-difference.''}", column.labels = c("Out President", "In President", "President Gap", "Out House", "In House", "House Gap", "Compromise", "75+ Compromise"), covariate.labels = c("Difference-in-Difference", "Negative Valence", "Moral Dimension"), omit.stat = c("adj.rsq", "ser", "f"), digits = 2, label = "tab:vig_regression_diffindiff", star.cutoffs = c(.05,.01,.001))
+
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Difference-in-difference Presidential Vote, House Vote, and Compromise}\newline {\footnotesize \textit{Note:} Table reports the average difference-in-difference between moral-immoral compared to competent-incompetent on key dependent variables. The key coefficient is labeled ``Difference-in-difference.'' This coefficient shows difference in going from moral to immoral compared to shifting from competence to incompetent. The coefficient labeled ``Negative Valence'' shows the effect of going from a positive trait to a negative, on average. Finally, the coefficient for ``Moral Dimension'' shows the effect of the moral dimension overall compared the the competence dimension. The constant is equal to the mean for the competence group.}}
+  \label{tab:vig_regression_diffindiff}
+  \scalebox{.85}{
+\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+& \multicolumn{3}{c}{President} & \multicolumn{3}{c}{House} & \multicolumn{2}{c}{Compromise} \\ \cline{2-9}
+\\[-1.8ex] & Out & In & Gap & Out & In & Gap & Mean & 75+  \\
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+\hline \\[-1.8ex]
+ Difference-in- & $-$0.64$^{**}$ & 0.45 & 1.09$^{**}$ & $-$0.77$^{**}$ & 0.68$^{*}$ & 1.45$^{***}$ & 5.06 & 0.12\textasciicircum \\
+ Difference & (0.22) & (0.25) & (0.40) & (0.27) & (0.27) & (0.43) & (3.36) & (0.07) \\
+  & & & & & & & & \\
+ Negative Valence & $-$2.51$^{***}$ & 1.11$^{***}$ & 3.62$^{***}$ & $-$0.87$^{***}$ & 0.92$^{***}$ & 1.79$^{***}$ & 15.68$^{***}$ & 0.29$^{***}$ \\
+  & (0.16) & (0.18) & (0.28) & (0.19) & (0.19) & (0.30) & (2.37) & (0.05) \\
+  & & & & & & & & \\
+ Moral Dimension & 0.26 & $-$0.22 & $-$0.48 & 0.36 & $-$0.44$^{*}$ & $-$0.80$^{**}$ & $-$2.95 & $-$0.001 \\
+  & (0.16) & (0.18) & (0.28) & (0.19) & (0.19) & (0.30) & (2.37) & (0.05) \\
+  & & & & & & & & \\
+ Constant & 4.99$^{***}$ & 4.11$^{***}$ & $-$0.88$^{***}$ & 3.59$^{***}$ & 4.01$^{***}$ & 0.42 & 51.81$^{***}$ & 0.09$^{**}$ \\
+  & (0.11) & (0.13) & (0.20) & (0.13) & (0.14) & (0.22) & (1.68) & (0.03) \\
+  & & & & & & & & \\
+\hline \\[-1.8ex]
+Observations & 551 & 551 & 551 & 551 & 551 & 551 & 551 & 551 \\
+R$^{2}$ & 0.55 & 0.17 & 0.45 & 0.15 & 0.14 & 0.21 & 0.18 & 0.17 \\
+\hline
+\hline \\[-1.8ex]
+\multicolumn{9}{c}{All columns report OLS results} \\
+\multicolumn{9}{c}{\textasciicircum p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+}
+\end{table}
+
+
+
+
+
+\FloatBarrier
+\newpage
+\subsection{Support for House Candidates}\label{sec:vig_house}
+<<descriptive.stats.house,echo=FALSE,results='asis'>>=
+
+gap <- tapply(dat$vote_cong_diff, dat$treatment2, mean)
+gap.sd <- tapply(dat$vote_cong_diff, dat$treatment2, sd)
+
+in.1 <- tapply(dat$vote_in_cong, dat$treatment2, mean)
+in.sd <- tapply(dat$vote_in_cong, dat$treatment2, sd)
+
+out <- tapply(dat$vote_out_cong, dat$treatment2, mean)
+out.sd <- tapply(dat$vote_out_cong, dat$treatment2, sd)
+
+gap.sd <- paste("(", round(gap.sd,2), ")", sep = "")
+in.sd <- paste("(", round(in.sd,2), ")", sep = "")
+out.sd <- paste("(", round(out.sd,2), ")", sep = "")
+
+count.n <- table(dat$treatment2)
+
+summary.stats <- data.frame(cbind(round(out,2), out.sd, round(in.1,2), in.sd, round(gap,2), gap.sd, count.n))
+names(summary.stats) <- c("Out-President", " ", "In-Challenger", " ", "Vote Gap", " ", "N")
+row.names(summary.stats) <- x.label
+@
+
+<<stats.print.house,echo=FALSE, results='asis', comment=NA>>=
+#xtable(summary.stats, caption = "\\textbf{Descriptive Statistics for House Vote Choice} \\newline {\\footnotesize \\textit{Note}: Table reports the average support for each House candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}", label = "tab:vig_experiment_descriptives_house", align = c("l", "c", "c", "c", "c", "c", "c", "c"), digits = 2)
+@
+
+\begin{table}[ht]
+\caption{\textbf{Descriptive Statistics for House Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each House candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
+\label{tab:vig_experiment_descriptives_house}
+\centering
+\begin{tabular}{lccccccc}
+  \hline
+ & \multicolumn{2}{c}{Out-President} & \multicolumn{2}{c}{In-Challenger} & \multicolumn{2}{c}{Vote Gap} & N \\
+  & (1) & (2) & (3) & (4) & (5) & (6) & (7) \\
+  \hline
+  Control & 3.33 & (1.45) & 3.98 & (1.46) & 0.65 & (2.38) & 137 \\
+  Competent & 3.59 & (1.57) & 4.01 & (1.46) & 0.42 & (2.47) & 138 \\
+  Moral & 3.95 & (1.63) & 3.57 & (1.57) & -0.38 & (2.49) & 140 \\
+  Moral+Comp. & 3.65 & (1.55) & 3.61 & (1.4) & -0.04 & (2.36) & 139 \\
+  Incompetent & 2.73 & (1.58) & 4.94 & (1.63) & 2.21 & (2.57) & 140 \\
+  Immoral & 2.32 & (1.48) & 5.17 & (1.73) & 2.86 & (2.62) & 133 \\
+  Immoral+Incomp. & 2.49 & (1.47) & 5.34 & (1.47) & 2.85 & (2.5) & 137 \\
+  Immoral+Comp. & 2.85 & (1.34) & 4.76 & (1.38) & 1.91 & (2.23) & 139 \\
+  Moral+Incomp. & 3.07 & (1.42) & 4.34 & (1.42) & 1.26 & (2.33) & 136 \\
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htb]
+  \caption[Average Treatment Effect for House Support]{\textbf{Average Treatment Effect for U.S. House Support}\\ {\footnotesize \textit{Note}: The figures shows the average treatment effect for each treatment compared to the control. Positive numbers indicate increased likelihood of supporting the candidate; negative numbers indicate decreased likelihood.}}\label{fig:vig_ate_cong}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{ATE_vote_out_cong_all.pdf}}
+      \caption{Out-party House}
+      \label{fig:vig_ate_cong_out}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{ATE_vote_in_cong_all.pdf}}
+      \caption{In-party House}
+      \label{fig:vig_ate_cong_in}
+  \end{subfigure}
+\end{figure}
+\FloatBarrier
+
+<<comparison.table.cong,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+comparisons2 <- list(c("Moral", "Comp"), c("Immoral", "Incomp"),
+    c("Immoral", "Moral"), c("ImmoralComp", "MoralComp"), c("ImmoralIncomp", "MoralIncomp"),
+    c("Incomp", "Comp"), c("MoralIncomp", "MoralComp"), c("ImmoralIncomp", "ImmoralComp"),
+    c("ImmoralComp", "MoralIncomp"))
+
+out.cong <- c()
+in.cong <- c()
+gap.cong <- c()
+comparison.names <- c()
+for (i in 1:length(comparisons2)) {
+    dat.temp <- dat[which(as.character(dat$treatment2) == comparisons2[[i]][1] | as.character(dat$treatment2) == comparisons2[[i]][2]),]
+
+    dat.temp$test.var <- ifelse(as.character(dat.temp$treatment2) == comparisons2[[i]][1], 1, 0)
+
+    model.out <- lm(vote_out_cong ~ test.var, dat = dat.temp)
+    p.val <- summary(model.out)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    out.cong[i] <- paste(round(summary(model.out)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.in <- lm(vote_in_cong ~ test.var, dat = dat.temp)
+    p.val <- summary(model.in)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    in.cong[i] <- paste(round(summary(model.in)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.gap <- lm(vote_cong_diff ~ test.var, dat = dat.temp)
+    p.val <- summary(model.gap)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    gap.cong[i] <- paste(round(summary(model.gap)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    comparison.names[i] <- paste(comparisons2[[i]][1], " v. ", comparisons2[[i]][2], sep = "")
+}
+
+
+## Difference-in-difference
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# House vote
+diffindiff.out.cong <- lm(vote_out_cong ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.out.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+out.cong[length(out.cong)+1] <- paste(round(summary(diffindiff.out.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.in.cong <- lm(vote_in_cong ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.in.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+in.cong[length(in.cong)+1] <- paste(round(summary(diffindiff.in.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.gap.cong <- lm(vote_cong_diff ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.gap.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+gap.cong[length(gap.cong)+1] <- paste(round(summary(diffindiff.gap.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+
+
+
+direct.comparisons <- data.frame(cbind(out.cong, in.cong, gap.cong))
+names(direct.comparisons) <- c("Out-party", "In-Party", "Difference")
+comparison.names <- c(comparison.names, "Moral-Immoral vs. Comp.-Incomp.")
+row.names(direct.comparisons) <- comparison.names
+
+stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons", title = "\\textbf{Direct Comparisons of House Support between Key Treatment Groups} \\newline {\\footnotesize \\emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support.}", digits = 2)
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Direct Comparisons of House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support.}}
+  \label{tab:vig_comparisons_house}
+\begin{tabular}{@{\extracolsep{5pt}} lccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+ & Out-party & In-Party & Difference \\
+ & (1) & (2) & (3) \\
+\hline \\[-1.8ex]
+\textbf{H1: Cross-Dimension} & & & \\
+Moral v. Competent & 0.36$\hat{\mkern6mu}$ & -0.44$^{*}$ & -0.8$^{**}$ \\
+Immoral v. Incompetent & -0.41$^{*}$ & 0.24 & 0.65$^{*}$ \\
+\\
+\textbf{H2: Difference-in-Difference} & & & \\
+Moral-Immoral vs. Comp.-Incomp. & -0.77$^{**}$ & 0.68$^{*}$ & 1.45$^{***}$ \\
+\\
+\textbf{H3: Mixed Messages} & & & \\
+Immoral+Comp. v. Moral+Incomp. & -0.22 & 0.42$^{*}$ & 0.65$^{*}$ \\
+\\
+%\textbf{Moral: Positive to Negative} & & & \\
+%Immoral v. Moral & -1.63$^{***}$ & 1.6$^{***}$ & 3.24$^{***}$ \\
+%Immoral+Comp. v. Moral+Comp. & -0.81$^{***}$ & 1.15$^{***}$ & 1.96$^{***}$ \\
+%Immoral+Incomp. v. Moral+Incomp. & -0.58$^{***}$ & 1$^{***}$ & 1.58$^{***}$ \\
+%\\
+%\textbf{Competence: Positive to Negative} & & & \\
+%Incomp. v. Comp. & -0.87$^{***}$ & 0.92$^{***}$ & 1.79$^{***}$ \\
+%Moral+Incomp. v. Moral+Comp. & -0.58$^{**}$ & 0.73$^{***}$ & 1.31$^{***}$ \\
+%Immoral+Incomp. v. Immoral+Comp. & -0.36$^{*}$ & 0.57$^{***}$ & 0.93$^{**}$ \\
+\hline \\[-1.8ex]
+\multicolumn{4}{c}{$\hat{\mkern6mu}$ p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001}\\
+\end{tabular}
+\end{table}
+
+
+
+\begin{figure}[htb]
+\caption[Never-Always Support for In-Party Out-party House Candidate]{\textbf{The Proportion of Respondents Saying They Would ``Always'' or ``Never'' Support Hypothetical In-party and Out-party House Candidates by Treatment}\\
+    {\footnotesize }}\label{fig:vig_house_vote_extremes}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{always_vote_in_cong_all.pdf}}
+      \caption{Always Support In-party House Cand.}
+      \label{fig:vig_always_in_cong}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{never_vote_out_cong_all.pdf}}
+      \caption{Never Support Out-party House Cand.}
+      \label{fig:vig_never_out_cong}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[htb]
+\caption[Polarized Support for U.S. House]{\textbf{The Proportion of Respondents with Polarized Vote Preferences by Treatment for U.S. House Vote}\\
+    {\footnotesize \textit{Note}: The figures show the percentage of respondents in each treatment group who have completely polarized preferences, meaning they would always vote for the in-party candidate and never vote for the out-party candidate. Results shown for U.S. House vote only.}}\label{fig:vig_always_never_house}
+  \centering
+%  \begin{subfigure}[b]{.48\textwidth}
+%      {\includegraphics[width=\textwidth]{alwaysnever_pres_all.pdf}}
+%      \caption{Presidential}
+%      \label{fig:alwaysnever_pres}
+%  \end{subfigure}
+%  ~
+  %\begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=.5\textwidth]{alwaysnever_cong_all.pdf}}
+   %   \caption{U.S. House}
+   %   \label{fig:alwaysnever_cong}
+  %\end{subfigure}
+\end{figure}
+
+<<comparison.table.cong.polar,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+comparisons2 <- list(c("Moral", "Comp"), c("Immoral", "Incomp"),
+    c("Immoral", "Moral"), c("ImmoralComp", "MoralComp"), c("ImmoralIncomp", "MoralIncomp"),
+    c("Incomp", "Comp"), c("MoralIncomp", "MoralComp"), c("ImmoralIncomp", "ImmoralComp"),
+    c("ImmoralComp", "MoralIncomp"))
+
+out.cong <- c()
+in.cong <- c()
+gap.cong <- c()
+comparison.names <- c()
+for (i in 1:length(comparisons2)) {
+    dat.temp <- dat[which(as.character(dat$treatment2) == comparisons2[[i]][1] | as.character(dat$treatment2) == comparisons2[[i]][2]),]
+
+    dat.temp$test.var <- ifelse(as.character(dat.temp$treatment2) == comparisons2[[i]][1], 1, 0)
+
+    model.out <- lm(never_out_cong ~ test.var, dat = dat.temp)
+    p.val <- summary(model.out)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    out.cong[i] <- paste(round(summary(model.out)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.in <- lm(always_in_cong ~ test.var, dat = dat.temp)
+    p.val <- summary(model.in)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    in.cong[i] <- paste(round(summary(model.in)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.gap <- lm(alwaysnever_cong ~ test.var, dat = dat.temp)
+    p.val <- summary(model.gap)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    gap.cong[i] <- paste(round(summary(model.gap)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    comparison.names[i] <- paste(comparisons2[[i]][1], " v. ", comparisons2[[i]][2], sep = "")
+}
+
+
+## Difference-in-difference
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# House vote
+diffindiff.out.cong <- lm(never_out_cong ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.out.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+out.cong[length(out.cong)+1] <- paste(round(summary(diffindiff.out.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.in.cong <- lm(always_in_cong ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.in.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+in.cong[length(in.cong)+1] <- paste(round(summary(diffindiff.in.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.gap.cong <- lm(alwaysnever_cong ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.gap.cong)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+gap.cong[length(gap.cong)+1] <- paste(round(summary(diffindiff.gap.cong)$coefficients[2,1], 2), p.symbol, sep = "")
+
+direct.comparisons <- data.frame(cbind(out.cong, in.cong, gap.cong))
+names(direct.comparisons) <- c("Out-party", "In-Party", "Difference")
+comparison.names <- c(comparison.names, "Moral-Immoral vs. Comp.-Incomp.")
+row.names(direct.comparisons) <- comparison.names
+
+stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons", title = "\\textbf{Direct Comparisons of House Support between Key Treatment Groups} \\newline {\\footnotesize \\emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support.}", digits = 2)
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Comparisons of Polarized House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support at their poles.}}
+  \label{tab:vig_comparisons_house_polar}
+\begin{tabular}{@{\extracolsep{5pt}} lccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+ & Out-party & In-Party & Difference \\
+ & (1) & (2) & (3) \\
+\hline \\[-1.8ex]
+\textbf{H1: Cross-Dimension} & & & \\
+Moral v. Competent & -0.05 & -0.04 & -0.03$^{*}$ \\
+Immoral v. Incompetent & 0.13$^{*}$ & 0.10$^{*}$ & 0.11$^{*}$ \\
+\\
+\textbf{H2: Difference-in-Difference} & & & \\
+Moral-Immoral vs. Comp.-Incomp. & 0.19$^{**}$ & 0.14$^{*}$ & 0.14$^{**}$ \\
+\\
+\textbf{H3: Mixed Messages} & & & \\
+Immoral+Comp. v. Moral+Incomp. & 0.01 & 0.03 & 0.02 \\
+\\
+%\textbf{Positive to Negative} & & & \\
+%Immoral v. Moral & 0.33$^{***}$ & 0.26$^{***}$ & 0.23$^{***}$ \\
+%Immoral+Comp. v. Moral+Comp. & 0.06 & 0.04 & 0.04$^{*}$ \\
+%Immoral+Incomp. v. Moral+Incomp. & 0.21$^{***}$ & 0.23$^{***}$ & 0.17$^{***}$ \\
+%\\
+%Incomp. v. Comp. & 0.15$^{**}$ & 0.12$^{**}$ & 0.09$^{**}$ \\
+%Moral+Incomp. v. Moral+Comp. & 0.05 & 0.01 & 0.02 \\
+%Immoral+Incomp. v. Immoral+Comp. & 0.2$^{***}$ & 0.2$^{***}$ & 0.15$^{***}$ \\
+\hline \\[-1.8ex]
+\multicolumn{4}{c}{$\hat{\mkern6mu}$ p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001}\\
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Polarized Presidential Vote Additional Materials}
+
+
+\begin{figure}[htb]
+  \caption[Support for Presidential Candidates at the Extremes]{\textbf{The Proportion of Respondents at the Extremes of the Electoral Support Scale for the Hypothetical Out-party President and the In-party Challenger by Treatment}\\ {\footnotesize \textit{Note}: The figures shows the percentage of respondents who would never support the out-party president and the percentage who would always support the in-party challenger by treatment group. Responses are the most extreme answers on a seven-point scale from never support to always support.}}\label{fig:vig_pres_vote_extremes_all}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{never_vote_mitchell_all.pdf}}
+      \caption{Never Support Out-party}
+      \label{fig:vig_never_out_pres_all}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{always_vote_mitchell_all.pdf}}
+      \caption{Always Support Out-party}
+      \label{fig:vig_always_out_pres_all}
+  \end{subfigure}
+  \newline
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{never_vote_in_pres_all.pdf}}
+      \caption{Never Support In-party}
+      \label{fig:vig_never_in_pres_all}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{always_vote_in_pres_all.pdf}}
+      \caption{Always Support In-party}
+      \label{fig:vig_always_in_pres_all}
+  \end{subfigure}
+\end{figure}
+
+
+<<two.extreme,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+n.treatments <- table(dat$treatment2)
+never.vote <- table(dat$treatment2, dat$two_never_mitchell)[,2]
+always.vote <- table(dat$treatment2, dat$two_always_mitchell)[,2]
+
+x.label <- c("Control", "Competent", "Moral", "Moral+Comp.", "Incompetent", "Immoral", "Immoral+Incomp.", "Immoral+Comp.", "Moral+Incomp.")
+x.label <- rev(x.label)
+
+values2 <- never.vote/n.treatments
+values2 <- rev(values2)
+
+pdf("two_never_vote_mitchell_all.pdf", height = 8.5, width = 11)
+par(las = 2, cex = 1.75)
+par(mar=c(2, 8, .5, 2))
+barplot(values2,
+    space = 0,
+    axes = FALSE,
+    xlim = c(0,.85),
+    names.arg = c(x.label),
+    horiz = TRUE)
+text(x = (values2 + num.step), y = .5:8.5, labels = paste(round(values2, 2)*100,"%", sep = ""))
+#x.label <- c("Cont.", "Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+axis(2, .5:8.5, lab = rep("", times = 9))
+#mtext(x.label, side = 1, line = .75, at = seq(.5, 16.5, by = 2), las = 3, cex = 1.5)
+axis(1, seq(0, .8, by = .2), label = c("0%", "20%", "40%", "60%", "80%"), las = 1)
+
+dev.off()
+
+
+
+
+values2 <- always.vote/n.treatments
+values2 <- rev(values2)
+
+pdf("two_always_vote_mitchell_all.pdf", height = 8.5, width = 11)
+par(las = 2, cex = 1.75)
+par(mar=c(2, 8, .5, 2))
+barplot(values2,
+    space = 0,
+    axes = FALSE,
+    xlim = c(0,.85),
+    names.arg = c(x.label),
+    horiz = TRUE)
+text(x = (values2 + num.step), y = .5:8.5, labels = paste(round(values2, 2)*100,"%", sep = ""))
+#x.label <- c("Cont.", "Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+axis(2, .5:8.5, lab = rep("", times = 9))
+#mtext(x.label, side = 1, line = .75, at = seq(.5, 16.5, by = 2), las = 3, cex = 1.5)
+axis(1, seq(0, .8, by = .2), label = c("0%", "20%", "40%", "60%", "80%"), las = 1)
+
+dev.off()
+
+
+
+#### Extremes figures -- vote for in-party president
+n.treatments <- table(dat$treatment2)
+never.vote <- table(dat$treatment2, dat$two_never_in_pres)[,2]
+always.vote <- table(dat$treatment2, dat$two_always_in_pres)[,2]
+
+x.label <- c("Control", "Competent", "Moral", "Moral+Comp.", "Incompetent", "Immoral", "Immoral+Incomp.", "Immoral+Comp.", "Moral+Incomp.")
+x.label <- rev(x.label)
+
+values2 <- never.vote/n.treatments
+values2 <- rev(values2)
+
+pdf("two_never_vote_in_pres_all.pdf", height = 8.5, width = 11)
+par(las = 2, cex = 1.75)
+par(mar=c(2, 8, .5, 2))
+barplot(values2,
+    space = 0,
+    axes = FALSE,
+    xlim = c(0,.85),
+    names.arg = c(x.label),
+    horiz = TRUE)
+text(x = (values2 + num.step), y = .5:8.5, labels = paste(round(values2, 2)*100,"%", sep = ""))
+#x.label <- c("Cont.", "Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+axis(2, .5:8.5, lab = rep("", times = 9))
+#mtext(x.label, side = 1, line = .75, at = seq(.5, 16.5, by = 2), las = 3, cex = 1.5)
+axis(1, seq(0, .8, by = .2), label = c("0%", "20%", "40%", "60%", "80%"), las = 1)
+
+dev.off()
+
+
+
+
+values2 <- always.vote/n.treatments
+values2 <- rev(values2)
+
+pdf("two_always_vote_in_pres_all.pdf", height = 8.5, width = 11)
+par(las = 2, cex = 1.75)
+par(mar=c(2, 8, .5, 2))
+barplot(values2,
+    space = 0,
+    axes = FALSE,
+    xlim = c(0,.85),
+    names.arg = c(x.label),
+    horiz = TRUE)
+text(x = (values2 + num.step), y = .5:8.5, labels = paste(round(values2, 2)*100,"%", sep = ""))
+#x.label <- c("Cont.", "Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+axis(2, .5:8.5, lab = rep("", times = 9))
+#mtext(x.label, side = 1, line = .75, at = seq(.5, 16.5, by = 2), las = 3, cex = 1.5)
+axis(1, seq(0, .8, by = .2), label = c("0%", "20%", "40%", "60%", "80%"), las = 1)
+
+dev.off()
+
+@
+
+
+\begin{figure}[htb]
+  \caption[Support for Presidential Candidates at the Two Extremes]{\textbf{The Proportion of Respondents at the Two Most Extreme Response Options for the Out-party President and the In-party Challenger by Treatment}\\
+    {\footnotesize \textit{Note}: The figures shows the percentage of respondents who would gave the two most extreme responses for never support or always support the in-party and out-party candidates for president by treatment group. The top row shows the support for the out-party candidate at the extremes; the bottom row is the in-party candidate. Responses are the two most extreme answers on a seven-point scale from never support to always support.}}\label{fig:vig_two_pres_vote_extremes}
+  \centering
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{two_always_vote_mitchell_all.pdf}}
+      \caption{Always Support Out-party}
+      \label{fig:vig_two_always_out_pres}
+  \end{subfigure}
+  \qquad
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{two_never_vote_mitchell_all.pdf}}
+      \caption{Never Support Out-party}
+      \label{fig:vig_two_never_out_pres}
+  \end{subfigure}
+  \newline
+    \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{two_always_vote_in_pres_all.pdf}}
+      \caption{Always Support In-party}
+      \label{fig:vig_two_always_in_pres}
+  \end{subfigure}
+  \qquad
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{two_never_vote_in_pres_all.pdf}}
+      \caption{Never Support In-party}
+      \label{fig:vig_two_never_in_pres}
+  \end{subfigure}
+\end{figure}
+
+
+<<regressions.polar,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+model.out.pres <- lm(never_mitchell ~ factor(treatment2), data = dat)
+model.in.pres <- lm(always_in_pres ~ factor(treatment2), data = dat)
+model.gap.pres <- lm(alwaysnever_pres ~ factor(treatment2), data = dat)
+
+model.out.cong <- lm(never_out_cong ~ factor(treatment2), data = dat)
+model.in.cong <- lm(always_in_cong ~ factor(treatment2), data = dat)
+model.gap.cong <- lm(alwaysnever_cong ~ factor(treatment2), data = dat)
+
+stargazer(model.out.pres, model.in.pres, model.gap.pres, model.out.cong, model.in.cong, model.gap.cong, column.labels = c("Never Out ", "Always In", "Polarized", "Never Out", "Always In", "Polarized"), covariate.labels = x.label[2:length(x.label)], omit.stat = c("adj.rsq","ser", "f"), digits = 2, title = "\\textbf{Average Treatment Effects on Polarizing Presidential Support for the Eight Treatment Groups} \\newline {\\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the extremes of the electoral support variables.}", label = "tab:regression_ate_polar", star.cutoffs = c(.05,.01,.001))
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Average Treatment Effects on Polarizing Presidential Support for the Eight Treatment Groups} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the extremes of the electoral support variables.}}
+  \label{tab:vig_regression_ate_polar}
+  \scalebox{.85}{
+\begin{tabular}{@{\extracolsep{5pt}}lcccccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+& \multicolumn{3}{c}{President} & \multicolumn{3}{c}{House} \\ \cline{2-7}
+ & Never Out  & Always In & Polarized & Never Out & Always In & Polarized \\
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6)\\
+\hline \\[-1.8ex]
+ Competent & $-$0.02 & $-$0.03 & $-$0.02 & $-$0.02 & 0.01 & $-$0.01 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Moral & $-$0.02 & $-$0.06 & $-$0.03 & $-$0.07 & $-$0.02 & $-$0.04 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Moral+Comp. & $-$0.04 & $-$0.001 & $-$0.03 & $-$0.04 & $-$0.02 & $-$0.03 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Incompetent & 0.23$^{***}$ & 0.12$^{**}$ & 0.09$^{**}$ & 0.13$^{**}$ & 0.13$^{***}$ & 0.08$^{*}$ \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Immoral & 0.45$^{***}$ & 0.27$^{***}$ & 0.26$^{***}$ & 0.26$^{***}$ & 0.23$^{***}$ & 0.19$^{***}$ \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Immoral+Incomp. & 0.39$^{***}$ & 0.22$^{***}$ & 0.22$^{***}$ & 0.23$^{***}$ & 0.22$^{***}$ & 0.17$^{***}$ \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Immoral+Comp. & 0.16$^{***}$ & 0.01 & 0.02 & 0.03 & 0.02 & 0.01 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Moral+Incomp. & 0.04 & 0.001 & 0.01 & 0.02 & $-$0.01 & $-$0.01 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Constant & 0.04 & 0.08$^{**}$ & 0.03 & 0.14$^{***}$ & 0.04 & 0.04 \\
+  & (0.03) & (0.03) & (0.02) & (0.03) & (0.03) & (0.02) \\
+  & & & & & & \\
+\hline \\[-1.8ex]
+Observations & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 & 1,239 \\
+$R^{2}$ & 0.22 & 0.10 & 0.14 & 0.08 & 0.10 & 0.09 \\
+\hline
+\hline \\[-1.8ex]
+\multicolumn{7}{c}{All ATEs calculated using OLS} \\
+\multicolumn{7}{c}{$^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+}
+\end{table}
+
+
+
+
+
+<<diffindiff.polar,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# Presidential vote
+diffindiff.out.pres <- lm(never_mitchell ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.in.pres <- lm(always_in_pres ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.gap.pres <- lm(alwaysnever_pres ~ pt + neg + moraldimension, data = dat.negpos)
+
+# House vote
+diffindiff.out.cong <- lm(never_out_cong ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.in.cong <- lm(always_in_cong ~ pt + neg + moraldimension, data = dat.negpos)
+diffindiff.gap.cong <- lm(alwaysnever_cong ~ pt + neg + moraldimension, data = dat.negpos)
+
+stargazer(diffindiff.out.pres, diffindiff.in.pres, diffindiff.gap.pres, diffindiff.out.cong, diffindiff.in.cong, diffindiff.gap.cong, title = "\\textbf{Difference-in-difference of Polarized Support: Net Change of Moral--Immoral Compared to Competent--Incompetent}\\newline {\\footnotesize \\emph{Note:} Table reports the average difference-in-difference between moral--immoral compared to competent--incompetent for the polarized support variables. The key coefficient is labeled ``Difference-in-difference.''}", column.labels = c("Never Out", "Always In", "Polarized", "Never Out", "Always In", "Polarized"), covariate.labels = c("Difference-in-Difference", "Negative Valence", "Moral Dimension"), omit.stat = c("adj.rsq", "ser", "f"), digits = 2, label = "tab:vig_regression_diffindiff_polar", star.cutoffs = c(.05,.01,.001))
+
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Difference-in-difference of Polarized Support for President and House: Net Change of Moral--Immoral Compared to Competent--Incompetent}\newline {\footnotesize \emph{Note:} Table reports the average difference-in-difference between moral--immoral compared to competent--incompetent for the polarized support variables.}}
+  \label{tab:vig_regression_diffindiff_polar}
+  \scalebox{.85}{
+\begin{tabular}{@{\extracolsep{5pt}}lcccccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+& \multicolumn{3}{c}{President} & \multicolumn{3}{c}{House} \\ \cline{2-7}
+ & Never Out & Always In & Polarized & Never Out & Always In & Polarized \\
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6)\\
+\hline \\[-1.8ex]
+ Difference-in- & 0.22$^{***}$ & 0.18$^{**}$ & 0.19$^{***}$ & 0.19$^{**}$ & 0.14$^{*}$ & 0.14$^{**}$ \\
+ Difference & (0.06) & (0.06) & (0.05) & (0.07) & (0.06) & (0.05) \\
+  & & & & & & \\
+ Negative Valence & 0.26$^{***}$ & 0.15$^{***}$ & 0.11$^{**}$ & 0.15$^{**}$ & 0.12$^{**}$ & 0.09$^{**}$ \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Moral Dimension & $-$0.0002 & $-$0.03 & $-$0.01 & $-$0.05 & $-$0.04 & $-$0.03 \\
+  & (0.04) & (0.04) & (0.03) & (0.05) & (0.04) & (0.03) \\
+  & & & & & & \\
+ Constant & 0.01 & 0.05 & 0.01 & 0.12$^{***}$ & 0.06$^{*}$ & 0.03 \\
+  & (0.03) & (0.03) & (0.02) & (0.03) & (0.03) & (0.02) \\
+  & & & & & & \\
+\hline \\[-1.8ex]
+Observations & 551 & 551 & 551 & 551 & 551 & 551 \\
+R$^{2}$ & 0.25 & 0.13 & 0.15 & 0.10 & 0.09 & 0.09 \\
+\hline
+\hline \\[-1.8ex]
+\multicolumn{7}{c}{All columns report OLS results} \\
+\multicolumn{7}{c}{\textasciicircum p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+}
+\end{table}
+
+
+\FloatBarrier
+\newpage
+\subsection{Compromise}
+<<descriptive.stats.comp,echo=FALSE,results='asis'>>=
+
+comp <- tapply(dat$compromise_balance, dat$treatment2, mean)
+comp.sd <- tapply(dat$compromise_balance, dat$treatment2, sd)
+
+over <- tapply(dat$comp_over75, dat$treatment2, mean)
+over.sd <- tapply(dat$comp_over75, dat$treatment2, sd)
+
+comp.sd <- paste("(", round(comp.sd,2), ")", sep = "")
+over.sd <- paste("(", round(over.sd,2), ")", sep = "")
+
+count.n <- table(dat$treatment2)
+
+summary.stats <- data.frame(cbind(round(comp,2), comp.sd, round(over,2), over.sd, count.n))
+names(summary.stats) <- c("Compromise", " ", "Above 75", " ", "N")
+row.names(summary.stats) <- x.label
+@
+
+<<stats.print.comp,echo=FALSE, results='asis', comment=NA>>=
+#xtable(summary.stats, caption = "\\textbf{Descriptive Statistics for Political Compromise Preference} \\newline {\\footnotesize \\textit{Note}: Table reports the average support for compromise between the in-party and the out-party president as well as the percentage of respondents who wanted a compromise above 75 favoring their own party. Higher numbers mean more likely to want a compromise to favor their own party; lower numbers mean favoring more balance. Standard deviation in parentheses}", label = "tab:vig_experiment_descriptives_house", align = c("l", "c", "c", "c", "c", "c"), digits = 2)
+@
+
+\begin{table}[ht]
+\caption{\textbf{Descriptive Statistics for Political Compromise Preference} \newline {\footnotesize \textit{Note}: Table reports the average support for compromise between the in-party and the out-party president as well as the percentage of respondents who wanted a compromise above 75 favoring their own party. Higher numbers mean more likely to want a compromise to favor their own party; lower numbers mean favoring more balance. Standard deviation in parentheses}}
+\label{tab:vig_experiment_descriptives_comp}
+\centering
+\begin{tabular}{lccccc}
+  \hline
+ & \multicolumn{2}{c}{Compromise} & \multicolumn{2}{c}{Above 75} & N \\
+ & (1) & (2) & (3) & (4) & (5) \\
+  \hline
+Control & 54.39 & (19.04) & 0.17 & (0.38) & 137 \\
+  Competent & 51.81 & (16.78) & 0.09 & (0.29) & 138 \\
+  Moral & 48.86 & (17.59) & 0.09 & (0.29) & 140 \\
+  Moral+Comp. & 48.11 & (18.54) & 0.08 & (0.27) & 139 \\
+  Incompetent & 67.49 & (20.75) & 0.39 & (0.49) & 140 \\
+  Immoral & 69.6 & (23.25) & 0.5 & (0.5) & 133 \\
+  Immoral+Incomp. & 71.62 & (20.26) & 0.46 & (0.5) & 137 \\
+  Immoral+Comp. & 61.58 & (20.44) & 0.27 & (0.45) & 139 \\
+  Moral+Incomp. & 58.85 & (19.11) & 0.21 & (0.41) & 136 \\
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htb]
+\caption[Compromise Balance]{\textbf{Proportion of Respondents Wanting the In-Party to Receive at Least 75 percent of its Agenda in a Compromise, by Treatment}\\
+    {\footnotesize \textit{Note}: The figure shows the percentage of respondents in each treatment group who wanted the in-party to receive 75 percent or more of its agenda in any political compromise with the out-party president.}}\label{fig:vig_compromise}
+  \centering
+      {\includegraphics[width=.48\textwidth]{compromise_balance_75plus_all.pdf}}
+\end{figure}
+
+
+
+

@@ -1,0 +1,88 @@
+\chapter{The Emotional Foundations of Moral Judgments}\label{ch:foundation}
+
+Before the last few years, political scientists studying morals and politics focused on a narrow set of phenomena and issues that were labeled ``moral,'' such as alcohol, gambling, sex, and abortion \cite{Funk1996a,Meier1994,Stoker1993}. However, in recent years developments in social psychology have expanded the scope of what should be considered moral in political life \cite{Grahametal2009,Haidt2012,SkitkaBauman2008}. These theories have encouraged political scientists to expand the relationship between core values and political behavior. Most of this work has focused on how policies and issues prime moral intuitions \cite{Kolevaetal2012}, how elites prime issue-oriented moral intuitions \cite{CliffordJerit2013}, or how citizens label issues as moral \cite{Ryan2014}.
+
+Neglected in much of this new literature on morality is the role of political actors. There is a significant body of qualitative and historical work that examines the top-down implications and origins of presidents' and other leaders' moral status and leadership \cite{DaynesSussman2001,Denton2005,Hinckley1990,Kane2001,Olasky1999,Pfiffner2004}. There are few studies that explicitly address the mass public's bottom-up moral perceptions of political leaders. Political observers and presidents believe that elected officials are a source of moral leadership and moral symbolism, yet we know very little about citizens' moral judgments of major political actors in light of new theories of morality. We know even less of how those judgments affect important political behaviors.
+
+Actors are an important element of the political environment that are almost entirely absent from our understanding of morals and politics. Negative attitudes toward Presidents Clinton, Obama, and Bush in many ways have exerted significant constraints on their presidencies. These attitudes have been highly emotional and highly moralized \cite{HuddyFeldmanCassese2007,ParkerBarreto2013}. I argue that in partisans' minds the most prominent political actors are an important channel for moral feelings and judgments in contemporary politics. These actors function as moral intuitions, of sorts, that signal (or confirm) which issues, groups, and agenda are morally acceptable or morally wrong. Within the relatively short period of a U.S. presidential term many issues will come and go, but individuals' attitudes towards the president provide a consistent moral frame.
+
+Individuals encounter new politicians with underdeveloped schemata that develop over time into stable, morally charged judgments that inform their other interactions with the political world \cite{TaberLodgeGlathar2001}. My theory of moral judgments of actors posits that these schemata of actors develop connections to morally relevant emotions and morally relevant trait attributions. These moral connections can strengthen in such a way that they affect other associations made with the actors. The connections provide moral motivation for voting loyally for one's party, for political activism, and for affective polarization.
+
+%Attitudes toward candidates and presidents matter. \citeasnoun{ParkerBarreto2013} find that negative attitudes toward President Obama are one of the strongest predictors of identifying with the Tea Party. Believing that President Obama is a socialist---which is a morally charged judgment---increases identification with the Tea Party. The Tea Party has had major impacts on political life since its emergence in 2009 \cite{SkocpolWilliamson2011}. Similarly, Republicans and conservatives who dislike President Obama are more likely to say they think he is a Muslim, regardless of sophistication \cite{HartmanNewmark2012}. They more readily accept information if it confirms their negative predispositions. To understand how morals impact politics, the judgments individuals make of actors should compliment theories of morality aimed at issues and policies.
+
+
+
+\section{Measurement Validation with Observational Data}\label{sec:foundation_validation}
+As discussed above in \ref{sec:theory}, I hypothesize a connection between moral or ``suitability'' traits and moral emotion. Study 1 uses observational data to see if trait attributions along moral traits are connected with aversion. I recruited 306 respondents who were asked to rate a prominent politician from the other party on eleven traits. I randomly assigned pure independents to rate a Republican or a Democrat. The respondents were asked to identify who they thought has ``the most influence over the [out-party's] values and goals.'' Democrats and the Independents assigned with them rated whoever they thought was the leader of the Republican party. The vast majority of respondents identified John Boehner as the leader of the GOP (71\%), with Senator Ted Cruz and Representative Paul Ryan tying for second at 7.5\%.\footnote{The analysis below pools trait ratings among the Democratic portion of the sample, regardless of the actor rated. The results are statistically and substantively the same if the data are restricted to just those who rated Speaker Boehner.} All Republicans and one half of the Independents rated President Obama.\footnote{75\% of the respondents in this sample said President Obama was the leader of the Democratic Party; 13\% said it was Senator Harry Reid; and the rest chose a smattering of other actors.}
+
+Respondents gave the actors ratings on eleven character traits. I expected seven of the traits to be moral (``moral,'' ``has good values,'' ``really cares about other people,'' ``trustworthy,'' ``honest,'' ``kind,'' and ``tolerant'') and the other four to be competence-based (``provides strong leadership,'' ``competent,'' ``intelligent,'' and ``knowledgeable''). Respondents who gave negative ratings on the five-point trait rating scale were asked how that rating made them feel.\footnote{Respondents rated the traits on a five-point scale from the 2008 and 2012 ANES surveys: not well at all, slightly well, moderately well, very well, and extremely well. The question wording was the same as the ANES's.} Respondents first answered how they felt about any traits they gave the most negative ratings and then for any traits that they gave the second most negative rating. In sum, respondents were asked how their trait rating makes feel when they believe the leader of the out-party lacks an important character trait.
+
+The follow-up questions about emotions included nine emotions across three category: aversion (``angry,'' ``hostile,'' and ``disgusted''), anxiety (``nervous,'' ``scared,'' and ``afraid''), and enthusiasm (``enthusiastic,'' ``proud,'' and ``hopeful'').\footnote{The nine emotions come from \citeasnoun{HuddyFeldmanCassese2007}.} The enthusiasm emotions were included as a placebo test to determine to assess whether respondents were appropriate responding to the question (they were; results for enthusiasm are not presented). The wording of the emotion question was, ``In the previous question, you said that `(TRAIT)' (does not describe President Smith well at all/describes President Smith slightly well). We are interested in how it makes you feel that a (OUT-PARTY) president (does not have/only slightly has) the character trait `(TRAIT)'. How much do you feel any of the following emotions because `(TRAIT)' (does not describe President Smith well at all/describes President Smith slightly well)?'' The respondents had four response options for each emotion: ``not at all,'' ``not very much,'' ``somewhat,'' and ``very much.''
+
+I only asked the emotional follow-ups to the two most negative trait judgments for two reasons. First, I did not expect respondents with positive character judgments to have the negative emotions of interest, and, second, I need to save space on the survey. Future work will need to explore the emotional reactions across the range of trait judgments. This limitation becomes a problem when assessing the emotional reactions to the traits because traits with few negative ratings were skewed with large error margins. Instead, I look at the emotions with an adjusted index of emotional reaction where I set the emotional index to zero for respondents who did not give negative trait ratings. This process weights the emotional reactions by the negativity of the trait judgments. This procedure also restricts the index to between 0.5 instead of one, but that does not mean respondents who gave negative ratings were not also saying they felt the emotions of aversion or anxiety. Most respondents who gave negative trait ratings also said they felt some degree of negative emotion.
+
+The analysis in the next section tests two hypotheses. The first is that suitability traits will form a single dimension; ability traits will form another \cite{Funk1996b}. I use confirmatory factor analysis to confirm that the traits I expect to share a common factor actually do. Recent work on character judgments have split trait judgments across a number of dimensions (see \citeasnoun{Goren2002}, \citeasnoun{Goren2007}, and \citeasnoun{Hayes2005}), but recent research has found that group and person perceptions tend to emphasize two dimensions \cite{CuddyFiskeGlick2007,FiskeCuddyGlick2007}. The second hypothesis holds that the moral traits will be associated with stronger aversion because these traits are associated with moral intuitions \cite{Clifford2014} and moral conviction.
+
+
+\subsection{Study 1 -- Results}\label{foundation_validation_results}
+Table \ref{tab:study1_factor} shows the results of a confirmatory factor analysis on the eleven traits in Study 1.\footnote{The factor analysis used iterative principle component methods with a promax rotation that allows the factors to correlate.} The results show clearly that the traits align as I hypothesized. The moral traits load strongly on a single dimension, while the competence traits load a separate dimension. The low Eigenvalue for the second dimension is a concern, but it is largely a result of the strong negative judgments Republicans make of President Obama. The factor analysis among Republicans (not shown) reveals that ten of the eleven traits load on a single factor because they gave neutral ratings only on intelligence. Democrats' and independents' ratings match what the combined results in Table \ref{tab:study1_factor} show.
+
+\begin{table}[htb]
+\centering
+\caption[Effect of Difference in Moral Judgment and Key Controls on Vote Choice in Presidential Elections]{\textbf{Factor Analysis of Out-party Leaders' Character Traits}}\label{tab:study1_factor}
+\scalebox{.8}{
+\begin{tabular}{@{\extracolsep{5pt}}lccc}
+\\[-1.8ex]\hline \\[-1.8ex]
+\\[-1.8ex] & \textbf{Morality} & \textbf{Competence} & \textbf{Uniqueness} \\
+\hline \\[-1.8ex]
+Moral & 0.80 & -- & 0.18 \\
+Has good values & 0.80 & -- & 0.20 \\
+Really cares about other people & 0.90 & -- & 0.19 \\
+Trustworthy & 0.68 & -- & 0.23 \\
+Honest & 0.68 & -- & 0.30 \\
+Tolerant & 0.75 & -- & 0.44 \\
+Kind & 0.87 & -- & 0.28 \\
+Provides strong leadership & -- & 0.58 & 0.42 \\
+Competent & -- & 0.62 & 0.31 \\
+Knowledgeable & -- & 0.93 & 0.21 \\
+Intelligent & -- & 0.70 & 0.40 \\
+& & & \\
+Eigenvalues & 7.15 & 0.69 &  \\
+\hline \\[-1.8ex]
+\multicolumn{4}{c}{Correlation between factors: 0.69} \\
+\multicolumn{4}{c}{Blanks have factor loadings below 0.3} \\
+\end{tabular}
+}
+\end{table}
+
+Now I turn my attention to the emotions that respondents attach to their negative trait judgments. As mentioned above, I recoded the emotional reactions to zero for respondents who did not rate a trait negatively along a dimension. So if a Republican respondent thought President Obama had positive or neutral competence traits, then her aversion scale is set to zero. Because of this approach, the scale's averages are lower than they should be if they only included ratings for negative judgments. The proportion of respondents who gave negative trait ratings and who also felt aversion or anxiety is higher than the values in these figures. The results are essentially the same if I set the emotional index to missing for respondents who didn't judge a trait negatively. I create separate indices for the three aversion and three anxiety traits across the seven moral traits and the four competence traits. The indices are scaled between zero and one and weighted to reflect the number of traits in each dimension.
+
+Figure \vref{fig:study1_emotion_allpartisan} shows the average aversion and anxiety for each type of traits for all 306 respondents and also for the 259 partisans (including leaners). The average level of aversion is statistically higher for moral traits among both groups ($t$ = 10.34 on 305 d.f., $p <$ 0.0001 among all respondents; $t$ = 10.34 on 258 d.f., $p <$ 0.0001 among partisans). The results support the hypothesized relationship between moral traits and moral emotions. Of the three emotions that compose the aversion dimension, the most commonly felt was ``disgust'' with ``angry'' following closely behind.
+
+\begin{figure}[htb]
+  \centering
+  \caption{\textbf{Average Negative Aversion and Anxiety by Partisanship}\\
+    {\footnotesize \textit{Note}: Figure shows the average level of the aversion and anxiety for moral traits and competence traits. The points are the means with their 95\% confidence intervals. The y-axis is the weighted mean of the three individual emotions that compose each index. The results are shown for all respondents and for partisans only.}}\label{fig:study1_emotion_allpartisan}
+  {\includegraphics[width=0.65\textwidth]{Validation_Average_Emotions_allpartisan.pdf}}
+\end{figure}
+
+Figure \vref{fig:study1_emotion_allpartisan} also shows an increase in the average level of anxiety between moral and competence traits ($t$ = 6.28, $p <$ 0.0001; $t$ = 5.97, $p <$ 0.0001). People often struggle to distinguish anxiety and aversion; they are often a single negative emotional dimension \cite{HuddyFeldmanCassese2007,SteenbergenEllis2006}. It is not unusual to see the two classes of negative emotion moving together. However, among moral traits aversion's mean is significantly higher than anxiety's ($t$ = 6.26, $p <$ 0.0001; $t$ = 5.77, $p <$ 0.0001).
+
+Moral emotions results in higher levels of aversion; however, breaking down the averages by partisan groups (Republicans, Democrats, and pure Independents) shows that Democrats are driving the statistical significance in \ref{fig:study1_emotion_allpartisan}. Figure \vref{fig:study1_emotion_GOPDEM} shows the same data as Figure \ref{fig:study1_emotion_allpartisan}, but separately for each partisan group. The pattern of higher levels of aversion on the moral traits is present for each group, but the difference between the levels for competence traits is only significant among Democrats ($t$ = 10.27, $p <$ 0.0001). Part of the reason for the lack of statistical significant among Republicans and Independents is a lack of cases. There are only 82 Republicans and 47 pure Independents in the sample. Even though not statistically significant, the patterns are still supportive of my hypothesis.
+
+\begin{figure}[htb]
+  \centering
+  \caption{\textbf{Average Negative Aversion and Anxiety by Type of Trait}\\
+    {\footnotesize \textit{Note}: Figure shows the average level of the aversion and anxiety for moral traits and competence traits. The points are the means with their 95\% confidence intervals. The y-axis is the weighted mean of the three individual emotions that compose each index. The results are shown for Republicans, Democrats, and pure independents.}}\label{fig:study1_emotion_GOPDEM}
+  {\includegraphics[width=0.65\textwidth]{Validation_Average_Emotions_GOPDEM.pdf}}
+\end{figure}
+
+The results of Study 1 support both of my hypotheses. The moral traits load on a common factor, and these traits elicit stronger moral emotions. The results indicate that moral emotions are what make the moral-trait judgment different different from other judgments. The results also support moving forward with a survey experiment using political rhetoric to prime these judgments.
+
+
+
+
+\section{Anger and the Formation of Moral Judgments: Observational Evidence}\label{sec:foundation_observational}
+
+
+\section{Conclusion}\label{sec:foundation_conclusion}

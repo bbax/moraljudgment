@@ -1,0 +1,1019 @@
+%\section{Additional Regression Analysis}
+
+\chapter{Appendix for Unmasking the Effects of Moral Judgments}\label{ch:conjoint_appendix}
+
+\section{Conjoint Survey Questionnaire Wordings and Examples}\label{sec:conjoint_wordings}
+
+\begin{singlespace}
+
+\noindent For the next few questions, imagine you are about to cast a vote for the President of the United States.
+
+\vspace{4mm}
+\noindent You will read about several pairs of candidates running for president. For each pair, please indicate your attitudes towards the two candidates and which one you would be most likely to \ul{support}. Even if you are not entirely sure, please indicate which of the two you would be \ul{most likely to support} for president.
+
+\vspace{4mm}
+\noindent \textbf{Please read each pair of candidates carefully and completely.}
+
+\vspace{4mm}
+\noindent \hrulefill
+
+\begin{figure}[h]
+  \caption[Example of Conjoint Table]{\textbf{Screenshot of Conjoint Table}\\ {\footnotesize \textit{Note}: This figure shows a sample of what participants saw on their screen for each of the five pairs of candidates they rated. The order of the traits was randomized as was the valence (yes or no) of the traits. Below the table on the same screen were the questions to select a preferred candidate, to rate the probability of supporting each candidate, and to rate the moral character}}\label{fig:example_table}
+  \centering
+      \includegraphics[width=.75\textwidth]{conjoint_table_example2}
+\end{figure}
+
+\noindent \textbf{Preferred Candidate:} Which of these candidates would you be most likely to support for president? Candidate A or Candidate B
+
+\vspace{4mm}
+\noindent \textbf{Candidate Rating:} On a scale from 1 to 7, where 1 indicates that you would never support the candidate, and 7 indicates you would always support the candidate, where would you place...
+
+%\vspace{4mm}
+%\noindent \textbf{Moral Character:} Overall, how moral would you say is \ldots 1 - not at all moral to 7 - extremely moral
+
+\end{singlespace}
+
+
+\section{Amazon Mechanical Turk HIT}\label{sec:conjoint_HIT}
+\noindent \textbf{Title}: A Social Science Survey
+
+\vspace{4mm}
+\noindent \textbf{Keywords}: survey, questionnaire, social science, psychology, leadership
+
+\vspace{4mm}
+\noindent We are conducting an academic survey about public affairs.
+
+\vspace{4mm}
+\noindent \textbf{Reward}: \$1.00
+
+\vspace{4mm}
+\noindent \textbf{Description}: A 15-minute survey about a variety of issues. This survey must be completed in one sitting.
+
+\vspace{4mm}
+\noindent Qualifications: Must live in the U.S., be over 18 years old, and be a citizen of the United States who is eligible to vote.
+
+\newpage
+\section{Diagnostics}\label{sec:conjoint_diagnostics}
+\setcounter{table}{0}
+\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+\setcounter{figure}{0}
+\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+
+%\subsection{Carry-over Effects}
+
+<<carryover,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+dat <- dat.conjoint
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+carryover <- read.table("carryover_diagnostics.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+selected.carryover <- carryover[, c(grep("selected_",names(carryover),value=TRUE))]
+prob.carryover <- carryover[, c(grep("prob_",names(carryover),value=TRUE))]
+moral.carryover <- carryover[, c(grep("moral_",names(carryover),value=TRUE))]
+
+dvs <- c("selected", "prob", "moral")
+ivs <- c("In-party Candidate", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+for (i in 1:length(dvs)) {
+
+    setup<- paste("betas <- ", dvs[i], ".carryover[, c(grep(", '"', "_1", '"', ", names(", dvs[i], ".carryover),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+    setup<- paste("lower <- ", dvs[i], ".carryover[, c(grep(", '"', "_2", '"', ", names(", dvs[i], ".carryover),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+    setup<- paste("upper <- ", dvs[i], ".carryover[, c(grep(", '"', "_3", '"', ", names(", dvs[i], ".carryover),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"carryover_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    #y.lim <- c(1, 10)
+    #x.lim <- c(-.3, .3)
+    steps <- rev(c(-.2, -.1, 0, .1, .2))
+
+    y.lim <- c(1, length(betas[,1])-1)
+    x.lim <- c()
+    x.step <- .1
+    x.lim[1] <- round_any(min(lower[[1]], lower[[2]], lower[[3]], lower[[4]], lower[[5]]), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper[[1]], upper[[2]], upper[[3]], upper[[4]], upper[[5]]), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,5))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    for (j in 1:length(steps)) {
+    setup <- paste("points(betas[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], type = ",'"',"p",'"', ", pch = 21, col = ",'"', "black", '"', ", bg = ", '"', "black", '"', ", cex = cex.val)", sep = "")
+    eval(parse(text = setup))
+
+    #segments(upper, seq(.5, 4.5, by = 1), lower, seq(.5, 4.5, by = 1), lwd = 3, col = "black")
+    setup <- paste("segments(upper[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], lower[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], lwd = 2, col = ", '"', "black", '"', ")", sep = "")
+    eval(parse(text = setup))
+    }
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = .1), lab = round(seq(x.lim[1], x.lim[2], by = .1),1), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+
+}
+
+@
+To determine whether the traits had different effects, or carryover effects, between rounds I regress the dependent variables on the traits, but run a separate regression for each round. The effects sizes are then compared through standard methods. The results could also be obtained by interacting each trait with round. Figure \ref{fig:carryover} reports the impact of each trait by round (1-5). The figure shows the effect sizes (coefficients) with their 95\% confidence intervals using standard errors clustered by respondent.
+
+There are four instances where a trait's impact on candidate preference varied significantly between rounds (Figure \ref{fig:carryover_prefer}. In-party candidate had a significantly larger impact in round 4 compared to the other rounds. Respectful was insignificant in the first round, but had a modest positive impact in the other four rounds. And finally, homophobia had significantly lower impacts in rounds two and three, but overall the effects cluster together fairly well. Overall, however, there is no pattern of effects carrying over from one round to the next. There are not instances, except respectful, where the impact of traits varies chronologically.
+
+\begin{figure}
+  \caption[Carryover Effects by Round]{\textbf{Carryover Effects by Round}\\ {\footnotesize \textit{Note}: Figure reports the average effect for each trait by round.}}\label{fig:carryover}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{carryover_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:carryover_prefer}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{carryover_prob}
+      \caption{Candidate Rating}
+      \label{fig:carryover_rating}
+  \end{subfigure}
+\end{figure}
+
+Figure \ref{fig:carryover_rating} shows the impact by round of each trait on candidate ratings. Overall, the traits and partisanship had similar effects in each round. There are a few exceptions for caring about other people, treating others equally, loyalty, sexual morality, and homophobia. However, the patterns are not consistent or substantive very meaningful. There are some concerns here, but the patterns in general warrant moving forward with the analysis.
+
+
+%\subsection{Order Effects}
+
+<<order.diagnostics,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+order <- read.table("order_diagnostics.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+selected.order <- order[, c(grep("selected_",names(order),value=TRUE))]
+prob.order <- order[, c(grep("prob_",names(order),value=TRUE))]
+moral.order <- order[, c(grep("moral_",names(order),value=TRUE))]
+
+dvs <- c("selected", "prob", "moral")
+ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+for (i in 1:length(dvs)) {
+
+    setup<- paste("betas <- ", dvs[i], ".order[, c(grep(", '"', "_1", '"', ", names(", dvs[i], ".order),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+    setup<- paste("lower <- ", dvs[i], ".order[, c(grep(", '"', "_2", '"', ", names(", dvs[i], ".order),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+    setup<- paste("upper <- ", dvs[i], ".order[, c(grep(", '"', "_3", '"', ", names(", dvs[i], ".order),value = TRUE))]", sep = "")
+    eval(parse(text = setup))
+
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"order_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    #y.lim <- c(1, 10)
+    #x.lim <- c(-.3, .3)
+    steps <- c(.1, -.1)
+
+    y.lim <- c(1, length(betas[,1])-1)
+    x.lim <- c()
+    x.step <- .1
+    x.lim[1] <- round_any(min(lower[[1]], lower[[2]]), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper[[1]], upper[[2]]), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,5))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    for (j in 1:length(steps)) {
+        setup <- paste("points(betas[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], type = ",'"',"p",'"', ", pch = 21, col = ",'"', "black", '"', ", bg = ", '"', "black", '"', ")", sep = "")
+        eval(parse(text = setup))
+
+        #segments(upper, seq(.5, 4.5, by = 1), lower, seq(.5, 4.5, by = 1), lwd = 3, col = "black")
+        setup <- paste("segments(upper[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], lower[1:10,", j, "], c(y.lim[2]:y.lim[1])+steps[", j, "], lwd = 2, col = ", '"', "black", '"', ")", sep = "")
+        eval(parse(text = setup))
+    }
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = .1), lab = round(seq(x.lim[1], x.lim[2], by = .1),1), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+
+}
+
+@
+
+The diagnostics for profile order effects test if it mattered whether the first or second candidate had a trait or not. This diagnostic regresses the impact of teach trait on the dependent variables separately for the first candidate and the second. Figure \ref{fig:order} reports the results. Profile order did not matter at all for candidate preference (Figure \ref{fig:order_prefer}). There are two profile order effects for candidate ratings. If the second candidate was competent or experience, the impact was more positive than if the first candidate had these traits. These traits are less important to the overall analysis, so this issue is less concerning. It is possible this effect was the case because these were the last traits that respondents remembered as they scrolled down to give their ratings. It's possible they were the only traits still visible on screen after scrolling.
+
+\begin{figure}
+  \caption[Profile Order Effects]{\textbf{Profile Order Effects}\\ {\footnotesize \textit{Note}: }}\label{fig:order}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{order_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:order_prefer}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{order_prob}
+      \caption{Candidate Rating}
+      \label{fig:order_rating}
+  \end{subfigure}
+\end{figure}
+
+
+%\subsection{Sample Randomization}
+
+<<randomization,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+demos <- c("sex", "age", "party", "pid", "str_party2", "ideology")
+for (i in 1:length(demos)) {
+    setup <- paste(demos[i], ".model <- lm(", demos[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(demos[i], ".se <- clx(", demos[i], ".model, 1, stack.dat$id)[,2]", sep = "")
+    eval(parse(text = setup))
+
+    # Creating table
+    setup <- paste(demos[i], ".p.val <- summary(", demos[i], ".model)$coef[ , ", '"', "Pr(>|t|)", '"', "]", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(demos[i], ".se.val <- summary(", demos[i], ".model)$coef[ , ", '"', "Std. Error", '"', "]", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(demos[i], ".se.val <- ", demos[i], ".se", sep = "")
+    eval(parse(text = setup))
+
+    #setup <- paste("stargazer(", demos[i], ".model, se = list(", demos[i], ".se.val), p = list(", demos[i], ".p.val))", sep = "")
+    #eval(parse(text = setup))
+}
+
+
+
+foundations <- c("f.care", "f.fair", "f.auth", "f.loyal", "f.pure")
+for (i in 1:length(foundations)) {
+    setup <- paste(foundations[i], ".model <- lm(", foundations[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(foundations[i], ".se <- clx(", foundations[i], ".model, 1, stack.dat$id)[,2]", sep = "")
+    eval(parse(text = setup))
+
+    # Creating table
+    setup <- paste(foundations[i], ".p.val <- summary(", foundations[i], ".model)$coef[ , ", '"', "Pr(>|t|)", '"', "]", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(foundations[i], ".se.val <- summary(", foundations[i], ".model)$coef[ , ", '"', "Std. Error", '"', "]", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste(foundations[i], ".se.val <- ", foundations[i], ".se", sep = "")
+    eval(parse(text = setup))
+
+    #setup <- paste("stargazer(", foundations[i], ".model, se = list(", foundations[i], ".se.val), p = list(", foundations[i], ".p.val))", sep = "")
+    #eval(parse(text = setup))
+}
+
+@
+
+
+%<<random_tables, echo=FALSE, comment=NA, results='asis'>>=
+%stargazer(sex.model, age.model, pid.model, str_party2.model, ideology.model, se = list(sex.se.val, age.se.val, pid.se.val,
+%    str_party2.se.val, ideology.se.val), p = list(sex.p.val, age.p.val, pid.p.val, str_party2.p.val, ideology.p.val),
+%    dep.var.labels = c("Sex", "Age", "PID", "Str. PID", "Ideology"),
+%    covariate.labels = c("Candidate Political Party", "Really cares about other people", "Honest", "Treats everyone equally", "Respectful", "Loyal", "Sexually moral", "Not disgusted by homosexuality", "Competent", "Experienced"),
+%    label = "tab:random_demos",
+%    title = "Randomization Check: Demographics",
+%    style = "ajps"
+%)
+%@
+%
+%<<random_tables2, echo=FALSE, comment=NA, results='asis'>>=
+%stargazer(f.care.model, f.fair.model, f.auth.model, f.loyal.model, f.pure.model, se = list(f.care.se.val, f.fair.se.val, f.auth.se.val, f.loyal.se.val, f.pure.se.val), p = list(f.care.p.val, f.fair.p.val, f.auth.p.val, f.loyal.p.val, f.pure.p.val),
+%    dep.var.labels = c("Care", "Fairness", "Authority", "Loyalty", "Sanctity"),
+%    covariate.labels = c("Candidate Political Party", "Really cares about other people", "Honest", "Treats everyone equally", "Respectful", "Loyal", "Sexually moral", "Not disgusted by homosexuality", "Competent", "Experienced"),
+%    label = "tab:random_foundations",
+%    title = "Randomization Check: Moral Foundations",
+%    style = "ajps"
+%)
+%@
+
+The results for the randomization check are not shown. These diagnostics ensured that the traits were balanced across key demographics. The diagnostics regress the conjoint traits on demographics (sex, age, party identification, strength of party identification, and ideology) and the moral foundations. There were no significant effects. Overall, the treatment groups were balanced and sufficiently randomized.
+
+I also do not report the results from checks looking for unlikely profiles. It can be a problem if the experiment randomly creates combinations of traits that are unlikely or even contradictory. Pre-testing revealed a conflict between early drafts of the traits for loyalty and sanctity. This issue was fixed in the analysis presented here.
+
+Finally, I ran diagnostics to ensure that the order in which traits appeared among the ten did not have an impact on their effect. This test was tested by interacting each trait with the order in which it appeared. There were no significant effects for trait order. The issue is not a concern for the analysis.
+
+\newpage
+\section{Additional Figures}\label{sec:conjoint_additional_figs}
+\setcounter{table}{0}
+\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+\setcounter{figure}{0}
+\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+%\section{Effects by Party and Ideology}
+
+<<ols.regs.strpartisan,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("In-party Candidate", "Lean Partisan", "Weak Partisan", "Strong Partisan", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced", "In-Cand. x Lean", "In-Cand. x Weak", "In-Cand. x Strong")
+
+#groups <- c("dem", "gop", "ind")
+
+for (i in 1:length(dvs)) {
+    setup <- paste("ols <- lm(", dvs[i], " ~ factor(inparty_cand) + (factor(inparty_cand) * factor(str_party)) + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste("clustered <- clx(ols, 1, stack.dat$id)", sep = "")
+    eval(parse(text = setup))
+
+    betas <- clustered[,1]
+    se <- clustered[,2]
+    p.vals <- clustered[,4]
+
+    upper <- betas + (qnorm(.975) * se)
+    lower <- betas - (qnorm(.975) * se)
+
+    betas <- betas[2:length(betas)]
+    upper <- upper[2:length(upper)]
+    lower <- lower[2:length(lower)]
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"strpartisan_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas))
+    x.step <- .05
+    x.lim <- c()
+    x.lim[1] <- round_any(min(lower), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper), accuracy = x.step, f = ceiling)
+
+    y.offset <- 0.15
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(3,15,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas, c(y.lim[2]:y.lim[1]), type = "p", pch = 23, col = "black", bg = "black")
+
+    segments(upper, c(y.lim[2]:y.lim[1]), lower, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+}
+
+@
+
+\begin{figure}
+  \caption[Effect of Candidate Party by Strength of Partisanship]{\textbf{Effect of Candidate Party by Strength of Partisanship}\\ {\footnotesize \textit{Note}: }}\label{fig:str_partisan}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_ols_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:str_selected_partisan}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_ols_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:str_prob_partisan}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}
+  \caption{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:strparty_pp}
+  \centering
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strparty_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:strparty_selected}
+    \end{subfigure}
+    \\
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strparty_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:strparty_prob}
+    \end{subfigure}
+\end{figure}
+
+
+
+
+<<pp.strpartisandiff.shifts,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+ivs <- c("In-party\nCand.", "Really\ncares", "Honest", "Treats\nequally", "Respectful", "Loyal", "Sexually\nmoral", "Not disgusted\nhomosexuality", "Competent", "Experienced")
+
+
+#####################################################################################################################
+## Predicted Probabilities for selected -- shift for strong partisans only
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+strparty.pp <- read.table("str_partisan_pp3.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+point.est <- strparty.pp[,seq(1, 30, by=3)]
+lower <- strparty.pp[,seq(2, 30, by=3)]
+upper <- strparty.pp[,seq(3, 30, by=3)]
+
+
+diff.point.a <- point.est[2,] - point.est[1,]
+diff.point.b <- point.est[4,] - point.est[3,]
+
+diff.point <- as.numeric(diff.point.b)
+
+diff.point2 <- c(rep(0, times = length(diff.point.b)*2-1))
+#diff.point2[1] <- as.numeric(diff.point.a[1])
+diff.point2[seq(1, length(diff.point2), by = 2)] <- as.numeric(diff.point.b[1,seq(1, length(diff.point.b), by = 1)])
+
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strpartisan_pp_selected_diff.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+y.lim <- c(1, length(diff.point2))
+
+x.lim <- c()
+x.step <- .05
+x.lim[1] <- 0
+x.lim[2] <- round_any(max(diff.point), accuracy = x.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,13,1,2))
+barplot(rev(diff.point2),
+  axes = FALSE,
+  xlim = x.lim,
+  #ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  horiz = TRUE
+)
+
+text(rev(diff.point), seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), labels = round(rev(diff.point), 2), cex = cex.val, pos = 4)
+
+
+# y-axis
+axis(2, at = seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), lab = rev(ivs), cex.axis = cex.val, las = 1)
+#mtext("Strength of Partisanship", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# x-axis
+axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 1, line = 3, at = x.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+
+
+#######################################################################
+#### Candidate Rating
+point.est <- strparty.pp[,seq(31, 60, by=3)]
+lower <- strparty.pp[,seq(32, 60, by=3)]
+upper <- strparty.pp[,seq(33, 60, by=3)]
+
+
+diff.point <- point.est[4,] - point.est[3,]
+diff.point2 <- c(rep(0, times = length(diff.point)*2-1))
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- as.numeric(diff.point[1,seq(1, length(diff.point), by = 1)])
+
+
+
+#diff.point2 <- diff.point2 * 6
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strpartisan_pp_prob_diff.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+y.lim <- c(1, length(diff.point2))
+
+x.lim <- c()
+x.step <- .05
+x.lim[1] <- 0
+x.lim[2] <- round_any(max(diff.point), accuracy = x.step, f = ceiling)+.01
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,13,1,2))
+barplot(rev(diff.point2),
+  axes = FALSE,
+  xlim = x.lim,
+  #ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  horiz = TRUE
+)
+
+text(rev(diff.point), seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), labels = round(rev(diff.point), 2), cex = cex.val, pos = 4)
+
+# y-axis
+axis(2, at = seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), lab = rev(ivs), cex.axis = cex.val, las = 1)
+#mtext("Strength of Partisanship", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# x-axis
+axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 1, line = 3, at = x.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+@
+
+\begin{figure}
+  \caption{\textbf{Predicted Effect of Each Trait when Candidate Party Differs in a Round among Strong Partisans Only}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from no to yes for each trait among strong partisans \emph{when the partisanship of the two candidates in a round are different}.}}\label{fig:strpartisan_pp_diff}
+  \centering
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_pp_selected_diff}
+      \caption{Prefer Candidate for President}
+      \label{fig:strpartisan_selected_diff}
+    \end{subfigure}
+    \\
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_pp_prob_diff}
+      \caption{Candidate Rating}
+      \label{fig:strpartisan_prob_diff}
+    \end{subfigure}
+\end{figure}
+
+
+<<ols.regs.partisan,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+groups <- c("dem", "gop", "ind")
+
+for (i in 1:length(dvs)) {
+
+    for (g in 1:length(groups)) {
+        setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat[which(stack.dat$", groups[g], " == 1),])", sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("clustered <- clx(ols, 1, stack.dat[which(stack.dat$", groups[g], " == 1),]$id)", sep = "")
+        eval(parse(text = setup))
+
+        betas <- clustered[,1]
+        se <- clustered[,2]
+        p.vals <- clustered[,4]
+
+        upper <- betas + (qnorm(.975) * se)
+        lower <- betas - (qnorm(.975) * se)
+
+        setup <- paste("betas2.", groups[g], " <- betas[2:length(betas)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("upper2.", groups[g], " <- upper[2:length(upper)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("lower2.", groups[g], " <- lower[2:length(lower)]", sep = "")
+        eval(parse(text = setup))
+    }
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"partisan_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2.dem))
+    x.step <- .05
+    x.lim <- c()
+    #x.lim[1] <- floor(min(lower2.dem, lower2.gop, lower2.ind)*10)*.1
+    #x.lim[2] <- ceiling(max(upper2)*10)*.1
+    x.lim[1] <- round_any(min(lower2.dem, lower2.gop, lower2.ind), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2.dem, upper2.gop, upper2.ind), accuracy = x.step, f = ceiling)
+
+    y.offset <- 0.15
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2.dem, c(y.lim[2]:y.lim[1])+y.offset, type = "p", pch = pch.dem, col = dem.color, bg = bg.dem)
+    points(betas2.gop, c(y.lim[2]:y.lim[1]), type = "p", pch = pch.gop, col = gop.color, bg = bg.gop)
+    points(betas2.ind, c(y.lim[2]:y.lim[1])-y.offset, type = "p", pch = 23, col = "black", bg = "black")
+
+    segments(upper2.dem, c(y.lim[2]:y.lim[1])+y.offset, lower2.dem, c(y.lim[2]:y.lim[1])+y.offset, lwd = 2, col = dem.color)
+    segments(upper2.gop, c(y.lim[2]:y.lim[1]), lower2.gop, c(y.lim[2]:y.lim[1]), lwd = 2, col = gop.color)
+    segments(upper2.ind, c(y.lim[2]:y.lim[1])-y.offset, lower2.ind, c(y.lim[2]:y.lim[1])-y.offset, lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    # Legend
+    legend("topleft", c("Dem.", "GOP", "Ind."), pch = c(pch.dem, pch.gop, 23), cex = cex.val, pt.bg = c(dem.color, gop.color, "black"), bg = "white", inset = .01)
+
+    dev.off()
+}
+
+@
+
+%\begin{figure}
+%  \caption[Effect of Character Traits by Party]{\textbf{Effect of Character Traits by Party}\\ {\footnotesize \textit{Note}: }}\label{fig:h1_partisan}
+%  \centering
+%  \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{partisan_ols_selected}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:h1_selected_partisan}
+%  \end{subfigure}
+%  \\
+%  \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{partisan_ols_prob_zero1}
+%      \caption{Candidate Rating}
+%      \label{fig:h1_prob_partisan}
+%  \end{subfigure}
+%\end{figure}
+
+
+<<ols.regs.ideology,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+groups <- c("lib", "con", "mod")
+
+for (i in 1:length(dvs)) {
+
+    for (g in 1:length(groups)) {
+        setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat[which(stack.dat$", groups[g], " == 1),])", sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("clustered <- clx(ols, 1, stack.dat[which(stack.dat$", groups[g], " == 1),]$id)", sep = "")
+        eval(parse(text = setup))
+
+        betas <- clustered[,1]
+        se <- clustered[,2]
+        p.vals <- clustered[,4]
+
+        upper <- betas + (qnorm(.975) * se)
+        lower <- betas - (qnorm(.975) * se)
+
+        setup <- paste("betas2.", groups[g], " <- betas[2:length(betas)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("upper2.", groups[g], " <- upper[2:length(upper)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("lower2.", groups[g], " <- lower[2:length(lower)]", sep = "")
+        eval(parse(text = setup))
+    }
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"ideology_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2.lib))
+    x.step <- .05
+    x.lim <- c()
+    x.lim[1] <- round_any(min(lower2.lib, lower2.con, lower2.mod), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2.lib, upper2.con, upper2.mod), accuracy = x.step, f = ceiling)
+
+    y.offset <- 0.15
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2.lib, c(y.lim[2]:y.lim[1])+y.offset, type = "p", pch = pch.dem, col = dem.color, bg = bg.dem)
+    points(betas2.con, c(y.lim[2]:y.lim[1]), type = "p", pch = pch.gop, col = gop.color, bg = bg.gop)
+    points(betas2.mod, c(y.lim[2]:y.lim[1])-y.offset, type = "p", pch = 23, col = "black", bg = "black")
+
+    segments(upper2.lib, c(y.lim[2]:y.lim[1])+y.offset, lower2.lib, c(y.lim[2]:y.lim[1])+y.offset, lwd = 2, col = dem.color)
+    segments(upper2.con, c(y.lim[2]:y.lim[1]), lower2.con, c(y.lim[2]:y.lim[1]), lwd = 2, col = gop.color)
+    segments(upper2.mod, c(y.lim[2]:y.lim[1])-y.offset, lower2.mod, c(y.lim[2]:y.lim[1])-y.offset, lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    # legend
+    legend("topleft", c("Lib.", "Cons.", "Mod."), pch = c(pch.dem, pch.gop, 23), cex = cex.val, pt.bg = c(dem.color, gop.color, "black"), bg = "white", inset = .01)
+
+    dev.off()
+}
+
+@
+
+
+%\begin{figure}
+%  \caption[Effect of Character Traits by Ideology]{\textbf{Effect of Character Traits by Ideology}\\ {\footnotesize \textit{Note}: }}\label{fig:h1_ideo}
+%  \centering
+%  \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{ideology_ols_selected}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:h1_selected_ideo}
+%  \end{subfigure}
+%  \\
+%  \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{ideology_ols_prob_zero1}
+%      \caption{Candidate Rating}
+%      \label{fig:h1_prob_ideo}
+%  \end{subfigure}
+%\end{figure}
+
+
+
+
+<<ols.regs.candpartisan,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+groups <- c(1, 2, 0)
+
+for (i in 1:length(dvs)) {
+
+    for (g in 1:length(groups)) {
+        setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat[which(stack.dat$candidate.party == ", groups[g], "),])", sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("clustered <- clx(ols, 1, stack.dat[which(stack.dat$candidate.party == ", groups[g], "),]$id)", sep = "")
+        eval(parse(text = setup))
+
+        betas <- clustered[,1]
+        se <- clustered[,2]
+        p.vals <- clustered[,4]
+
+        upper <- betas + (qnorm(.975) * se)
+        lower <- betas - (qnorm(.975) * se)
+
+        setup <- paste("betas2.", groups[g], " <- betas[2:length(betas)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("upper2.", groups[g], " <- upper[2:length(upper)]", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("lower2.", groups[g], " <- lower[2:length(lower)]", sep = "")
+        eval(parse(text = setup))
+    }
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"cand_partisan_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2.1))
+    x.step <- .05
+    x.lim <- c()
+    #x.lim[1] <- floor(min(lower2.dem, lower2.gop, lower2.ind)*10)*.1
+    #x.lim[2] <- ceiling(max(upper2)*10)*.1
+    x.lim[1] <- round_any(min(lower2.1, lower2.2, lower2.0), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2.1, upper2.2, upper2.0), accuracy = x.step, f = ceiling)
+
+    y.offset <- 0.15
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2.1, c(y.lim[2]:y.lim[1])+y.offset, type = "p", pch = pch.dem, col = dem.color, bg = bg.dem, cex = cex.val)
+    points(betas2.2, c(y.lim[2]:y.lim[1]), type = "p", pch = pch.gop, col = gop.color, bg = bg.gop, cex = cex.val)
+    points(betas2.0, c(y.lim[2]:y.lim[1])-y.offset, type = "p", pch = 23, col = "black", bg = "black", cex = cex.val)
+
+    segments(upper2.1, c(y.lim[2]:y.lim[1])+y.offset, lower2.1, c(y.lim[2]:y.lim[1])+y.offset, lwd = 2, col = dem.color)
+    segments(upper2.2, c(y.lim[2]:y.lim[1]), lower2.2, c(y.lim[2]:y.lim[1]), lwd = 2, col = gop.color)
+    segments(upper2.0, c(y.lim[2]:y.lim[1])-y.offset, lower2.0, c(y.lim[2]:y.lim[1])-y.offset, lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    # Legend
+    legend("topleft", c("Dem.", "GOP", "Ind."), pch = c(pch.dem, pch.gop, 23), cex = cex.val, pt.bg = c(dem.color, gop.color, "black"), bg = "white", inset = .01)
+
+    dev.off()
+}
+
+@
+
+\begin{figure}
+  \caption{\textbf{Effect of Character Traits by Candidate Partisanship}\\ {\footnotesize \textit{Note}: The figure reports the effect of each trait for Democratic, Republican, and Independent candidates separately (three separate models).}}\label{fig:cand_partisan}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{cand_partisan_ols_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:cand_selected_partisan}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{cand_partisan_ols_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:cand_prob_partisan}
+  \end{subfigure}
+\end{figure}
+
+
+
+
+%\section{Additional Results of Interaction Models}
+
+\begin{figure}
+  \caption{\textbf{Effect of Interactions between Character Traits and Moral Foundations}\\ {\footnotesize \textit{Note}: The figures report the coefficients for each variable plus 95\% confidence intervals. The bottom eight rows in each panel show the coefficients for the interactions.}}\label{fig:interaction_betas}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{interaction_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:interaction_betas_selected}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{interaction_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:interaction_betas_prob}
+  \end{subfigure}
+\end{figure}
+
+
+<<other.interactions,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("Not Disgusted x\nSanctity", "Not Disgusted x\nCare", "Not Disgusted x\nFairness")
+
+interact.found <- c("f.pure", "f.care", "f.fair")
+
+for (i in 1:length(dvs)) {
+
+    betas2 <- c()
+    upper2 <- c()
+    lower2 <- c()
+    for (f in 1:length(interact.found)) {
+        setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp + str_party2 + f.care + f.fair + f.auth + f.loyal + f.pure + (str_party2 * inparty_cand) + (f.care * re_care) + (f.fair * re_honest) + (f.fair * re_egal) + (f.auth * re_auth) + (f.loyal * re_loyal) + (f.pure * re_pure1) + (re_pure2 * ", interact.found[f], "), dat = stack.dat)", sep = "")
+        eval(parse(text = setup))
+        #summary(ols)
+
+        setup <- paste("ols.", dvs[i], " <- ols", sep = "")
+        eval(parse(text = setup))
+
+        clustered <- clx(ols, 1, stack.dat$id)
+
+        betas <- clustered[,1]
+        se <- clustered[,2]
+        p.vals <- clustered[,4]
+
+        upper <- betas + (qnorm(.975) * se)
+        lower <- betas - (qnorm(.975) * se)
+
+        betas2[f] <- betas[length(betas)]
+        upper2[f] <- upper[length(upper)]
+        lower2[f] <- lower[length(lower)]
+    }
+
+
+    # Creating coefficient figure
+    setup <- paste("pdf(",'"',"alt_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2))
+
+    x.lim <- c()
+    x.step <- .1
+    x.lim[1] <- round_any(min(lower2), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,2,5))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+
+    points(betas2, c(y.lim[2]:y.lim[1]), type = "p", pch = 21, col = "black", bg = "black", cex = cex.val)
+
+    segments(upper2, c(y.lim[2]:y.lim[1]), lower2, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = round(seq(x.lim[1], x.lim[2], by = x.step),1), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+}
+
+@
+
+%\begin{figure}
+%  \caption{\textbf{Alternative Interactions with Homophobia}\\ {\footnotesize \textit{Note}: }}\label{fig:altinteract_homophobia}
+%  \centering
+%  \includegraphics[width=\textwidth]{alt_selected}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:altinteract_selected}
+%  \end{subfigure}
+%  ~
+%  \begin{subfigure}[b]{.48\textwidth}
+%      \includegraphics[width=\textwidth]{alt_prob_zero1}
+%      \caption{Candidate Rating}
+%      \label{fig:altinteract_prob}
+%  \end{subfigure}
+%\end{figure}
+
+\begin{figure}
+  \caption{\textbf{Alternative Interactions with Not Disgusted by Homosexuality}\\ {\footnotesize \textit{Note}: This figure reports the effect sizes (coefficients) plus 95\% confidence interval for alternative interactions between homophobia (``disgusted by homosexuality'') and a moral foundation. Only the interaction with sanctity is significant. The trait does not interact significantly with either care or fairness.}}\label{fig:alt}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{alt_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:alt_selected}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{alt_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:alt_prob}
+  \end{subfigure}
+\end{figure}

@@ -1,0 +1,1041 @@
+%\documentclass[12pt]{article}
+%%%% For figures
+%\usepackage{graphicx}
+%%\usepackage{subfig,rotate}
+%
+%%%% for comments
+%\usepackage{verbatim}
+%
+%%%% For tables
+%\usepackage{multirow}
+%% Longtable lets you have tables that span multiple pages.
+%\usepackage{longtable}
+%
+%% Booktabs produces far nicer tables than the standard LaTeX tables.
+%%   see: http://en.wikibooks.org/wiki/LaTeX/Tables
+%\usepackage{booktabs}
+%
+%%set parameters for longtable:
+%% default caption width is 4in for longtable, but wider for normal tables
+%\setlength{\LTcapwidth}{\textwidth}
+%
+%%%%Package for citations
+%\usepackage{harvard}
+%
+%\usepackage{setspace}
+%%\usepackage{geometry}
+%\usepackage{fancyhdr}
+%\usepackage{amsmath,amsthm,amssymb}
+%\usepackage{graphicx}
+%\usepackage{hyperref}
+%\usepackage{pdflscape}
+%\usepackage{fullpage}
+%\usepackage{dcolumn}
+%\usepackage{varioref}
+%\usepackage{placeins}
+%\usepackage{varioref}
+%\usepackage{caption}
+%%\usepackage{knitr}
+%\usepackage{fixltx2e}
+%\usepackage{soul}
+%
+%% Need to use one or the other, but can't use both
+%\usepackage{subcaption}
+%%\usepackage{subfig}
+%
+%\graphicspath{ {c:/Users/Public/Figures/} }
+%%\let\footnote=\endnote
+%%\renewcommand{\harvardurl}{\url}
+%%\usepackage{marvosym}
+%
+%\linespread{1.6}
+%\graphicspath{ {C:/Users/Public/Figures/} }
+%
+%\title{The Good One or the Smart One?: Experimental Evidence for How Individuals Choose Presidential Candidates\thanks{I thank Tali Mendelberg, Marty Gilens, Omar Wasow, LaFleur Stephens, Katie Donovan, and the Princeton Politics Department's Behavior Workshop and Graduate Research Seminar in American Politics for their helpful feedback and suggestions. I am grateful to the Center for the Study of Democratic Politics (CSDP) at Princeton University for financial support.}}
+%\usepackage[left=1in,top=1in,right=1in,bottom=1.1in]{geometry}
+%\setstretch{1.5}
+%\author{J. Baxter Oliphant\thanks{Ph.D. Candidate, Department of Politics, Princeton University}}
+%\date{}
+%
+%\begin{document}
+%\maketitle
+%
+%\newcommand\spacingset[1]{\renewcommand{\baselinestretch}%
+%{#1}\small\normalsize}
+%\spacingset{1.25}
+%
+%
+%%\addvspace{1in}
+%\begin{abstract}
+%\noindent This chapter examines the effect of moral judgments of presidential candidates on vote choice using an original survey experiment. The survey experiment primes different considerations of a hypothetical out-party president and tests whether negative moral judgments significantly increase respondents' support for the in-party candidate and opposition to the out-candidate. The results show that negative moral messages have a consistently larger effect than negative messages about competence. Furthermore, negative moral judgments make respondents less supportive of balanced political compromise and have a coattail effect on U.S. House vote. Overall, the analysis suggests that moral judgments of political actors are a significant mechanism for how moral emotions and intuitions affect electoral support.
+%\end{abstract}
+%
+%\newpage
+%\spacingset{1.6}
+
+%<<child-settings, child='master_settings.Rnw',>>=
+%@
+
+%R - Importing vignette experiment results
+<<vig.setup,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+  library(foreign)
+  library(qdap)
+  library(Hmisc)
+  library(xtable)
+  library(stargazer)
+
+  setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2014 Vignettes MTurk/MTURK_Vignettes_Pretest_5")
+
+  dat <- read.dta("Vignette Pre-test 3 and 4 and 5 old.dta")
+
+  dat.all <- dat
+
+  dat.partisan <- dat[which(dat$partisan == 1),]
+
+  dat.gop <- dat[which(dat$gop == 1),]
+  dat.dem <- dat[which(dat$dem == 1),]
+  dat.ind <- dat[which(dat$ind == 1),]
+
+  dat.lean <- dat[which(dat$leaner == 1),]
+  dat.strong <- dat[which(dat$str_party == 3),]
+
+
+
+  setwd("C:/Users/Public/Figures/")
+
+  dvs <- c("vote_mitchell")
+  group <- c("all")
+
+  num.step <- .035
+
+  x.label <- c("Control", "Competent", "Moral", "Moral+Comp.", "Incompetent", "Immoral", "Immoral+Incomp.",
+    "Immoral+Comp.", "Moral+Incomp.")
+
+  comparisons <- list(c("Moral", "Comp"), c("Immoral", "Moral"), c("Immoral", "Incomp"),
+      c("Incomp", "Comp"), c("ImmoralComp", "MoralComp"), c("MoralIncomp", "MoralComp"),
+      c("ImmoralIncomp", "MoralIncomp"), c("ImmoralIncomp", "ImmoralComp"),
+      c("ImmoralComp", "MoralIncomp"))
+
+  comparisons.full <- list(c("Moral", "Competent"), c("Immoral", "Moral"), c("Immoral", "Incompetent"),
+      c("Incompetent", "Competent"), c("Immoral +\nCompetent", "Moral +\nCompetent"), c("Moral +\nIncompetent", "Moral +\nCompetent"),
+      c("Immoral +\nIncompetent", "Moral +\nIncompetent"), c("Immoral +\nIncompetent", "Immoral +\nCompetent"),
+      c("Immoral +\nCompetent", "Moral +\nIncompetent"))
+
+  comparison.colors <- list(c("gold1", "darkgoldenrod4"), c("gold1", "gold1"), c("gold1", "darkgoldenrod4"),
+      c("darkgoldenrod4", "darkgoldenrod4"), c("gold4", "goldenrod"), c("goldenrod2", "goldenrod"),
+      c("darkgoldenrod", "goldenrod2"), c("darkgoldenrod", "gold4"),
+      c("gold4", "goldenrod2"))
+
+  label.locations <- list(c(3, 2), c(6, 3), c(6, 5), c(5, 2), c(8, 4), c(9, 4), c(7, 9), c(7, 8), c(8, 9))
+
+  setwd("C:/Users/Public/Figures/")
+@
+
+\chapter{Morality vs. Competence in Presidential Voting: Experimental Evidence}\label{ch:vignettes}
+
+There is a paradox in contemporary theories of morals and politics. The most prominent theories rely on direct connections between moral values and specific political issues to explain how morals affect politics \citeaffixed{Haidt2012,SkitkaMorgan2014}{See}. However, research into mass political behavior consistently finds that the effects of issues are typically small and inconsistent because many citizens lack strong issue-based preferences, know little about political issues, and struggle to correctly incorporate issue-relevant information into their political judgments \citeaffixed{Bartels2003,DelliCarpiniKeeter1996,MalhotraKuo2008}{See}. Given this disconnect between the theories' reliance on issues and the public's relationship with political issues, there is a need for political scientists to better explore how citizens connect moral intuitions and values with their political behavior.
+
+This chapter provides experimental evidence showing that moral judgments of political actors help resolve this paradox. Citizens make moral judgments of actors, especially at the presidential level, that connect morals to their political behavior --- without relying directly on issue attitudes. Citizens forget the reasons why they form impressions of candidates \citeaffixed{LodgeMcGrawStroh1989}{see}, but the effects of these judgments persist. When these impressions are formed based on moral emotions and intuitions, they result in moral judgments of candidates. As a result, citizens form stable moral judgments of the candidates that provide a pathway for moral emotions and intuitions to affect voting without the explicit relationships between morals and issues at the center of other theories.
+
+Previous research has consistently found that judgments of candidates correlate significantly with vote choice \cite{Campbelletal1960,FridkinKenney2011,Funk1999,Hayes2005,Hayes2010,Kinder1986,Marshall1984,MillerMiller1976}. In the earliest days of public opinion research, for example, \citeasnoun**{Campbelletal1960} argued that Dwight Eisenhower's personal favorability helped him overcome Republican's large disadvantage in party identification in the 1950s. Similar effects have been found in congressional elections. More favorably viewed Senate candidates, for example, do better than less favorably viewed candidates \citeaffixed{FridkinKenney2011,Hayes2010}{See}. Furthermore, learning about candidates' traits plays a significant role in electoral campaigns. As individuals become more certain about who candidates are, they also become more certain of their vote choice \cite{Peterson2005,Peterson2009}.
+
+It remains unclear, however, exactly which traits and judgments are most important for political behavior. Much of the research on the topic has tended to lump judgments together onto a single dimension of like vs. dislike \citeaffixed{LodgeMcGrawStroh1989}{e.g.,} or split them up without trying to find commonalities that unite different traits. When scholars have disaggregated perceptions of actors into specific dimensions, the classifications used have been inconsistent or under-theorized, leading to inconsistent findings that are difficult to generalize across elections and candidates. Some scholars have found that perceptions of competence matter the most because of their relevance to the task of governing \citeaffixed{Fiorina1981,Funk1997,Milleretal1986,Todorovetal2005}{e.g.}. On the other hand, there is evidence that judgments of morality and values are the core elements of citizens' perceptions of political leaders \citeaffixed{Clifford2014,CuddyFiskeGlick2007}{See}.
+
+Furthermore, previous research into the role of judgments of candidates has several gaps. First, most of the evidence for the role of candidate traits relies on observational data, leaving it uncertain whether judgments affect vote choice or vice versa \cite{Rahnetal1994}. This observational work has also tended to neglect the dynamics of impression formation and treated judgments as static. The research that has looked at the dynamics of candidate judgment does not distinguish between different types of trait judgments \cite{Peterson2009}. Second, the experimental work that has explicitly explored which traits matter for vote choice has tended to focus on weak conceptualizations of some traits, especially morality, \citeaffixed{Funk1997}{e.g.} or on the special cases of judgments after political scandals \cite{Funk1996a,PetersonVonnahme2014,Stoker1993,WelchHibbing1997}. Scandals have the advantage of providing plausibly exogenous shocks to character judgments, but they illustrate extremes that are fairly rare for most political leaders. And third, the research has ignored important differences in how political actors are judged across partisan groups versus within them \citeaffixed{Bartels2002,Kinder1986}{e.g.}. Politicians do not exist independently of their partisanship. Democrats and Republicans will differ significantly in the traits they emphasize in their judgments \cite{Barkeretal2006,Clifford2014,Hayes2005}, yet there is significant variations in these judgments within partisan groups.
+
+This chapter addresses these three gaps in the literature by leveraging a survey experiment to explore how judgments of politicians' character affect vote choice. The survey experiment manipulates judgments of a hypothetical out-party president independently of his ideology and policy positions. The manipulations are made without scandal, which is more typical of standard political judgments. I examine the effect of these treatments \emph{within} partisan groups to assess how partisans who do make moral judgments of the out-party's leader differ from those who do not. The emphasis on the out-party emphasizes the larger weight individuals give to their negative perceptions, especially when judging the other party's candidates \cite{Goren2002,Goren2007}. The experimental design allows for causal identification of the impact of moral judgments on electoral support.
+
+The impact of moral traits at the presidential level is not fully understood. Not all dimensions of judgments of candidates will have the same effect on vote choice at the presidential level because of the unique role presidents play in the U.S. political system. These elections garner significantly more participation and media coverage than other races. Moral judgments --- values-based judgments of whether candidates exhibit or possess obligatory characteristics\footnote{This definition follows Haidt's \citeyear{Haidt2001} definition of moral judgments as ``evaluations (good vs. bad) of the actions or character of a person that are made with respect to a set of virtues held to be obligatory by a culture or subculture'' (817).} --- will be particularly influential because of their connections to core moral values and intuitions \cite{Clifford2014,Haidt2001}. Because moral judgments are less demanding cognitively \cite{Cushmanetal2006,Stroh1995}, more accessible \cite{Narvaezetal2006}, nearly automatic \cite{Ulemanetal1996}, and emotionally potent \cite{Haidt2001,Haidt2012}. Morality is uniquely important in social perception \cite{Brambillaetal2011,BrambillaLeach2014,Wojciszkeetal1998a}; it should play a similar role in political perceptions.
+
+These moral judgments are particularly important for partisans because they can justify motivated, biased judgments with an appearance of objectivity. Partisans have dual motivations to be loyal to their party while also appearing to be unbiased in holding elected officials accountable \cite{Groenendyk2013}. Judgments of competence are normatively important because they are key to appearing to being a good citizen who holds elected representatives accountable regardless of party \cite{Page1978,Popkin1991}, but they require more information and effort to form than most citizens possess. On the other hand, partisans can feel their way to moral judgments through less demanding moral emotions and intuitions. Moral judgments are highly motivated and can be very partisan, but they outwardly maintain an appearance of being unbiased. By their very nature, these judgments resist contrary evidence and compromise \cite{Marietta2009,Tetlock2003}, but to their holders they feel very legitimate and unbiased. These judgments do not require a rational basis; individuals can simply assert them \cite{Haidt2001}. Even when the basis for a moral judgment is undermined, individuals will stick to it because they \emph{feel} it is still legitimate and right \cite{Haidtetal1993}. %Furthermore, previous research has shown that across partisan groups judgments of candidates' character is not as important as partisanship itself because the variance in the judgments is strongly correlated with partisanship \cite{Bartels2002}. Yet \emph{within} partisan groups there are important differences that are obscured when examining judgments across groups (e.g. examining how individuals judge a single actor, such as Bill Clinton, instead of exploring how each side perceives the other's nominee).
+
+The analysis in this chapter asks what is the relationship between moral judgments of the candidates and vote choice. Do citizens want to support the good candidate or are they drawn to the smart one? I use a survey experiment to assess how different judgments of a hypothetical future president have difference effects on the likelihood of supporting him or a hypothetical out-party challenger. The results show that moral judgments do have a significantly larger effect on voting than judgments of competence.
+
+In the next section I introduce the theoretical framework for understanding how moral judgments of candidate will impact vote choice and political compromise. Section \ref{sec:vig_design} describes the survey experiment's design. Section \ref{sec:vig_results} reports the results showing that moral judgments have an independent effect on vote choice that is consistently stronger than the effect of competence. In the last section, I review the findings and discuss their implications for presidential campaigns.
+
+
+
+\section{Theory}\label{sec:vig_theory}
+The two leading theories of morals and politics, moral foundations theory and moral convictions theory, focus on how political issues elicit moral reactions and become moralized \cite{Haidt2012,SkitkaMorgan2014}; however, their reliance on issues fits poorly with what political scientists know about political behavior. Political issues tend to be fairly unimportant for the political behavior of many citizens. Issue-based explanations are less effective for explaining vote in the complex environment of presidential elections when many different issues characterize the campaign and the choice is between individual candidates instead of issues or policies. An alternative pathway for morals to affect politics is through judgments of candidates. Voters see vote choice as a moral choice \cite{SkitkaBauman2008}, and moral values significantly influence how people judge politicians \cite{Clifford2014}. Yet actors are almost entirely absent from the above theories.
+
+%Perceptions of presidential candidates are complex amalgamations of political values, party stereotypes, policy positions, and individual characteristics that can have significant moral meaning.
+
+Political scientists have proposed and identified a bewildering number of dimensions for candidate perception \cite{BenoitMcHale2003,Funk1996b,Kinder1986,Marshall1984,Milleretal1986,Sigel1966,Trentetal2001}; however, I adopt the approach of \citeasnoun{IyengarKinder1987}, other political scientists \cite{McCurleyMondak1995,Mondak1995}, and social psychologists \cite{FiskeCuddyGlick2007,Tauschetal2007} of structuring perceptions along two primary dimensions. One dimension pertains to competence and a second to morality.\footnote{Social psychologists tend to call the second dimension ``warmth'' \cite**{CuddyFiskeGlick2007,FiskeCuddyGlick2007,Tauschetal2007}, though some use ``moral'' \cite**{Wojciszkeetal1998a,Wojciszkeetal1998b,Brambillaetal2011}. \citeasnoun{IyengarKinder1987} refer to it as ``integrity.'' \citeasnoun{Johnstonetal2004} refer to the dimensions as ``character'' and ``competence.'' Political scientists have often used ``warmth'' to refer to candidates' friendliness, charisma, or charm charm --- whether they would be good company for a beer \citeaffixed{Funk1997}{e.g.}. But that notion is much narrower than what social psychologists refer to using the same word. I use \emph{moral} to more clearly identify the dimension as a judgment of candidates' values-based traits that are relevant to how they intend to act in office.} Social psychologists believe these two perceptional mechanisms developed to help humans quickly and automatically ascertain a new actor's abilities to harm and desires to harm. The first determination is our judgment of a group or individual's competence; the second is our judgment of their morality.
+
+%There are essentially two primary dimensions for judging presidential candidates \citeaffixed{Funk1996b}{see}. First, \emph{can} this person be president? Can she manage the responsibilities and work load? Will he understand the complexities of the job? And second, \emph{should} this person be president? Does he have the right values? Is she a good enough person to wield power well?
+
+The first dimension focuses on competence and is plausibly more objective, but it may be harder for the average citizen to assess. The mass public lacks the political information to judge competence in many, if not most, areas of policy and governance \citeaffixed{HealyMalhotraMo2010,MalhotraKuo2008}{See}. Assessing politicians' capacity to hold office suggests one should know the responsibilities of the office, what constitutes pursuing those responsibilities competently, and how to judge if that is being done. Few citizens have the resources necessary to do that \cite{DelliCarpiniKeeter1996}. Thus, both on issue voting and accurate attributions of responsibility for outcomes, the public often finds competence judgments difficult to make accurately. Additionally, individuals judge competence before candidates even takes office. Hence, these judgments will be contingent and imprecise, making them a poor foundation for decided to support a candidate. Together these factors suggest that competence may not be as important for voting as once thought.
+
+The second judgment focuses on intentions, or morality, and whether those intentions conform with one's values \cite{CuddyFiskeGlick2007,FiskeCuddyGlick2007,Wojciszkeetal1998a}. There are a number of factors that point to this class of judgments being more influential than judgments of competence. Moral judgments are more common and accessible cognitively, which researchers have found means people are willing to make moral judgments with less information than competence judgments \cite{Tauschetal2007}. Moral judgments are also highly intuitive; they occur before explicit cognitive reasoning begins \cite{Haidt2001}. Moral judgments are politically subjective and easier to make in complex environments \cite{FiskeCuddyGlick2007}. Citizens can use these judgments to make inferences about what candidates will do in office, which make them a more concrete and salient basis for vote choice.
+
+Scholars have traditionally emphasized the first dimension in perceptions of candidates. Empirical research \cite{Castellietal2009,DruckmanJacobsOstermeier2004,Funk1999,IyengarKinder1987,McCurleyMondak1995,Mondak1995} and normative theories have typically emphasized competence over morality because it is arguable a more rational way for voters to assess representatives' performance \cite{Fiorina1981,Page1978,Popkin1991}. These theories argue that competence is more task-relevant \citeaffixed{Funk1997}{See}.\footnote{\citeasnoun{Funk1997} experimentally compares competence with a warmth dimension focused on friendliness and collegiality to build this argument. The evidence is convincing that voters prefer a capable representative over one who would be a great neighbor or co-worker. For my purposes, however, I want to compare competence with a stronger conceptualization of morality.} Competence appears in open-ended descriptions of presidential candidates consistently \cite{Milleretal1986}\footnote{Competence's prevalence may be a product of how the question is typically asked, which produces some bias \citeaffixed[163]{LauRedlawsk2006}{See}.}, and it predicts global evaluations well \cite{Kinder1986,MillerMiller1976}. Competence has also emerged as particularly important in visual impressions of candidates \cite{Mattesetal2010,Todorovetal2005}, though in more competitive races these automatic impressions may not matter as much \cite{Atkinsonetal2009}. %Much of the evidence for the preeminence of competence comes from studies focused on legislative races \cite{Castellietal2009,Funk1997,McCurleyMondak1995,Mondak1995}.
+
+Recent theoretical and empirical developments suggest moral judgments might be more important than previous research concluded. In large elections, there is evidence to suggest that voters are more likely to care about morality than competence because it offers them an expressive benefit \cite{Feddersenetal2009,Williams2011}. Voters know their vote is unlikely to determine they election, so they look for candidates who best communicates their values rather than their material interests.\footnote{Of course, in many elections partisanship may already reflect material interests (e.g. union members voting Democrat), and the moral judgments are \emph{post hoc} justifications \cite{Rahnetal1994}. However, I believe those very justifications reveal the moral reasoning partisans are making about their attitudes and preferences, which is meaningful in its own right because it reveals how individuals rationalize their vote choices.}. These expressive tendencies will be particularly relevant when partisans perceive a moral difference between candidates. Voters will see their ballot as an opportunity to reaffirm their commitment to important, non-negotiable values \cite{Tetlock2000,Tetlock2003,Tetlocketal2000}. Furthermore, these moral judgments frame voting as a choice between good and evil, which will give citizens stronger directional motivations for their vote choice \cite{TaberLodgeGlathar2001}.
+
+Social psychological research has found that moral and competence judgments have very different characteristics and implications. Moral traits directly connect with one's moral intuitions, which automatically bias conclusions before cognitive reasoning even engages \cite{Haidt2012}. Judgments that engage these intuitions are going to have very different implications on behavior than others. \citeasnoun{Clifford2014} finds that the moral traits of less well-known politicians exemplify the morality of their policy positions, especially when those positions deviate from partisan expectations. Traits and policies are intertwined, which means moral judgments will be intuitive and emotionally potent through these connections \cite{Haidt2001,Haidt2003}. Moral traits will have different emotional foundations than other judgments, and those differences have real implications for deciding how to vote. Different emotions have different impacts on behavior. Moral emotions tend to unite groups and motivate people to act in ways that are socially beneficial \cite{Haidt2003}. Moral emotions also tend to focus on people rather than issues \cite{Petersen2010}. Individuals get mad at the people saying and doing the things they believe are morally wrong. The things themselves are not the emotional targets.
+
+Moral judgments will also be particularly influential for vote choice because they are more diagnostic of an actor's true nature. People require less information before making moral judgments than competence judgments \cite{Tauschetal2007}. Just a few (if that many) deviations from moral norms can result in stable, long-term negative moral judgments. On the other hand, judgments of competence can resist a number of deviations before being revised. People perceived to be competent can act incompetently a number of times before the judgment changes. There is not the same allowance for moral judgments. One immoral act can destroy a reputation of morality. In this sense, information about morality is more diagnostic of character. People need less experience and information to ``figure out'' core moral characteristics. Thus it may be easier for individuals to learn enough about candidates to make a real judgment about morality than competence during campaigns.
+
+Moral judgments are cognitively easy and accessible as well. Morals are a particularly accessible consideration \cite{Clifford2014,FazioWilliams1986,Narvaezetal2006}, and more accessible considerations are more likely to influence behavior. Furthermore, moral judgments are cognitively less demanding as a result of the accessibility of moral considerations \cite{Cushmanetal2006,Stroh1995}. In many circumstances, moral reasoning is almost automatic. More labor-intensive cognitive reasoning is not engaged \cite{Greeneetal2001}. Moral judgments are quick and easy, so to speak, so they should activate more easy when citizens encounter political information during a campaign. These considerations will have a stronger influence on their reasoning than others.
+
+Citizens cannot form their judgments of morality independently of other political influences; they are dependent on partisanship, moral intuitions, and many other factors \cite{Bartels2002,Clifford2014,Johnstonetal2004}. As mentioned in Chapter 2, these pre-dispositions shape how actors are initially perceived through campaign information and media coverage \cite{LodgeTaber2013}. Numerous biases and motivations influence the first moments of perception, with significant downstream effects on judgment. Initial emotional reactions tilt individuals toward certain conclusions and judgments about political phenomena. However, with time the specific information that caused the judgments is forgotten, but the impressions remain. These on-line judgments \cite{LodgeMcGrawStroh1989,LodgeSteenbergenBrau1995} are weighted to favor emotional associations with moral intuitions that can transfer their emotional content to the actors \cite{LodgeTaber2005}. Thus, moral emotions, such as anger and disgust, become attached to judgments of officeholders and candidates \cite{Haidt2003}.\footnote{Elsewhere I have found that negative moral trait judgments are significantly more likely to elicit moral emotions, especially anger and disgust, in partisans (see Chapter 3). For example, a Republican who believes President Obama is not moral is much more likely to report feeling moral emotions as a result of that judgment than similar negative judgments of Obama's competence. Traits differ in the emotions upon which they are based.}
+
+This association between actors and moral emotions means that in a sense actors can become moral intuitions in their own right \citeaffixed{Westenetal2006}{See}. Moral judgments of actors encode moral feelings and perceptions that have been felt and then forgotten. Attitudes toward the actors become moralized and impact vote choice similarly to how moralized issues impact political behavior \cite{SkitkaBauman2008}. Republicans, for example, form their moral judgments of President Obama based on their emotional reactions to information about his personality, work history, ideology, and policies. They do not retain the information that elicited the judgments, but the judgment remains. Later, when Republicans encounter new information framed around President Obama, their on-line assessment of the president is activated. This process activates the moral emotions and intuitions centered on the actor without activating issue-specific considerations.
+
+
+
+\section{Experimental Design}\label{sec:vig_design}
+A weakness in the existing literature on the impact of character judgments on vote choice at the presidential level is that most studies cannot speak to whether judgments cause the vote or vice versa because they use observational data. Those studies that have used experimental methods have often compared strong competence traits against relatively weaker traits of sociability or friendliness \citeaffixed{Funk1997,HomerBatra1994}{See}. Additionally, many of these experimental studies have also been focused on congressional candidates. To address this gap in the literature, I fielded an online survey experiment that primed judgments about a hypothetical out-party president with the objective of measuring the impact of those treatments on participants' likelihood of supporting that candidate or an in-party challenger.
+
+The experiment gave respondents different messages regarding the hypothetical president's morality and/or competence. All respondents read the same introductory paragraph with basic background information about a hypothetical out-party president, which included his prior experience in elected office, the size of his victory in the popular vote and Electoral College, his policy agenda, and the ideology of his policies.\footnote{I described the hypothetical actor as a sitting president ``in the future'' (year 2025) to differentiate him from contemporary politicians. There are a number of politicians who are widely perceived as possible presidential candidates in the future, and respondents may have easily thought of them if the hypothetical actor was a non-incumbent presidential candidate.} The control saw nothing more about the president and moved on to other questions. There were eight treatment groups that saw between three to six additional paragraphs describing the president. The statements were labeled as coming from generic co-partisans. The experimental design is between groups; it does not allow an examination of within-person changes. Participants only saw one message regarding the president.
+
+The length of the treatments depended on whether respondents received messages on one dimension or two.\footnote{The language of the treatments and the introduction is in Section \vref{sec:experimental_language} in the appendix.} Four treatment groups received information about one dimension of the actor's character, either competence or morality, not both, which meant they received three paragraphs. Two of these groups received positive primes (moral or competent); two received negative (immoral or incompetent). Four groups received cues for both dimensions which were six paragraphs long.\footnote{Respondents were held on the treatment screen for a set amount of time before the button to move on appeared. The control group had to wait 10 seconds. The groups that got only one dimension were held for \Sexpr{unique(dat$delay)[1]}, and the treatments with two dimensions (6 paragraphs) were held for \Sexpr{unique(dat$delay)[2]} seconds.} Two of these groups received complementary information (e.g. positive morality and positive competence) and two received contradictory cues (e.g. immoral and competent). In total there were three positive treatments (competent only, moral only, and moral+competent), three negative treatments (incompetent only, immoral only, and immoral+incompetent), and two mixed (immoral+competent, moral+incompetent). The order of the treatment paragraphs was randomized to reduce recency effects.
+
+I use a hypothetical actor because it would have been extremely difficult to manipulate attitudes toward a contemporary or past leader. Every aspect of a hypothetical leader can be designed to avoid interfering with the manipulation of the character judgments. His ideology is a mix of liberal and conservative policies to signal that he governs moderately without using that potentially problematic term.\footnote{\emph{Moderate} could imply morally relevant information about the president's character (e.g. more competent as president because he could get things done or more empathetic to his political opponents). It could also indicate a more competent president who can navigate partisan politics to get things done.} I made his policy agenda a mix of issues that tend to appeal to both sides of the aisle (i.e. education, defense, and health care) to avoid giving an ideological signal.
+
+The treatments were drafted to be broad and direct. In the real-world, voters would gather information about the candidates from multiple sources over much longer periods of time. I made the messages very direct and hard-hitting to give clear cues regarding his morals and competence. I use real-world language wherever possible, but the language is more pointed and direct than what is commonly in the media. The moral cues include five of the six moral intuitions that \citeasnoun{Haidt2012} and his colleagues have identified. Individuals have different preferences for different moral character traits \cite{Clifford2014}, so the treatments include five foundations to ensure each person would receive at least some language that would activate a moral intuitions they care about.\footnote{\citeasnoun{Haidt2012} identifies six primary moral foundations: care/harm, fairness/cheating, loyalty/betrayal, authority/subversion, sanctity/degradation, and liberty/oppression. The sanctity/degradation, which is closely related to sexuality, is excluded from the moral language because it is so closely associated with judgments of morality associated with sex scandals. I wanted to avoid the sex-scandal emphasis of many studies on perceptions of politicians' morality \citeaffixed{Dohertyetal2011,Dohertyetal2014,Stoker1993}{See} because these scandals are rare and a narrow part of what it means to be moral.} Similarly, the competence cues were broad to include managerial and leadership skills as well as personal expertise, intelligence, and competence.
+
+<<vig.n.sizes,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+    # Generating numbers for the next paragraph
+    total.ind <- sum(dat.ind$v5)
+    ind.rate <- table(dat.ind$outparty1)
+    ind.rate.dem <- round(ind.rate[1] / total.ind, 2) * 100
+    ind.rate.gop <- round(ind.rate[2] / total.ind, 2) * 100
+@
+
+I recruited \Sexpr{prettyNum(sum(dat.all$v5), big.mark = ",")} participants through Amazon's Mechanical Turk.\footnote{A quarter of the sample completed the experiment on August 6-7, 2014. Another quarter completed it on September 3, 2014, and the final half completed it on September 16, 2014. There are no significant differences between the dates. The treatments had consistent effects each round. Respondents were excluded from successive waves, so the samples do not overlap. The sample is non-representative since respondents voluntarily agreed to participate from a non-representative population of works on MTurk.} All respondents were over 18 years of age, living in the U.S., and eligible to vote.\footnote{The respondents only had to be \emph{eligible} to vote (self-reported); they did not have to be registered voters.} Republican and Democratic identifiers, including leaners, received treatments that included vignettes regarding their normal out-party; pure Independents were randomly assigned a party.\footnote{The data include \Sexpr{prettyNum(sum(dat.ind$v5), big.mark = ",")} pure Independents, \Sexpr{prettyNum(sum(dat.gop$v5), big.mark = ",")} Democrats, and \Sexpr{prettyNum(sum(dat.gop$v5), big.mark = ",")} Republicans. \Sexpr{gsub(" ","-",capitalize(replace_number(ind.rate.gop)))} percent of pure independents rated a Republican president; \Sexpr{ind.rate.dem} percent rated an out-party Democrat.} All results reported below are substantively similar if pure Independents are excluded. Respondents received \$0.55 for their time. The average respondent took 10-11 minutes to complete the survey.
+
+
+
+
+\section{Hypotheses}\label{sec:vig_hypotheses}
+I will test three primary hypotheses based on the theory of moral judgments I have developed. Each hypothesis aims to shed light on how individuals use judgments of morals and competence to decide about supporting candidates. The primary objective of each hypothesis is to compare the impact of the moral dimensions with that of competence.
+
+The first hypothesis (H1) is that negative moral messages will impact electoral support more significantly than messages about incompetence. The intuitive nature and diagnosticity of moral judgments suggest they will play an important role in how individuals make up their minds about voting. Moral judgments are most likely to channel the values-based, on-line evaluations that voters make over the course of the election into the decision. An immoral president will be much less appealing than an incompetent president because of these attached emotions and values. Negative messages about competence will have a significant impact on voting compared to the control, but the impact of negative moral messages will be larger.
+
+The second hypothesis (H2) states that the moral dimension will have a larger net effect on support than the competent dimension. The net effect is the difference between the effects of the moral and competence dimensions when they move from positive to negative. Moving from moral to immoral will change support more than moving from competent to incompetent. Examining the net effect will give a sense of the overall difference in how the dimensions affect electoral support. A larger net effect will show that morality matters more on both positive and negative messages.
+
+Finally, the third hypothesis (H3) argues that when the messages about the two dimensions are combined with mixed directions, meaning one is negative and the other positive, the negative moral message will have a stronger impact regardless of the positive message about competence. The treatment group that combines immoral and competent will have lower support for the out-party president and higher support for the in-party challenger than the group that combines moral and incompetent.
+
+For all hypotheses, I expect that the treatments will have a similar dynamic in the opposition direction. Negative moral messages will increase support for the in-party challenger. Participants will want to oppose the immoral president by increasing their support for their party's challenger. Positive messages may decrease support for the in-party candidate, but negative messages will be more influential and have larger effects.
+
+
+\section{Results}\label{sec:vig_results}
+There are three key types of outcome variables in the study: character judgments of morals and competence, electoral support (for president and U.S. House), and political compromise. The question wordings for each are in Section \ref{sec:vig_wordings} of the appendix.\footnote{I also asked respondents about the likelihood of turning out to vote and getting involved in politics (various forms of activism); however, these variables failed to uncover a significant effect for the treatments.} Most of the analysis will focus on electoral support, especially at the presidential level, but the character judgments are important for establishing whether the treatments had their intended effect. The discussion of the results concludes with a comment on the impact of moral judgments on attitudes toward political compromise.
+
+The first step in the analysis is to make sure the treatments had their intended effects. The respondents rated the president on four moral traits and three competence traits.\footnote{The moral traits are ``moral,'' ``really cares about other people,'' ``honest,'' and ``tolerant.'' The competence traits are ``provides strong leadership,'' ``knowledgeable,'' and ``intelligent.'' Leadership is a trait that has been found to load on both morality and competence, but in this situation factor analysis found that it best fit with competence.} I combined the moral and competence traits to form indices for each dimension.\footnote{The indices are weighted according to how many traits are in each dimension. The results are essentially the same one trait is dropped from the moral index.} Table \ref{tab:vig_treat_verify} (and Table \vref{tab:vig_traits_ate} in the appendix) show that the treatments generally moved judgments in the right direction and along the correct dimension.
+
+<<vig.treatmentcheck,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+### Average of moral and comp traits for all respondents
+trait <- tapply(dat$moral_traits, dat$treatment2, mean, na.rm = TRUE)
+trait.sd <- tapply(dat$moral_traits, dat$treatment2, sd, na.rm = TRUE)
+trait.n <- table(dat$treatment2)
+
+trait.ll <- trait - (qnorm(.975) * (trait.sd / sqrt(trait.n)))
+trait.ul <- trait + (qnorm(.975) * (trait.sd / sqrt(trait.n)))
+
+trait2 <- tapply(dat$comp_traits, dat$treatment2, mean, na.rm = TRUE)
+trait.sd <- tapply(dat$comp_traits, dat$treatment2, sd, na.rm = TRUE)
+
+trait2.ll <- trait2 - (qnorm(.975) * (trait.sd / sqrt(trait.n)))
+trait2.ul <- trait2 + (qnorm(.975) * (trait.sd / sqrt(trait.n)))
+
+
+y.lim <- c(0,4)
+x.lim <- c(1,9)
+off.set <- .1
+
+moral <- c(x.lim[1]:x.lim[2] - off.set)
+comp <- c(x.lim[1]:x.lim[2] + off.set)
+
+# Create PDF
+pdf("traits_by_treatment_all.pdf", height = 8.5, width = 11)
+
+par(mar=c(10, 5, 2.5, 2))
+plot(x.lim, y.lim,
+    type = "n",
+    ylab = "",
+    xlab = "",
+    axes = FALSE
+    #main = "Average Rating on Moral and Comp Traits"
+)
+
+abline(h = 2, lty = "solid", col = "lightgrey")
+
+segments(moral, trait.ll, moral, trait.ul, lwd = 3, col = col.moral)
+points(moral, trait, pch = pch.moral, bg = col.moral, col = col.moral, cex = 2)
+
+segments(comp, trait2.ll, comp, trait2.ul, lwd = 3, col = col.comp)
+points(comp, trait2, pch = pch.comp, bg = col.comp, col = col.comp, cex = 2)
+
+abline(v = x.lim[1]:x.lim[2], lty = "longdash", col = "lightgrey")
+
+x.label2 = c("Control", "Competent\nOnly", "Moral\nOnly", "Moral+\nComp.", "Incompetent\nOnly", "Immoral\nOnly", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+axis(1, x.lim[1]:x.lim[2], lab = rep("", times = x.lim[2]), lwd = 2)
+mtext(x.label2, side = 1, line = .5, las = 3, cex = 1.75, at = x.lim[1]:x.lim[2])
+
+axis(2, seq(y.lim[1], y.lim[2], by = 1), lab = c("Positive","","Neutral","","Negative"), las = 3, lwd = 2, cex.axis = 2)
+
+legend("topleft", legend = c("Moral", "Competent"), col = c(col.moral,col.comp), pt.bg = c(col.moral,col.comp), pch = c(pch.moral,pch.comp), bg = "white", cex = 1.75)
+
+dev.off()
+
+
+# Creating a table
+
+ttest <- c()
+p.vals.sym <- c()
+
+for(i in 1:length(x.label)) {
+  y.1 <- dat$moral_traits[which(dat$treatment2 == levels(dat$treatment2)[i])]
+  y.2 <- dat$comp_traits[which(dat$treatment2 == levels(dat$treatment2)[i])]
+  ttest[i] <- t.test(y.1, y.2)$p.value
+  p.vals.sym[i] <- report.pval.symbol(ttest[i])
+}
+
+
+
+Moral <- round(trait, 1)
+Competence <- round(trait2, 1)
+difference <- round(abs(Moral - Competence), 1)
+treatment.table <- data.frame(cbind(Moral, Competence, difference, p.vals.sym))
+names(treatment.table) <- c("Moral Index", "Competence Index", "Difference", "Significance")
+row.names(treatment.table) <- x.label
+
+#xtable(treatment.table, align = c("l", "c", "c", "c"), caption = c("Treatment Verification Table: Average Character Rating of Out-party President by Treatment Group", "Treatment Verification Table"), label = "tab:treat_verify")
+
+# stargazer(treatment.table, title = "\\textbf{Treatment Verification: Average Character Rating of Out-party President by Treatment Group}\\newline {\\footnotesize \\emph{Note:} Table reports the average difference between ratings on moral and competence of the hypothetical out-party president. Higher values indicate more negative character judgments. The indices have a range from 0 to 4, where 0 means they said all traits describe the president ``extremely well'' and 4 means the president was rated ``not well at all'' for all traits. Significant tests whether the moral and competence indices are note equal to each other.}", label = "tab:treat_verify", summary = FALSE, digits = 1, style = "ajps", align = TRUE, notes = c("\\textasciicircum p $<$0.1, $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001), notes.align = "c")#))
+
+@
+
+%\begin{figure}[htb]
+%  \centering
+%      {\includegraphics[width=\textwidth]{moral_traits_by_treatment_all.pdf}}
+%  \caption[Traits by Treatment]{\textbf{Traits by Treatment}\\
+%    {\footnotesize \textit{Note}: }}\label{fig:vig_traits_by_treatment}
+%\end{figure}
+
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Treatment Verification: Average Character Rating of Out-party President by Treatment Group}\newline {\footnotesize \emph{Note:} Table reports the average difference between ratings on moral and competence of the hypothetical out-party president. Higher values indicate more negative character judgments. The indices have a range from 0 to 4, where 0 means respondents said all traits described the president ``extremely well,'' and 4 means they said all traits described the president ``not well at all.'' The third columns reports whether the moral and competence indices are statistically.}}
+  \label{tab:vig_treat_verify}
+\begin{tabular}{@{\extracolsep{5pt}} D{.}{.}{-2} D{.}{.}{-2} D{.}{.}{-2} D{.}{.}{-2} D{.}{.}{-2} }
+\\[-1.8ex]\hline \\[-1.8ex]
+\multicolumn{1}{c}{} & \multicolumn{1}{c}{Moral Index} & \multicolumn{1}{c}{Competence Index} & \multicolumn{1}{c}{Difference} & \multicolumn{1}{c}{Significance} \\
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} \\
+\hline \\[-1.8ex]
+\multicolumn{1}{l}{Control} & \multicolumn{1}{c}{2.0} & \multicolumn{1}{c}{1.7} & \multicolumn{1}{c}{0.3} & \multicolumn{1}{c}{$^{**}$} \\
+\multicolumn{1}{l}{Competent} & \multicolumn{1}{c}{1.7} & \multicolumn{1}{c}{1.1} & \multicolumn{1}{c}{0.6} & \multicolumn{1}{c}{$^{***}$} \\
+\multicolumn{1}{l}{Moral} & \multicolumn{1}{c}{1.0} & \multicolumn{1}{c}{1.2} & \multicolumn{1}{c}{0.2} & \multicolumn{1}{c}{\textasciicircum} \\
+\multicolumn{1}{l}{Moral+Comp.} & \multicolumn{1}{c}{1.1} & \multicolumn{1}{c}{1.0} & \multicolumn{1}{c}{0.1} & \multicolumn{1}{c}{\textasciicircum} \\
+\multicolumn{1}{l}{Incompetent} & \multicolumn{1}{c}{2.7} & \multicolumn{1}{c}{3.4} & \multicolumn{1}{c}{0.7} & \multicolumn{1}{c}{$^{***}$} \\
+\multicolumn{1}{l}{Immoral} & \multicolumn{1}{c}{3.6} & \multicolumn{1}{c}{3.0} & \multicolumn{1}{c}{0.6} & \multicolumn{1}{c}{$^{***}$} \\
+\multicolumn{1}{l}{Immoral+Incomp.} & \multicolumn{1}{c}{3.4} & \multicolumn{1}{c}{3.4} & \multicolumn{1}{c}{0.0} & \multicolumn{1}{c}{} \\
+\multicolumn{1}{l}{Immoral+Comp.} & \multicolumn{1}{c}{3.2} & \multicolumn{1}{c}{1.6} & \multicolumn{1}{c}{1.6} & \multicolumn{1}{c}{$^{***}$} \\
+\multicolumn{1}{l}{Moral+Incomp.} & \multicolumn{1}{c}{1.4} & \multicolumn{1}{c}{2.7} & \multicolumn{1}{c}{1.3} & \multicolumn{1}{c}{$^{***}$} \\
+\hline \\[-1.8ex]
+\multicolumn{5}{c}{\textasciicircum p $<$0.1, $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001} \\
+\end{tabular}
+\end{table}
+
+The treatments worked as designed, but some were more effective than others. The negative treatments moved both indices more than the positive treatments. Furthermore, some treatments moved the intended dimension \emph{and} the other. For example. the immoral-only treatment increased the negativity of the moral index by 1.6 points, but it also increased the negativity of competent index by 1.3 points. The increase of 1.6 point is statistically larger, however. Treatment that moved both dimensions had larger effects in every case on the primary dimension it was meant to move. In all but three groups (moral only, moral+competent, and immoral+incompetent) the differences were significant at the 0.05 level (see columns 3 and 4 in Table \ref{tab:vig_treat_verify}). The lack of a significant distinction between the two is only potentially problematic for the moral-only treatment because the other two were designed to move the two traits together. The fact that the double negative treatments did not have significant differences shows that the moral and competence treatments were well balanced. The evidence suggests that the treatments worked as designed, so the effects observed in each group can be attributed to manipulating the right dimensions of the president's character.
+
+
+
+\subsection{Effect on Average Presidential Support}
+The first outcome variable is the level of support respondents gave the hypothetical out-party president. Respondents rated how likely they would be to support the president and an in-party challenger on a seven-point scale. This section looks at the average differences between each treatment and the control (the average treatment effect, or ATE) and the differences between the treatments.\footnote{Descriptive statistics for presidential vote choice are in Table \vref{tab:vig_experiment_descriptives} in the appendix. See Table \vref{tab:vig_regression_ate} in the appendix for the average treatment effects of each treatment on the key dependent variables.} The results will show whether moral treatments increased the average support for the out-party president and the in-party challenger compared to competence. Comparing the means of each treatment group with the control's reveals the average treatment effect, which is the change in support each message created.
+
+Figure \ref{fig:vig_ate_pres} shows the average difference between the control group's support for the candidates and the treatment groups'. This difference called the average treatment effect (ATE).\footnote{The average treatment effect is $\mu_{i} - \mu_{c}$, where $i$ is the eight treatment groups and $c$ is the control group.} Compared to the control, each treatment group significantly moved support for the out-party president (Figure \ref{fig:vig_ate_pres_out}). The immoral-only treatment had the strongest effect for increasing opposition to the out-party president. The incompetent-only and immoral+incompetent groups were close behind. Attacks against the out-party president are more effective than messages favorable to the other side. The positive treatments only modestly increased support for the president or opposition to the challenger.
+
+
+<<vig.ate.figures,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+y.label <- c("Average Treatment Effect on\nSupport for Out-party President", "Average Treatment Effect on\nSupport for In-party Challenger", "Average Treatment Effect on\nDifference in Presidential Support", "Average Treatment Effect on\nSupport for Out-party House", "Average Treatment Effect on\nSupport for In-party House", "Average Treatment Effect on\nDifference in House Support")
+
+dvs2 <- c("vote_mitchell", "vote_in_pres", "vote_pres_diff", "vote_out_cong", "vote_in_cong", "vote_cong_diff")
+
+for (k in 1:length(dvs2)) {
+    for (j in 1:length(group)) {
+
+        setup <- paste("dat.t <- dat.", group[j], sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("vote <- tapply(dat.t$", dvs2[k], ", dat.t$treatment2, mean, na.rm = TRUE)", sep = "")
+        eval(parse(text = setup))
+        mean.diff <- (vote[2:9] - vote[1])
+
+        sse <- c()
+        mse <- c()
+        harmonic.mean <- c()
+        deg.free <- c()
+
+        control.treat <- dat[which(dat.t$treatment2 == "Control"),]
+        setup <- paste("control.mean <- mean(control.treat$", dvs2[k], ", na.rm = TRUE)", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("control.sse <- sum((control.treat$", dvs2[k], " - control.mean)^2)", sep = "")
+        eval(parse(text = setup))
+        control.n <- length(control.treat$treatment2)
+
+        groups <- c("Comp", "Moral", "MoralComp", "Incomp", "Immoral", "ImmoralIncomp", "ImmoralComp", "MoralIncomp")
+        for(i in 1:length(groups)) {
+            treatment <- dat.t[which(dat.t$treatment2 == groups[i]),]
+            setup <- paste("treatment.mean <- mean(treatment$", dvs2[k], ", na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+            setup <- paste("treatment.sse <- sum((treatment$", dvs2[k], " - treatment.mean)^2)", sep = "")
+            eval(parse(text = setup))
+
+            sse.temp <- control.sse + treatment.sse
+            sse[i] <- sse.temp
+
+            treat.n <- length(treatment$treatment2)
+            deg.free[i] <- control.n + treat.n - 2
+
+            mse[i] <- sse[i] / deg.free[i]
+
+            harmonic.mean[i] <- 2 / ((1 / control.n) + (1 / treat.n))
+        }
+
+        stand.error <- sqrt( (2 * mse) / harmonic.mean)
+
+        upper.limit <- mean.diff + (qnorm(.975)*stand.error)
+        lower.limit <- mean.diff - (qnorm(.975)*stand.error)
+
+        y.lim <- c()
+        y.lim[1] <- floor(min(lower.limit))
+        y.lim[2] <- ceiling(max(upper.limit))
+        x.lim <- c(1,8)
+
+        if (dvs2[k] == "compromise_balance") {
+            y.lim <- c(-15, 25)
+        }
+
+        setup <- paste("pdf(",'"',"ATE_", dvs2[k],"_", group[j], ".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+        eval(parse(text = setup))
+
+        # Figures
+        par(mar=c(8, 6, .5, 2))
+        plot(x.lim, y.lim,
+            type = "n",
+            ylab = "",
+            xlab = "",
+            axes = FALSE
+        )
+
+        abline(h = 0)
+        abline(v = x.lim[1]:x.lim[2], lty = "dashed", col = "lightgrey", lwd = 1)
+
+
+        segments(x.lim[1]:x.lim[2], lower.limit, x.lim[1]:x.lim[2], upper.limit, lwd = 2)
+        points(x.lim[1]:x.lim[2], mean.diff, lwd = 2, col = "black", bg = "black", cex = 2, pch = 21)
+
+
+        x.label2 = c("Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+        axis(1, x.lim[1]:x.lim[2], lab = rep("", times = x.lim[2]), lwd = 2)
+        mtext(x.label2, side = 1, line = .75, at = x.lim[1]:x.lim[2], las = 3, cex = 1.75)
+
+        #Y-axis label
+        y.lab <- y.label[k]
+        y.loc <- mean(y.lim)
+        mtext(y.lab, side = 2, line = 2.75, at = y.loc, las = 3, cex = cex.val)
+
+        if (dvs2[k] == "compromise_balance") {
+            axis(2, seq(y.lim[1], y.lim[2], by = 5), las = 2, cex.axis = 2, lwd = 2)
+        } else {
+            axis(2, y.lim[1]:y.lim[2], las = 2, cex.axis = 2, lwd = 2)
+        }
+
+        dev.off()
+    }
+}
+
+@
+
+\begin{figure}
+  \caption[Average Treatment Effect on Presidential Support]{\textbf{Average Treatment Effect on Average Presidential Support}\\ {\footnotesize \textit{Note}: The figures shows the average treatment effect for each treatment compared to the control. Positive numbers indicate increased support; negative numbers indicate decreased support.}}\label{fig:vig_ate_pres}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{ATE_vote_mitchell_all}
+      \caption{Out-party President}
+      \label{fig:vig_ate_pres_out}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{ATE_vote_in_pres_all}
+      \caption{In-party Challenger}
+      \label{fig:vig_ate_pres_in}
+  \end{subfigure}
+\end{figure}
+
+Seven of the eight treatments also significantly affected support for the in-party challenger (Figure \ref{fig:vig_ate_pres_in}). The combined negative messages (immoral+incompetent) had the strongest effect for increasing support for the in-party challenger, but moral only and competence only are very close behind. The moral+incompetent group actually failed to increase support for the in-party challenger compared to the control. For the most part, every treatment had a significant effect compared to the control. These consistently significant effects across the board make it difficult to test hypotheses one and two with these figures.
+
+Figure \ref{fig:vig_ate_pres} does show results that support hypotheses three. The mixed treatment with a negative moral message had a consistently stronger effect than the mixed message with negative competence messaging. The immoral+competent message's effect is clearly larger for the out-party (last two points on the right in Figure \ref{fig:vig_ate_pres_out}), and it is the only significant effect among the mixed treatments for the in-party (last two dots in Figure \ref{fig:vig_ate_pres_in}). The effect of immoral+competent is significantly more influential than the effect for moral+incompetent.
+
+<<vig.comparison.table,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+comparisons2 <- list(c("Moral", "Comp"), c("Immoral", "Incomp"),
+    c("Immoral", "Moral"), c("ImmoralComp", "MoralComp"), c("ImmoralIncomp", "MoralIncomp"),
+    c("Incomp", "Comp"), c("MoralIncomp", "MoralComp"), c("ImmoralIncomp", "ImmoralComp"),
+    c("ImmoralComp", "MoralIncomp"))
+
+out.pres <- c()
+in.pres <- c()
+gap.pres <- c()
+comparison.names <- c()
+for (i in 1:length(comparisons2)) {
+    dat.temp <- dat[which(as.character(dat$treatment2) == comparisons2[[i]][1] | as.character(dat$treatment2) == comparisons2[[i]][2]),]
+
+    dat.temp$test.var <- ifelse(as.character(dat.temp$treatment2) == comparisons2[[i]][1], 1, 0)
+
+    model.out <- lm(vote_mitchell ~ test.var, dat = dat.temp)
+    p.val <- summary(model.out)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    out.pres[i] <- paste(round(summary(model.out)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.in <- lm(vote_in_pres ~ test.var, dat = dat.temp)
+    p.val <- summary(model.in)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    in.pres[i] <- paste(round(summary(model.in)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.gap <- lm(vote_pres_diff ~ test.var, dat = dat.temp)
+    p.val <- summary(model.gap)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    gap.pres[i] <- paste(round(summary(model.gap)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    comparison.names[i] <- paste(comparisons2[[i]][1], " v. ", comparisons2[[i]][2], sep = "")
+}
+
+
+## Difference-in-difference
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# Presidential vote
+diffindiff.out.pres <- lm(vote_mitchell ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.out.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+out.pres[length(out.pres)+1] <- paste(round(summary(diffindiff.out.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.in.pres <- lm(vote_in_pres ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.in.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+in.pres[length(in.pres)+1] <- paste(round(summary(diffindiff.in.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.gap.pres <- lm(vote_pres_diff ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.gap.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+gap.pres[length(gap.pres)+1] <- paste(round(summary(diffindiff.gap.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+
+direct.comparisons <- data.frame(cbind(out.pres, in.pres, gap.pres))
+names(direct.comparisons) <- c("Out-party", "In-Party", "Difference")
+comparison.names <- c(comparison.names, "Moral-Immoral vs. Comp.-Incomp.")
+row.names(direct.comparisons) <- comparison.names
+
+stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons", title = "\\textbf{Direct Comparisons of Presidential Support between Key Treatment Groups} \\newline {\\footnotesize \\emph{Note}: Table reports the difference between key treatment groups for the three key variables of presidential support.}", digits = 2)
+@
+
+The average treatment effects in Figure \ref{fig:vig_ate_pres} do not provide a clear test for H1 and H2. Instead, it is helpful to compare the groups directly to one another. Table \ref{tab:vig_comparisons} shows the important comparisons needed to confirm that the moral dimension has a stronger effect than competence between the treated groups.\footnote{Comparing the treated groups to the control and then to each other produces the same results as those in Table \ref{tab:vig_comparisons}. The difference is that the effect sizes are smaller; the significance of those differences is unchanged. It is clearer to discuss their direct comparisons, however, without calculating the ATE with the control first.} Each column reports the difference between the two treatment groups. Column (1) shows the difference in support for the out-party president, on average. Column (2) is the average difference between support for the in-party challenger. The last column shows the cumulative difference between support for the out-party and in-party candidates. The table includes the results of significance tests (t-tests) to determine whether the differences are significant.
+
+The comparisons are grouped according to the hypothesis they test. The first group reports the direct comparisons between moral and competent messages, which tests H1. This groups reports the differences for both the positive messages and the negative messages. The next group reports the net difference between two dimensions (H2). This row shows the difference between shifting from positive to negative on the moral dimension compared to the same shift on competence.\footnote{The net difference, also known as the difference-in-difference, is calculated as follows $(M_{moral} - M_{immoral}) - (C_{comp.} - C_{incomp.})$, where $M_{moral}$ is the mean for the moral-only group, $M_{immoral}$ is the mean for immoral only, $C_{comp.}$ is mean for competent only, and $C_{incomp.}$ is the mean for incompetent only. This quantity can be calculated using a simple OLS regression model. See Table \vref{tab:vig_regression_diffindiff} in the appendix for the full results of the models for presidential support and U.S. House support.} The second-to-last group shows the difference between the mixed-message groups to test H3's assertion that immoral+competent will have a larger impact on support than moral+incompetent. The last three groups explore the size of the shift moving from the positive messages to the negative messages for each dimension. The bottom two show who the dimensions' shifts are affected when they are paired with the other dimension's positive or negative messages. These groups are less important for directly testing the hypotheses, but they shed light on which dimension has a larger effect.
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Comparisons of Presidential Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of presidential support. The columns report the difference between the groups for out-party support, in-party support, and the difference between the two candidates, respectively. The units of the numbers are points on the 1 to 7 support scale.}}
+  \label{tab:vig_comparisons}
+\begin{tabular}{@{\extracolsep{5pt}} lccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+ & Out-party & In-Party & Difference \\
+ & (1) & (2) & (3) \\
+\hline \\[-1.8ex]
+\multicolumn{4}{l}{\textbf{H1: Cross-Dimension}} \\
+Moral v. Competent & 0.26$\hat{\mkern6mu}$ & -0.22 & -0.48$\hat{\mkern6mu}$ \\
+Immoral v. Incompetent & -0.37$^{*}$  & 0.24 & 0.61$^{*}$  \\
+\\
+\multicolumn{4}{l}{\textbf{H2: Net Difference}} \\
+Moral-Immoral vs. Comp.-Incomp. & -0.64$^{**}$ & 0.45$\hat{\mkern6mu}$ & 1.09$^{**}$  \\
+\\
+\multicolumn{4}{l}{\textbf{H3: Mixed Messages}} \\
+Immoral+Comp. v. Moral+Incomp. & -0.94$^{***}$  & 0.28$\hat{\mkern6mu}$ & 1.22$^{***}$  \\
+\\
+\multicolumn{4}{l}{\textbf{Positive to Negative}} \\
+Immoral v. Moral & -3.15$^{***}$  & 1.56$^{***}$  & 4.71$^{***}$  \\
+Incomp. v. Comp. & -2.51$^{***}$  & 1.11$^{***}$  & 3.62$^{***}$  \\
+\\
+\multicolumn{4}{l}{\textbf{Positive to Negative, Positive}} \\
+Immoral+Comp. v. Moral+Comp. & -2.27$^{***}$  & 1.06$^{***}$  & 3.34$^{***}$  \\
+Moral+Incomp. v. Moral+Comp. & -1.33$^{***}$  & 0.78$^{***}$  & 2.12$^{***}$  \\
+\\
+\multicolumn{4}{l}{\textbf{Positive to Negative, Negative}} \\
+Immoral+Incomp. v. Moral+Incomp. & -1.7$^{***}$  & 0.82$^{***}$  & 2.52$^{***}$  \\
+Immoral+Incomp. v. Immoral+Comp. & -0.76$^{***}$  & 0.54$^{**}$  & 1.3$^{***}$  \\
+\hline \\[-1.8ex]
+\multicolumn{4}{c}{$\hat{\mkern6mu}$ p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001}\\
+\end{tabular}
+\end{table}
+
+The two comparisons in the first group test the first hypothesis (H1) that the moral treatments will have greater effects than the competence groups. Moral only marginally increases support for the out-party president compared to competent, but it doesn't significantly decrease support for the in-party. The gap between the two candidates among the moral group is marginally larger as well. The positive side of morality appears to have a marginally stronger effect than competence, but the evidence is weak. On the negative side, immoral has a significantly larger effect on support for the out-party president compared to incompetent. There is not a significant difference for support for the in-party, but the difference between support for the two candidates is significantly larger for immoral. These results support the first hypothesis, but with some caveats. Judging the out-party immoral decreases his support, but it does not increase support for the challenger.
+
+The second hypothesis (H2) proposes that the net difference from the positive message to the negative will be greater for the moral dimension.\footnote{The net difference, or difference-in-difference, is easily calculated through OLS. Table \vref{tab:vig_regression_diffindiff} shows the full model results for these calculations.} The results in the second group lend support to this hypothesis. The net shift for moral is 0.64 greater greater than competence's. The difference is an effect size of about 9\%. The net difference is marginally significant for support for the in-party challenger, while it is quite strong for the overall difference between the two candidates. The difference increased on the moral dimension by one compared to the competent dimension (a 14\% effect size). Just as the comparisons for H1, these results suggest that moral messages decrease the likelihood of supporting the out-party, but there is marginal support for these judgments increasing support for the in-party's challenger.
+
+The third hypothesis also finds support in Table \ref{tab:vig_comparisons}, just as it did in Figure \ref{fig:vig_ate_pres}. The effect on in-party support is only marginal once again. These results suggest that a negative judgment on morals is not offset when the competence judgment is positive. A negative moral judgment is much stronger than the positive competence message.
+
+Finally, the last group of comparisons show that generally the shift from positive to negative along the moral dimension has larger effects on support than the same shifts on the other dimension. For each shift the change is greater for the moral dimension. The two last groups show that this advantage of moral judgments holds regardless of the direction of the competence message it is paired with.
+
+These patterns extend down the ballot to support for U.S. House candidates.\footnote{See Section \ref{sec:vig_house} in the appendix for additional tables and figures on the effect of these treatments on support for candidates for the U.S. House of Representatives.} The effects of these treatments is very similar for House candidates. Immoral's effect is greater than incompetent's, reducing support for the out-party House candidate by 0.41 points. The positive moral message actually decreases the support for the in-party candidate compared to competence. Respondents slightly punish a co-partisan who promises to actively oppose a moral out-party president. The net difference between the two dimensions is slightly larger than it was for presidential support (0.77 compared to 0.64 above), but they're substantively similar. Moral judgments of a president have a significant effect on down-ballot considerations. Of course, the experimental nature of these data make it unclear if these patterns exist because the respondents had so little information about the House candidates that they naturally relied on judgments of the president. Nevertheless, it is telling that moral messages had a significantly stronger effect than competence messages.
+
+The results in Figure \ref{fig:vig_ate_pres} and Table \ref{tab:vig_comparisons} support all three hypotheses to some degree -- at least when it comes to immoral messages' ability to decrease support for the out-party president. The results are mixed when it comes to increasing support for the challenger and when it comes to the positive treatments. The dependent variable's limited range suggests that ceiling and floor effects might be tempering the results. Respondents could not go any lower or higher than the seven response options. In the next section, I look at the extremes to examine the effect moral judgments and competence judgments have on polarizing electoral support.
+
+
+
+
+\subsection{Polarized Vote Choice}
+Because of the limited range of the dependent variables, respondents may have clustered at the extremes, saying they would never support the out-party and always support the in-party. These potential ceiling and floor effects merit an examination of the proportions of respondents who choose the two most extreme response options.\footnote{The results are essentially the same if the analysis is made using the two most extreme response options on either end of the scale (e.g. ``1'' and ``2'' combined). See Figures \vref{fig:vig_pres_vote_extremes_all} and \vref{fig:vig_two_pres_vote_extremes} in the appendix to compare between the results with one extreme response and two. Figure \ref{fig:vig_pres_vote_extremes_all} shows the raw percentages in each treatment group, including the control, who said they would never or always support the two presidential candidates.} The results in the previous section gave support to the argument that messages of immorality had a larger effect than ones focused on incompetence; however, ceiling and floor effects may have hampered the ability to identify more significant differences. An analysis of the always and never extremes provides another means of testing the hypothesized relationship that morality will matter more than competence.
+
+I refer to the extremes of the electoral support question as ``polarized'' to highlight that these responses represent certainty about an election. In a real election, these voters would be completely unpersuadable. While most voters tend to support their party in the end \citeaffixed{GelmanKing1993}{see}, there are some persuadable voters who give each candidate's pitch a hearing \cite{HillygusShields2008}. This analysis asks whether moral judgments will increase this population of decided voters who are certain about their vote.
+
+<<vig.ate.figures.polar,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+y.label <- c("Average Treatment Effect on\nSupport for Out-party President", "Average Treatment Effect on\nSupport for In-party Challenger", "Average Treatment Effect on\nDifference in Presidential Support", "Average Treatment Effect on\nSupport for Out-party House", "Average Treatment Effect on\nSupport for In-party House", "Average Treatment Effect on\nDifference in House Support")
+
+dvs2 <- c("never_mitchell", "always_in_pres", "alwaysnever_pres", "never_out_cong", "always_in_cong", "alwaysnever_cong")
+
+for (k in 1:length(dvs2)) {
+    for (j in 1:length(group)) {
+
+        setup <- paste("dat.t <- dat.", group[j], sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("vote <- tapply(dat.t$", dvs2[k], ", dat.t$treatment2, mean, na.rm = TRUE)", sep = "")
+        eval(parse(text = setup))
+        mean.diff <- (vote[2:9] - vote[1])
+
+        sse <- c()
+        mse <- c()
+        harmonic.mean <- c()
+        deg.free <- c()
+
+        control.treat <- dat[which(dat.t$treatment2 == "Control"),]
+        setup <- paste("control.mean <- mean(control.treat$", dvs2[k], ", na.rm = TRUE)", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("control.sse <- sum((control.treat$", dvs2[k], " - control.mean)^2)", sep = "")
+        eval(parse(text = setup))
+        control.n <- length(control.treat$treatment2)
+
+        groups <- c("Comp", "Moral", "MoralComp", "Incomp", "Immoral", "ImmoralIncomp", "ImmoralComp", "MoralIncomp")
+        for(i in 1:length(groups)) {
+            treatment <- dat.t[which(dat.t$treatment2 == groups[i]),]
+            setup <- paste("treatment.mean <- mean(treatment$", dvs2[k], ", na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+            setup <- paste("treatment.sse <- sum((treatment$", dvs2[k], " - treatment.mean)^2)", sep = "")
+            eval(parse(text = setup))
+
+            sse.temp <- control.sse + treatment.sse
+            sse[i] <- sse.temp
+
+            treat.n <- length(treatment$treatment2)
+            deg.free[i] <- control.n + treat.n - 2
+
+            mse[i] <- sse[i] / deg.free[i]
+
+            harmonic.mean[i] <- 2 / ((1 / control.n) + (1 / treat.n))
+        }
+
+        stand.error <- sqrt( (2 * mse) / harmonic.mean)
+
+        upper.limit <- mean.diff + (qnorm(.975)*stand.error)
+        lower.limit <- mean.diff - (qnorm(.975)*stand.error)
+
+        y.lim <- c()
+        #y.lim[1] <- floor(min(lower.limit))
+        #y.lim[2] <- ceiling(max(upper.limit))
+        y.lim[1] <- -.25
+        y.lim[2] <- .5
+        x.lim <- c(1,8)
+
+        if (dvs2[k] == "compromise_balance") {
+            y.lim <- c(-15, 25)
+        }
+
+        setup <- paste("pdf(",'"',"ATE_", dvs2[k],"_", group[j], ".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+        eval(parse(text = setup))
+
+        # Figures
+        par(mar=c(8, 7, .5, 2))
+        plot(x.lim, y.lim,
+            type = "n",
+            ylab = "",
+            xlab = "",
+            axes = FALSE
+        )
+
+        abline(h = 0)
+        abline(v = x.lim[1]:x.lim[2], lty = "dashed", col = "lightgrey", lwd = 1)
+
+
+        segments(x.lim[1]:x.lim[2], lower.limit, x.lim[1]:x.lim[2], upper.limit, lwd = 2)
+        points(x.lim[1]:x.lim[2], mean.diff, lwd = 2, col = "black", bg = "black", cex = 2, pch = 21)
+
+
+        x.label2 = c("Comp.", "Moral", "Moral+\nComp.", "Incomp.", "Immoral", "Immoral+\nIncomp.", "Immoral+\nComp.", "Moral+\nIncomp.")
+        axis(1, x.lim[1]:x.lim[2], lab = rep("", times = x.lim[2]), lwd = 2)
+        mtext(x.label2, side = 1, line = .75, at = x.lim[1]:x.lim[2], las = 3, cex = 1.75)
+
+        #Y-axis label
+        y.lab <- y.label[k]
+        y.loc <- mean(y.lim)
+        mtext(y.lab, side = 2, line = 3.75, at = y.loc, las = 3, cex = cex.val)
+
+        if (dvs2[k] == "compromise_balance") {
+            axis(2, seq(y.lim[1], y.lim[2], by = 5), las = 2, cex.axis = 2, lwd = 2)
+        } else {
+            axis(2, seq(y.lim[1],y.lim[2], by = .25), las = 2, cex.axis = cex.val-.35, lwd = 2)
+        }
+
+        dev.off()
+    }
+}
+
+@
+
+Figure \vref{fig:vig_ate_pres_polar} shows the average treatment effect compared to the control on the percentage of respondents who said they would never support the out-party president or who said they would always support the in-party challenger.\footnote{The complete ATEs for polarized vote can be found in Table \ref{tab:vig_regression_ate_polar} in the appendix.} Unlike in the previous section, a number of treatments do not have significant effects. The positive messages do not polarize support, which would be expected given their more modest effects. The moral-only group slightly decreases the percentage of respondents choosing to always support the in-party, but the effect is substantively very small. The mixed-message treatments also have more modest effects. The moral+incompent message does not have a significant effect on either extreme. The immoral+competent mixed messages significantly increases opposition to the out-party president but has no effect on increasing the certainty that individuals will support the in-party challenger. The negative treatments, on the other hand, have strong effects on polarizing support, especially against the out-party.
+
+\begin{figure}[htb]
+  \caption[Average Treatment Effect on Polarizing Presidential Support]{\textbf{Average Treatment Effect on Polarizing Presidential Support}\\ {\footnotesize \textit{Note}: The figures shows the average treatment effect for each treatment compared to the control at the extremes of the support scale (never support and always support). Positive numbers indicate increased percentage of respondents choosing an option; negative numbers indicate decreased percentage. The unit of the numbers is the percentage of respondents choosing the extremes.}}\label{fig:vig_ate_pres_polar}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{ATE_never_mitchell_all.pdf}}
+      \caption{Never Out-party President}
+      \label{fig:vig_ate_pres_out_polar}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{ATE_always_in_pres_all.pdf}}
+      \caption{Always In-party Challenger}
+      \label{fig:vig_ate_pres_in_polar}
+  \end{subfigure}
+\end{figure}
+
+Combining immoral with incompetent (immoral+incompetent) results in essentially the same effect as just immoral for both never wanting to support the president and always wanting to support the challenger. The negative moral prime alone is strong enough to turn respondents against the out-party president. Adding incompetence does not increase the polarization of support. The two dimensions are not additive. Immoral's effect alone is as strong as both dimensions together.
+
+<<vig.comparison.table.polar,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+comparisons2 <- list(c("Moral", "Comp"), c("Immoral", "Incomp"),
+    c("Immoral", "Moral"), c("ImmoralComp", "MoralComp"), c("ImmoralIncomp", "MoralIncomp"),
+    c("Incomp", "Comp"), c("MoralIncomp", "MoralComp"), c("ImmoralIncomp", "ImmoralComp"),
+    c("ImmoralComp", "MoralIncomp"))
+
+out.pres <- c()
+in.pres <- c()
+gap.pres <- c()
+comparison.names <- c()
+for (i in 1:length(comparisons2)) {
+    dat.temp <- dat[which(as.character(dat$treatment2) == comparisons2[[i]][1] | as.character(dat$treatment2) == comparisons2[[i]][2]),]
+
+    dat.temp$test.var <- ifelse(as.character(dat.temp$treatment2) == comparisons2[[i]][1], 1, 0)
+
+    model.out <- lm(never_mitchell ~ test.var, dat = dat.temp)
+    p.val <- summary(model.out)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    out.pres[i] <- paste(round(summary(model.out)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.in <- lm(always_in_pres ~ test.var, dat = dat.temp)
+    p.val <- summary(model.in)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    in.pres[i] <- paste(round(summary(model.in)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    model.gap <- lm(alwaysnever_pres ~ test.var, dat = dat.temp)
+    p.val <- summary(model.gap)$coefficients[2,4]
+    p.symbol <- report.pval.symbol(p.val)
+    gap.pres[i] <- paste(round(summary(model.gap)$coefficients[2,1], 2), p.symbol, sep = "")
+
+    comparison.names[i] <- paste(comparisons2[[i]][1], " v. ", comparisons2[[i]][2], sep = "")
+}
+
+## Difference-in-difference
+dat.negpos <- dat[which(dat$neg == 1 | dat$pos == 1),]
+
+# Presidential vote
+diffindiff.out.pres <- lm(never_mitchell ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.out.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+out.pres[length(out.pres)+1] <- paste(round(summary(diffindiff.out.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.in.pres <- lm(always_in_pres ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.in.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+in.pres[length(in.pres)+1] <- paste(round(summary(diffindiff.in.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+diffindiff.gap.pres <- lm(alwaysnever_pres ~ pt + neg + moraldimension, data = dat.negpos)
+p.val <- summary(diffindiff.gap.pres)$coefficients[2,4]
+p.symbol <- report.pval.symbol(p.val)
+gap.pres[length(gap.pres)+1] <- paste(round(summary(diffindiff.gap.pres)$coefficients[2,1], 2), p.symbol, sep = "")
+
+
+direct.comparisons <- data.frame(cbind(out.pres, in.pres, gap.pres))
+names(direct.comparisons) <- c("Out-party", "In-Party", "Difference")
+comparison.names <- c(comparison.names, "Moral-Immoral vs. Comp.-Incomp.")
+row.names(direct.comparisons) <- comparison.names
+
+stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons_polar", title = "\\textbf{Direct Comparisons of Presidential Support between Key Treatment Groups} \\newline {\\footnotesize \\emph{Note}: Table reports the difference between key treatment groups for the three key variables of presidential support.}", digits = 2)
+@
+
+\begin{table}[!htbp] \centering
+  \caption{\textbf{Comparisons of Polarized Presidential Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference in polarized support between key treatment groups. Column (1) reports the difference in the percentage of respondents who would never support the out-party president; column (2) reports the difference in percentage that would always support the in-party challenger; and column (3) is the difference in the percentage of respondents who say they would never support the out-party and would always support the in-party.}}
+  \label{tab:vig_comparisons_polar}
+\begin{tabular}{@{\extracolsep{5pt}} lccc}
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
+ & Never Out & Always In & Polarized \\
+ & (1) & (2) & (3) \\
+\hline \\[-1.8ex]
+\multicolumn{4}{l}{\textbf{H1: Cross-Dimension}} \\
+Moral v. Competent & 0.01 & -0.03 & -0.01 \\
+Immoral v. Incompetent & 0.22$^{***}$ & 0.15$^{**}$ & 0.18$^{***}$ \\
+\\
+\multicolumn{4}{l}{\textbf{H2: Net Difference}} \\
+Moral-Immoral v. Comp.-Incomp. & 0.22$^{***}$ & 0.18$^{**}$ & 0.19$^{***}$ \\
+\\
+\multicolumn{4}{l}{\textbf{H3: Mixed Messages}} \\
+Immoral+Comp. v. Moral+Incomp. & 0.12$^{**}$ & 0.01 & 0.01 \\
+\\
+%\textbf{Positive to Negative} & & & \\
+%Immoral v. Moral & 0.47$^{***}$ & 0.32$^{***}$ & 0.29$^{***}$ \\
+%Incomp. v. Comp. & 0.26$^{***}$ & 0.15$^{***}$ & 0.11$^{***}$ \\
+%\\
+%Immoral+Comp. v. Moral+Comp. & 0.19$^{***}$ & 0.01 & 0.05$^{**}$ \\
+%Moral+Incomp. v. Moral+Comp. & 0.07$^{**}$ & 0.01 & 0.04$^{*}$ \\
+%\\
+%Immoral+Incomp. v. Moral+Incomp. & 0.35$^{***}$ & 0.22$^{***}$ & 0.21$^{***}$ \\
+%Immoral+Incomp. v. Immoral+Comp. & 0.23$^{***}$ & 0.21$^{***}$ & 0.2$^{***}$ \\
+\hline \\[-1.8ex]
+\multicolumn{4}{c}{$\hat{\mkern6mu}$ p$<$0.1; $^{*}$p$<$0.05; $^{**}$p$<$0.01; $^{***}$p$<$0.001}\\
+\end{tabular}
+\end{table}
+
+<<vig.nevervoteout,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+  # Calculating the numbers needed for the next paragraph
+
+  # Percent in incompetent-only group who would never vote for out-party president
+  never.incompetent.only <- round(table(dat.all$treatment2, dat.all$vote_mitchell)[5,1] / table(dat.all$treatment2)[5], 2) * 100
+
+  # Percent in immoral-only group who would never vote for out-party president
+  never.immoral.only <- round(table(dat.all$treatment2, dat.all$vote_mitchell)[6,1] / table(dat.all$treatment2)[6], 2) * 100
+
+  # T-test of proportion that would never vote for out-party president (Mitchell)
+  never.tt <- t.test(dat.all$never_mitchell ~ dat.all$immoralvincomp, alternative = "less")
+
+@
+
+Table \ref{tab:vig_comparisons_polar} reports the differences between key treatments, organized around each hypothesis. This table omits the last three groups from Table \ref{tab:vig_comparisons}. Hypothesis one is not supported between moral and competent, but it is strongly supported between immoral and incompetent. \Sexpr{gsub(" ","-",capitalize(replace_number(never.immoral.only)))} percent of respondents in the immoral-only group said they would never support the out-party president; only \Sexpr{never.incompetent.only} percent in the incompetence-only group would never consider supporting him. The respondents in the immoral group are significantly more opposed to the president than those in the incompetent group. An immoral out-party leader rallies the other side against him.
+
+The net difference of \Sexpr{round(never.immoral.only-never.incompetent.only, 2)} percentage points is highly significant as well.\footnote{Table \vref{tab:vig_regression_diffindiff_polar} in the appendix shows the entire calculations of the difference-in-difference.} This result strongly supports the second hypothesis. A negative moral judgment of an out-party candidate greatly increases the certainty that respondents would never support the other party's nominee. The negative moral judgments makes the other party's nominee much less acceptable. Furthermore, the net difference of the percentage choosing both never for the out-candidate and always for the in-candidate is larger for the moral dimension. The percentage of respondents who are completely polarized increases by 19 percentage points more. Nearly one of five respondents is now certain who they will support when the president is immoral.
+
+
+<<vig.polarized.vote,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+dvs1 <- c("neverout", "alwaysin", "alwaysnever", "compromise")
+#comparisons2 <- list(c("Incompetent", "Immoral", "Immoral+Incomp."))
+
+n.treatments <- table(dat$treatment2)
+neverout <- table(dat$treatment2, dat$vote_mitchell)[,1]
+alwaysin <- table(dat$treatment2, dat$vote_in_pres)[,7]
+alwaysnever <- table(dat$treatment2, dat$alwaysnever_pres)[,2]
+compromise <- table(dat$treatment2, dat$compromise_balance_quartile)[,4]
+
+neverout.prop <- neverout / n.treatments
+alwaysin.prop <- alwaysin / n.treatments
+alwaysnever.prop <- alwaysnever / n.treatments
+compromise.prop <- compromise / n.treatments
+
+for (j in 1:length(dvs1)) {
+    for (k in 1:length(comparisons)) {
+
+        ## Getting and formatting y-axis values
+        setup <- paste("val <- c(",dvs1[j],".prop[",label.locations[[k]][1],"], ",dvs1[j],".prop[",label.locations[[k]][2],"])", sep = "")
+        eval(parse(text = setup))
+        val2 <- c()
+        val2[seq(1, 5, by = 2)] <- 0
+        val2[seq(2, 4, by = 2)] <- val
+
+        # X-axis labels
+        lab <- c(x.label[label.locations[[k]][1]], x.label[label.locations[[k]][2]])
+
+        # Calculating the difference and significance of the difference
+        pairwise.diff <- abs((round(val[1], 2) - round(val[2],2)) * 100)
+
+        setup <- paste("pairwise.n <- c(n.treatments[",label.locations[[k]][1],"], n.treatments[",label.locations[[k]][2],"])", sep = "")
+        eval(parse(text = setup))
+        setup <- paste("pairwise.raw <- c(",dvs1[j],"[",label.locations[[k]][1],"], ",dvs1[j],"[",label.locations[[k]][2],"])", sep = "")
+        eval(parse(text = setup))
+
+        proportions.test <- prop.test(x = pairwise.raw, n = pairwise.n, alternative = "greater", conf.level = .95)
+        p.symbol <- report.pval.symbol(proportions.test$p.value)
+
+        color1 <- comparison.colors[[k]][1]
+        color2 <- comparison.colors[[k]][2]
+
+        for (i in 0:1) {
+            setup <- paste("pdf(",'"',"pairwise_", dvs1[j],"_", comparisons[[k]][1],"_v_", comparisons[[k]][2],"-",i,".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+            eval(parse(text = setup))
+
+            par(las = 2, cex = 1.75)
+            par(mar=c(3, 4, .5, .5))
+            barplot(val2,
+                space = 0,
+                axes = FALSE,
+                ylim = c(0,.65),
+                col = c("black", color1, "black", color2, "black"),
+                names.arg = c("", lab[1], "", lab[2], ""),
+                las = 1
+                #horiz = TRUE
+            )
+
+            text(y = (val + num.step), x = c(1.5,3.5), labels = paste(round(val, 2)*100,"%", sep = ""))
+            axis(2, seq(0, .6, by = .2), label = c("0%", "20%", "40%", "60%"), las = 1)
+
+            if (i == 1) {
+                segments(4.2, val[1], 4.2, val[2], lwd = 3, col = "red")
+                segments(4.2, val[1], 4.05, val[1], lwd = 3, col = "red")
+                segments(4.2, val[2], 4.05, val[2], lwd = 3, col = "red")
+                text(x = 4.15, y = min(val)+(abs(val[1]-val[2])/2), label = paste(pairwise.diff,"%",p.symbol,sep =""), pos = 4,
+                col = "red")
+            }
+
+            mtext("Percentage of Respondents", side = 2, line = 3, at = .3, las = 3, cex = 2)
+
+            dev.off()
+        }
+    }
+}
+
+@
+
+
+%\begin{figure}[htb]
+%  \caption[Support for Presidential Candidates at the Extremes]{\textbf{The Proportion of Respondents at the Extremes of the Electoral Support Scale for the Hypothetical Out-party President and the In-party Challenger by Treatment}\\ {\footnotesize \textit{Note}: The figures shows the percentage of respondents who would never support the out-party president and the percentage who would always support the in-party challenger by treatment group. Responses are the most extreme answers on a seven-point scale from never support to always support.}}\label{fig:pres_vote_extremes}
+%  \centering
+%  \begin{subfigure}[b]{.48\textwidth}
+%      {\includegraphics[width=\textwidth]{pairwise_neverout_Immoral_v_Incomp-1.pdf}}
+%      \caption{Never Support Out-party}
+%      \label{fig:never_out_pres}
+%  \end{subfigure}
+%  ~
+%  \begin{subfigure}[b]{.48\textwidth}
+%      {\includegraphics[width=\textwidth]{pairwise_alwaysin_Immoral_v_Incomp-1.pdf}}
+%      \caption{Always Support In-party}
+%      \label{fig:always_in_pres}
+%  \end{subfigure}
+%\end{figure}
+%\FloatBarrier
+
+<<vig.always.in,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+  # Percent in incompetent-only group who would never vote for out-party president
+  always.incompetent.only <- round(table(dat.all$treatment2, dat.all$vote_in_pres)[5,1] / table(dat.all$treatment2)[5], 2) * 100
+
+  # Percent in immoral-only group who would never vote for out-party president
+  always.immoral.only <- round(table(dat.all$treatment2, dat.all$vote_in_pres)[6,1] / table(dat.all$treatment2)[6], 2) * 100
+
+  # T-test of proportion that would always vote for in-party challenger
+  always.tt <- t.test(dat.all$always_in_pres~dat.all$immoralvincomp, alternative="less")
+@
+
+The mixed valence treatments have the same effect on certain support for the in-party challenger (none), but there is a significant difference in the proportion of respondents who said they would never support the out-party president. Nineteen percent of respondents in the immoral+competent treatment said they would never support the president; only seven percent of the moral+incompetent treatment were similarly polarized. This result suggests that negative moral judgments are strong enough to overcome a positive judgment of competence. When citizens have ambivalent judgments of an out-party actor's character, moral judgments have a stronger effect than competence. An immoral judgment overwhelms any positive judgments on the other dimension and increases polarization against the out-party president.
+
+Negative moral judgments also have stronger coattail effects on down-ballot races than negative competence judgments. These patterns of polarizing support is similar for U.S. House candidates. Immoral, compared to incompetent, increases the percentage never defecting by ten percentage points and the percentage always remaining loyal by 13 percentage points (see Appendix Table \vref{tab:vig_comparisons_house_polar}). The patterns for House vote are substantively and statistically comparable to the results for presidential vote. Respondents increased their opposition to out-party House candidates allied with an immoral president significantly more than they increased opposition to candidates aligned with an incompetent president.
+
+%\begin{figure}[htb]
+%    \caption[Polarized Support for President]{\textbf{The Proportion of Respondents with Polarized Vote Preferences by Treatment for Presidential Vote}\\
+%    {\footnotesize \textit{Note}: The figures show the percentage of respondents in each treatment group who have completely polarized preferences, meaning they would always vote for the in-party candidate and never vote for the out-party candidate.}}\label{fig:always_never}
+%  \centering
+%  \begin{subfigure}[b]{.48\textwidth}
+%      {\includegraphics[width=\textwidth]{pairwise_alwaysnever_Immoral_v_Incomp-1.pdf}}
+%      \caption{Presidential}
+%      \label{fig:alwaysnever_pres}
+%  \end{subfigure}
+%%  ~
+%%  \begin{subfigure}[b]{.48\textwidth}
+%%      {\includegraphics[width=\textwidth]{alwaysnever_cong_all.pdf}}
+%%      \caption{U.S. House}
+%%      \label{fig:alwaysnever_cong}
+%%  \end{subfigure}
+%\end{figure}
+%\FloatBarrier
+
+%The evidence above shows that moral and immoral judgments shift the likelihood that respondents will consider always or never supporting presidential candidates. These changes are also highly polarized. Column (3) in Table \ref{tab:comparisons_polar} shows that the percentage of respondents who would never support the out-party candidate \emph{and} would always support the in-candidate for president is higher between immoral and incompetent and overall across the whole dimension. The immoral group is significantly moral polarized than the incompetence group for presidential vote. There is a similar effect for House vote (see Table \ref{comparisons_house_polar} in the appendix). The immoral-only treatment significantly increased the proportion of respondents who are certain about their vote. Negative moral judgments have a stronger polarizing effect on electoral support than negative competence judgments.
+
+The results support all three hypotheses for the negative moral dimension. Morality increases average support and it pushes more respondents to the extremes. The moral dimension appears to play a uniquely significant role in how individuals make decisions about voting. An immoral president from the other party is cause for greater opposition than if the president were incompetent.
+
+
+\subsection{Beyond Electoral Support: Political Compromise}
+The analysis now asks if negative moral judgments affect attitudes beyond electoral support. Perhaps, judging a leader immoral also increases opposition to their overall political agenda. Respondents gave their preferences for compromise between the hypothetical out-party president and the in-party on a scale between zero and 100, where zero meant the president gets everything he wants and 100 means the in-party gets everything it wants.\footnote{The wording used in this study is available in Section \ref{sec:vig_wordings} of the appendix. The descriptive statistics for compromise are in Appendix Table \vref{tab:vig_experiment_descriptives_comp}. Appendix Figure \ref{fig:vig_compromise} reports the percentage of respondents choosing 75 or more for a compromise for each group.}
+
+My hypothesis for compromise is that immoral messages about the president will make individuals less receptive to compromise because moral values make people resistant to compromise \cite{Tetlocketal2000,Tetlock2003,SkitkaMorgan2014}. As \citeasnoun{Sundquist1983} put it, ``[When politics is] perceived in moral terms \ldots then compromise itself becomes reprehensible, for good men do not go halfway with evil'' (44). Believing the president is immoral will cause individuals to feel a desire to defeat the president however possible. They will want to completely defeat his agenda.
+
+\begin{figure}[htb]
+    \caption[Compromise Balance]{\textbf{Percentage of Respondents Wanting the In-Party to Receive at Least 75 percent of its Agenda in a Compromise}\\
+    {\footnotesize \textit{Note}: The figure shows the percentage of respondents in each treatment group who wanted the in-party to receive 75 percent or more of its agenda in any political compromise with the out-party president. The difference is significant at the 0.05 level.}}\label{fig:vig_compromise_pairwise}
+    \centering
+    {\includegraphics[width=.48\textwidth]{pairwise_compromise_Immoral_v_Incomp-1.pdf}}
+\end{figure}
+
+<<vig.compromise.ttest,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+  # Calculating the numbers needed for the next paragraph
+
+  # Percent in incompetent-only group who would never vote for out-party president
+  compromise.incompetent.only <- round(table(dat$treatment2, dat$compromise_balance_quartile)[5,4] / table(dat.all$treatment2)[5], 2) * 100
+
+  # Percent in immoral-only group who would never vote for out-party president
+  compromise.immoral.only <- round(table(dat$treatment2, dat$compromise_balance_quartile)[6,4] / table(dat.all$treatment2)[6], 2) * 100
+
+  # T-test of proportion that would never vote for out-party president (Mitchell)
+  compromise.tt <- t.test(dat.all$comp_over75 ~ dat.all$immoralvincomp, alternative = "less")
+  
+  dat.vig <- dat
+
+@
+
+Most of the treatments did not significantly affect attitudes about compromise; however, immoral did increase opposition to compromise compared to the incompetent treatment. Figure \ref{fig:vig_compromise_pairwise} shows that the immoral treatment significantly increases the proportion of respondents who want their party to get the majority of concessions compared to the incompetent message. The figure shows the percentage who chose 75 or above in favor of their party. The increase for immoral is statistically larger than the effect of incompetence (t = \Sexpr{round(compromise.tt$statistic,2)}, p $<$ \Sexpr{report.pval(compromise.tt$p.value)}, one-tailed test). When individuals believe an out-party leader is immoral, they want to defeat him at the ballot box \emph{and} they become less willing to compromise with his agenda. They want to defeat the immoral actor wherever possible.
+
+
+
+
+\FloatBarrier
+\section{Conclusion}\label{sec:vig_conclusion}
+The experimental results here provide compelling evidence that negative moral judgments of political leaders are significantly more influential for voting than negative judgments regarding competence. All three hypotheses found support to some degree. Negative moral judgments decrease the likelihood of defecting at the ballot box while marginally increasing loyalty to the in-party's candidate. They cause individuals to become more polarized about their candidate choices and more punitive regarding political compromise.
+
+This experiment reveals a significant causal pathway from moral judgments to electoral support. This pathway can work independent from the issues that other theories of morals and politics rely on. Most citizens do not have well-developed political values systems \citeaffixed{Converse1964}{See}, but they do have fairly well-developed partisan identities \cite{GreenPalmquistSchickler2002}. Through the mediator of partisanship and other predispositions, citizens make moral judgments of candidates and those moral judgments affect how they vote. Partisans who do not make negative moral judgments of the other party's nominee are more open to defecting and slightly less committed to supporting their own side.
+
+Overall, these results have implications for presidential campaigns in the United States. For campaigns, the takeaway is fairly straight forward: the most important dimension for defining the candidate is morality. Campaigns should focus on convincing voters that the other party's nominee is morally deficient because it contributes to fewer defections to the other candidate. These negative judgments can both decrease likelihood of defecting and slightly increase the certainty of supporting the in-party's candidate. In-party messaging should focus on convincing co-partisans that the other party's candidate is immoral; additional negative judgments regarding competence do not move preferences significantly compared to just immoral judgments.
+
+There are a number of recent candidates that tried to run on competence. Michael Dukakis made competence the central message of his speech at the convention. Al Gore ran on his technocratic record. Mitt Romney ran on his successful business career. Each campaign tried to sell the nominees' competence, and each lost the overall campaign because they lost the battle for moral judgments. George W. Bush's campaign used some of Gore's gaffes to argue he was a liar \cite{Johnstonetal2004}. Barack Obama's messaging successfully defined Romney as lacking empathy \cite{SidesVavreck2013}. Dukakis met a similar fate under the barrage of the infamous ``Willie Horton'' attacks \cite{Mendelberg2001}. Candidates who emphasize competence but lose morality do poorly. Competence matters, but morality matters more.
+
+Finally, the results indicate that individuals may not value competence as theorists and commentators hoped. The evidence here does not support the prediction that ``task-relevant'' competence is most important \cite{Fiorina1981,Funk1997}. Perhaps the predictions of competence's dominance defined task relevance too narrowly.  Perhaps citizens believe that a president's morality is task relevant because he or she serves as the head of government, the commander-in-chief, and the symbol of America's values \citeaffixed{Bellah1967,Edelman1964,Hinckley1990}{See}. It is important to have competent people in office, but at the presidential level this trait may be shared widely enough among the candidates that it is not a major concern.\footnote{Candidate quality may be a bigger concern at the congressional level \citeaffixed{McCurleyMondak1995,Mondak1995,MondakHuckfeldt2006}{See}.} The public wants smart leaders; they just want good leaders more.
+
+
+%\newpage
+%\appendix
+%<<child-experimental2, child='experimental-appendix.Rnw'>>=
+%@
+\FloatBarrier
+
+%\newpage
+%\begin{singlespace}
+
+%\bibliographystyle{C:/Users/Public/Bibliography/apsr_fs}
+%\bibliography{C:/Users/Public/Bibliography/DissertationMasterBibliography}
+
+%\end{singlespace}
+
+%\FloatBarrier
+%\newpage
+%\appendix
+%<<child-experimental2, child='experimental-appendix.Rnw'>>=
+%@
+
+%\end{document} 

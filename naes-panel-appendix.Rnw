@@ -1,0 +1,141 @@
+\chapter{Appendix for The Impact of Changes in Moral Judgments during the 2008 Presidential Election}\label{ch:anes_appendix}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+
+\section{2008 NAES Question Wordings}\label{sec:naes_wordings}
+\begin{itemize}
+    \item \textbf{Perception of Candidates' Ideology}: ``Which of the following best describes the views of (John McCain/Barack Obama): very conservative, somewhat conservative, moderate, somewhat liberal, or very liberal?''
+    \item \textbf{Respondents' Ideology}: ``Generally speaking, would you describe your political views as very conservative, somewhat conservative, moderate, somewhat liberal, or very liberal?''
+    \item \textbf{Candidates' Traits}: ``Please tell me how well the phrase (traits) applies to (John McCain/Barack Obama). Please use a scale from zero to 10, where zero means it does not apply at all, and 10 means it applies extremely well. Of course you can use any number in between.''
+    \begin{itemize}
+        \item \textbf{Moral Traits}: ``trustworthy''; ``has the judgment needed to be president''; ``shares my values''
+        \item \textbf{Competence Traits}: ``strong leader''; ``ready to be commander-in-chief''; ``has the experience needed to be president''
+    \end{itemize}
+    \item \textbf{Issue Attitudes}
+    \begin{itemize}
+        \item \textbf{Abortion}: ``Please tell me which of the following statements about abortion comes closest to your own view: Abortion should be available to anyone who wants it. Abortion should be available, but with stricter limits than it is now. Abortion should not be permitted except in cases of rape, incest, or when the life of the woman is at risk. Abortion should not be permitted under any circumstances.''
+        \item \textbf{Iraq}: ``I'm going to read you some plans for United States policy in Iraq. Please tell me which one comes closest to your own position: The US should withdraw all troops from Iraq as soon as possible. The US should set a deadline for withdrawing its troops if the Iraqi government doesn't show definite progress. The US should keep its troops in Iraq until a stable government is established.''
+        \item \textbf{Free Trade}: ``Do you favor or oppose the federal government in Washington negotiating more free trade agreements like NAFTA? [If favor:] Do you strongly favor or somewhat favor this? [If oppose:] Do you strongly oppose or somewhat oppose this?''
+        \item \textbf{Environment vs. Free Trade}: ``I am going to read you a pair of statements. Please tell me which of the two statements comes closest to your opinion: Protecting the environment should be a top priority, even if that means higher consumer prices. Protecting the environment is important, but it is more important to keep the economy growing.''
+        \item \textbf{Taxes}: ``I'm going to read you some options about federal income taxes. Please tell me which one comes closest to your view on what we should be doing about federal income taxes: Taxes should be cut. Taxes should be kept pretty much as they are. Taxes should be raised if necessary in order to maintain current federal programs and services.''
+    \end{itemize}
+    \item \textbf{Party Identification}: ``Generally speaking, do you usually think of yourself as a Republican, a Democrat, an Independent, or something else? [If Republican / Democrat:] Do you consider yourself a strong or not a very strong (Republican / Democrat)? [If not Republican / Democrat:] Do you think of yourself as closer to the Republican or Democratic Party?''
+    \item \textbf{Assessments of Economic Conditions}: ``Thinking about one year ago, in your opinion, (were the economic conditions in this country / was your personal economic situation) much better than they are right now, somewhat better, the same, somewhat worse, or much worse?''
+    \item \textbf{Resentment of Black Elected Officials}: ``Do you think black elected officials are more likely to (favor blacks for government jobs over white applicants / support government spending that favors blacks / give special favors to the black community)? Do you strongly agree, somewhat agree, somewhat disagree, or strongly disagree?''
+    %\item \textbf{Political Knowledge}: ``Who has the final responsibility to determine if a law is constitutional or not? Is it the president, the Congress, or the Supreme Court?''; ``How much of a majority is required for the US Senate and House to override a presidential veto?''; ``Do you happen to know which party has the most members in the United States House of Representatives?''
+    \item \textbf{Party Contact}: ``During the presidential general election campaign, did you receive email from either the Obama or McCain campaigns? [If yes:] Which campaign? Yes, from Obama; Yes, from McCain; Yes, from both; and No, from neither.''
+    \item \textbf{Best Candidate for Economy}: ``Who would better handle the economy if they were elected president in 2008, Barack Obama or John McCain?''
+    \item \textbf{Importance of Candidates' Character} (post-election only): ``Which was more important to you in choosing a candidate for president: their personal qualities, such as experience and judgment, or their positions on specific issues, such as energy policy and Iraq?''
+    \item \textbf{Other Controls}: Resident of 2008 battleground state (CO, FL, IN, MO, NV, NH, NM, NC, OH, PA, and VA)\footnote{Battleground states determined by Politico's 2008 Swing State Map \url{http://www.politico.com/convention/swingstate.html}}; and days between original interview and follow-up (mean: 46.5 days, st. dev.: 25 days, range: 2 to 93 days).
+   \item \textbf{Vote Choice (Pre-election)}:
+    \begin{itemize}
+        \item \textbf{8/08/08 to 9/25/08}: ``Thinking about the general election for president in November 2008, if that election were held today and the candidates were (John McCain, the Republican / John McCain and Sarah Palin, the Republicans); (Barack Obama, the Democrat / Barack Obama and Joe Biden, the Democrats); Ralph Nader, the (Green Party / Independent) candidate; and Bob Barr, the Libertarian, for whom would you vote?''\footnote{Running mates' names added after their announcements in late August.}
+        \item \textbf{9/26/08 to 11/3/08}: ``Thinking about the general election for president in November 2008, if that election were held today and the candidates were John McCain and Sarah Palin, the Republicans; Barack Obama and Joe Biden, the Democrats; Ralph Nader and Matt Gonzalez, the Independent candidates; Bob Barr and Wayne Allyn Root, the Libertarians; and Cynthia McKinney and Rosa Clemente, the Green Party candidates, for whom would you vote?''
+    \end{itemize}
+    \item \textbf{Vote Choice (Post-election)}: ``In the 2008 presidential election who did you vote for: John McCain and Sarah Palin, the Republicans; Barack Obama and Joe Biden, the Democrats; Ralph Nader and Matt Gonzalez, the Independent candidates; Bob Barr and Wayne Allyn Root, the Libertarians; or Cynthia McKinney and Rosa Clemente, the Green Party candidates?''
+\end{itemize}
+
+
+\section{Description of Additional Control Variables}\label{sec:naes_controls}
+The first variable is the change in respondents' partisanship between the first and second interviews. While partisanship in general appears to be quite stable \cite{GreenPalmquistSchickler2002}, there are some changes to party identification during campaigns \cite{Smidt2014}; therefore, changes in vote choice could be explained through shifting partisanship. The second alternative explanation is changes in perceptions of the candidates' ideology as a proxy for voters learning more about candidates' policy positions \cite{GelmanKing1993}. The third and fourth variable aim to capture persuasion and conversion effects. The third variable measures changes in the respondents' reported ideological identification, and the fourth is an index of changes in respondents' issue attitudes on five ideologically salient issues.\footnote{The issues are free trade agreements, the war in Iraq, protecting the environment versus growing the economy, abortion, and taxes.} The fifth variable measures changes in the amount of attention respondents give the election. Paying attention to politics increase exposure to campaign messaging and media priming, which would naturally help respondents make up their minds (or change their minds).
+
+The next two variables account for changes in respondents' perceptions of the economy -- at the national and individual levels. Changes in how respondents perceive the economy are an important consideration, particularly given the dire economic news that dominated the last two months of the election.\footnote{The collapse of Lehman Brothers occurred in mid-October and the government takeover of Fannie Mae and Freddie Mac came early September.} However, previous bad economic news was prominent long before the first interviews in August (e.g. the failure of Bear Stearns occurred in March), so most respondents gave negative assessments of their own financial situation and the overall economy in both waves.
+
+The last panel variable is an index of the changes in a battery of questions measuring respondents' perceptions that black elected officials favor other blacks. Race was a significant theme in the 2008 campaign \cite{KenskiHardyJamieson2010,Piston2010}. The index is a proxy for racial resentment. Two final variables account for time between interviews (more time means more opportunity to change one's mind) and residing in a battleground state to account for the higher probability of encountering the campaign in those states.
+
+
+\section{2008 NAES Supplemental Tables and Figures}
+
+\begin{table}[htbp]\centering
+\caption{\label{tab:naes_iv_descriptives}
+\textbf{Independent Variables' Descriptive Statistics} }\begin{tabular} {@{} l r r r r @{}} \\ \hline
+ & \textbf{Mean} & \textbf{St. Dev.} & \textbf{Min.} & \textbf{Max.} \\
+\hline
+$\triangle$ Moral Judgment  &       0.51 &       0.18 &       0.00 &       1.00 \\
+$\triangle$ Competence Judgment  &       0.51 &       0.18 &       0.00 &       1.00 \\
+$\triangle$ Partisanship  &       0.63 &       0.16 &       0.00 &       1.00 \\
+$\triangle$ Candidate Ideology  &       0.51 &       0.17 &       0.00 &       1.00 \\
+$\triangle$ Respondent Ideology  &       0.50 &       0.20 &       0.00 &       1.00 \\
+$\triangle$ Issue Attitudes  &       0.53 &       0.21 &       0.00 &       1.00 \\
+$\triangle$ Interest in Election  &       0.37 &       0.20 &       0.00 &       1.00 \\
+$\triangle$ National Economy  &       0.52 &       0.18 &       0.00 &       1.00 \\
+$\triangle$ Personal Finances  &       0.51 &       0.15 &       0.00 &       1.00 \\
+$\triangle$ Resentment of Black Officials  &       0.51 &       0.21 &       0.00 &       1.00 \\
+Battleground State  &       0.30 &       0.46 &       0.00 &       1.00 \\
+Days between Interviews\footnotesize{\dag} &      46.61 &      24.88 &       2 &      93 \\
+\hline
+\multicolumn{5}{@{}l}{\footnotesize{\dag Re-scaled between 0 and 1 for analysis.}}
+\end{tabular}
+\end{table}
+
+
+%\begin{figure}[htb]
+%  \centering
+%  {\includegraphics[width=.55\textwidth]{comp_trait_change_trunc.pdf}}
+%  \caption[Average Change in Competence Judgment by Change in Vote Choice]{\textbf{Average Change in Competence Judgment by Change in Vote Choice}\\
+%    {\footnotesize \textit{Note}: Figure shows the average change in the difference in how respondents judged the out-party and in-party candidates for the competence judgment index, with 95\% confidence intervals.}}\label{fig:comp_descriptive}
+%\end{figure}
+
+%\begin{table}
+%\centering
+%\caption{{\textbf{Effect of Changes in Moral Judgment on Changes in Vote Choice with Additional Controls}}\\
+%    {\footnotesize The model includes all alternative variables from Table \ref{tab:mlogit_results} as well as additional, non-panel controls for contact from the in- and out-party, perception of which candidate would be better for the economy, 2004 presidential vote choice, and self-reported weight on candidate characteristics (post-election).}}\label{tab:additional}
+%\scalebox{.8}{
+%\begin{tabular}{lcccccccc} \hline
+%  & \multicolumn{2}{c}{\textbf{All Partisans}} &  & \multicolumn{2}{c}{\textbf{Republicans}} &  & \multicolumn{2}{c}{\textbf{Democrats}} \\ \cline{2-3} \cline{5-6} \cline{8-9}
+%  & (1) & (2) &  & (3) & (4) &  & (5) & (6) \\
+%  & Change to & Change to & & Change to & Change to &  & Change to & Change to \\
+%  & In-party & Out-party & & In-party & Out-party &  & In-party & Out-party \\ \hline
+%\\
+%$\triangle$ Moral Judgment  & 2.33*** & -2.49*** & & 2.99* & -2.66* & & 2.12* & -2.29* \\
+%  & (0.66) & (0.73) & & (1.19) & (1.06) & & (0.85) & (1.09) \\
+%$\triangle$ Competence Judgment  & 0.92 & -1.27\textasciicircum & & -0.32 & -1.28 & & 1.51\textasciicircum & -1.19 \\
+%  & (0.62) & (0.77) & & (0.97) & (1.21) & & (0.82) & (1.03) \\
+%\\
+%\multicolumn{9}{c}{Additional Variables Excluded} \\
+%\\
+%Observations & 3,371 & 3,371 & & 1,497 & 1,497 & & 1,874 & 1,874 \\ \hline
+%\multicolumn{9}{c}{Standard errors in parentheses; Coefficients from multinomial logit models} \\
+%\multicolumn{9}{c}{*** p$<$0.001, ** p$<$0.01, * p$<$0.05, \textasciicircum p$<$0.1} \\
+%\end{tabular}
+%}
+%\end{table}
+
+
+\begin{figure}[htb]
+\caption[Predicted Effect of Moral Judgments on Republicans' Vote Choice]{\textbf{Predicted Effect of Moral Judgments on Republicans' Vote Choice}\\
+    {\footnotesize \textit{Note}: Figure shows the predicted probability of changing one's vote choice to the in-party candidate or the out-party candidate by moral judgment among Republicans only. 95\% confidence intervals shown. The light grey vertical lines report the mean for the moral judgment index and a one standard deviation shift above and below.}}\label{fig:naes_moral_gop_pp}
+  \centering
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{moral_gop_predicted_probability_imputed.pdf}}
+      \caption{Change to In-party}
+      \label{fig:naes_in_moral_gop_pp}
+  \end{subfigure}
+  \qquad
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{moral_gop_predicted_probability_imputed_out.pdf}}
+      \caption{Change to Out-party}
+      \label{fig:naes_out_moral_gop_pp}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[htb]
+  \caption[Predicted Effect of Moral Judgments on Democrats' Vote Choice]{\textbf{Predicted Effect of Moral Judgments on Democrats' Vote Choice}\\
+    {\footnotesize \textit{Note}: Figure shows the predicted probability of changing one's vote choice to the in-party candidate or the out-party candidate by moral judgment among Democrats only. 95\% confidence intervals shown. The light grey vertical lines report the mean for the moral judgment index and a one standard deviation shift above and below.}}\label{fig:naes_moral_dem_pp}
+  \centering
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{moral_dem_predicted_probability_imputed.pdf}}
+      \caption{Change to In-party}
+      \label{fig:naes_in_moral_dem_pp}
+  \end{subfigure}
+  \qquad
+  \begin{subfigure}[b]{.47\textwidth}
+      {\includegraphics[width=\textwidth]{moral_dem_predicted_probability_imputed_out.pdf}}
+      \caption{Change to Out-party}
+      \label{fig:naes_out_moral_dem_pp}
+  \end{subfigure}
+\end{figure} 

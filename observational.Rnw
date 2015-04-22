@@ -1,0 +1,1163 @@
+% Data set-up
+<<anes.setup,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+### Figures for Dissertation
+
+library(foreign)
+library(stargazer)
+library(apsrtable)
+library(Hmisc)
+library(MASS)
+library(reshape2)
+
+#rm(list=ls())
+
+## ANES Cumulative Data File, 1980 to 2008
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/1980-2012 ANES Cumulative Data File")
+#setwd("/Users/oliphant/MACOSXFILES/Desktop") # Computer cluster location
+
+dat <- read.dta("ANES Cleaned old format new data.dta")
+
+dat$participated <- as.numeric(dat$participated) - 1
+dat$cheap <- as.numeric(dat$cheap) - 1
+dat$costly <- as.numeric(dat$costly) - 1
+
+# Creating indicator variables for predicted probabilities
+dat$income2.34to67 <- ifelse(dat$income2 == "34 to 67 percentile", 1, 0)
+dat$income2.68to100 <- ifelse(dat$income2 == "68 to 100 percentile", 1, 0)
+dat$income2.refused <- ifelse(dat$income2 == "Refused", 1, 0)
+
+dat$education2.some <- ifelse(dat$education2 == "Some college", 1, 0)
+dat$education2.plus <- ifelse(dat$education2 == "College plus", 1, 0)
+
+pres.year <- seq(1984, 2012, by = 4)
+
+dat.gop <- dat[which(dat$gop == 1),]
+dat.dem <- dat[which(dat$dem == 1),]
+dat.partisan <- dat[which(dat$partisan == 1),]
+dat.ind <- dat[which(dat$partisan != 1),]
+
+#dat.partisan.2008 <- dat.partisan[which(dat.partisan$year == 2008),]
+
+setwd("C:/Users/Public/Figures/")
+
+
+## Creating a frame with survey weights
+library(survey)
+
+dat.all <- dat
+
+groups <- c("all", "partisan", "gop", "dem", "ind")
+
+for (i in 1:length(groups)) {
+    setup <- paste("anes.", groups[i], " <- svydesign(id = ~ids, data = dat.", groups[i], ", weights = ~weights)", sep ="")
+    eval(parse(text = setup))
+
+    setup <- paste("anes.", groups[i], " <- update(one = 1, diff_moral_index_trunc2 = factor(diff_moral_index_trunc), diff_comp_index_trunc2 = factor(diff_comp_index_trunc), diff_moral_index = factor(diff_moral_index), diff_comp_index2 = factor(diff_comp_index2), moral_three3 = factor(moral_three2), comp_three3 = factor(comp_three2), moral_three2 = factor(moral_three), comp_three2 = factor(comp_three), pres_vote_choice2 = pres_vote_defect, inparty_house_vote2 = house_vote_defect, anes.", groups[i], ")", sep = "")
+    eval(parse(text = setup))
+}
+
+@
+
+\chapter{The Influence of Moral Judgments on Presidential Vote, 1984-2012}\label{ch:anes}
+
+%Perceptions of presidential candidates' character often define their campaigns. Mitt Romney was widely seen as lacking empathy for main street America, especially after his ``47\%'' comments made to a room full of rich donors became public. Perceptions that Barack Obama is a weak leader are common among his opponents. Accusations of immorality dogged Bill Clinton throughout his presidency. Democrats harshly rated George W. Bush on measures of competence. Candidates for public office
+
+Most Americans identify in some way with one of the two major parties. Even those who claim independence typically lean toward a party and behave just like other partisans for the most part \cite{Keithetal1992}. Despite increasingly identifying as independents, Americans still behave like partisans \cite{Bartels2000}.\footnote{Since 2008, Gallup has found a significant increase in the percentage of Americans who identify as Independents. That year, slightly more Americans said they were Democrats (about 36\% vs. 35\%) than Independents (not including leaners). By late 2014, Gallup found that 43\% of Americans said they were Independents. However, only 11\% of all Americans do not lean toward one of the major parties. See Jones, Jeffrey M. 2015. ``In U.S., New Record 43\% Are Political Independents.'' \emph{Gallup.com}. Posted 7 Jan 2015. At \url{http://www.gallup.com/poll/180440/new-record-political-independents.aspx}. Accessed 6 Feb 15.} Most partisans vote for their party's candidates, and how they arrive at that decision sheds light on the nature of electoral competition.
+
+This chapter explores how partisans (including leaners) reason through and justify their vote choice in presidential elections. Partisans have dual motivations to both support their party while also appearing to support the best candidate for the job \cite{Groenendyk2013}. These dual motivations lead partisans to find ways to justify their support for their party that appear unbiased and responsible. One way voters may accomplish this is through perceptions of the candidates.
+
+In particular, citizens rely on judgments of candidates' moral traits because of their close emotional connection to core moral values. Furthermore, moral judgments are more likely to affect vote choice because they are more diagnostic of a person's true character, requiring less information and experience to make the judgment.
+
+Despite earlier predictions that partisanship was weakening and candidates' personalities were taking over elections, the evidence shows that partisanship remains the strongest predictor of vote choice \emph{across} partisan groups \cite{Bartels2002}. It is unclear, however, what effect these perceptions have on voting \emph{within} partisan groups. This chapter explores the impact of perceptions of candidates' morality on voting within partisan groups to shed light on the extent that different considerations (e.g. morality, competence, issue positions) drive partisan behavior at the ballot box.
+
+The following analysis asks what impact, if any, moral judgments have in actual presidential election \emph{within} partisan groups. I examine the data within partisan groups to shed light on how partisans' differing reactions to candidates affects their voting. Partisanship dominates most Americans' vote choice.
+
+I draw on observational evidence from the last \Sexpr{replace_number(length(c(table(dat$year))))} presidential elections to show that partisans who do not make moral judgments favorable to their party's nominee are much more likely to defect than partisans who see their nominee as morally better than the other party's. These effects are stronger for moral judgments than for competence judgments and even policy positions. Partisan voters vote for their party's nominee when they believe he or she to be morally better than the other side, not when they see the nominee as more capable and competent. Partisanship is not just a competition over issues; it's a competition over which candidates are most ``righteous'' in the eyes of supporters.
+
+%This chapter examines the relationship between moral judgments of political actors and two areas of political behavior and attitudes: vote choice and political activism. The primary emphasis will be on voting, but moral judgments also have significant impact on other areas of political behavior since the 1980s that are worthy of attention.
+
+%The data for this chapter comes from observational studies collected through the American National Election Studies' time-series surveys conducted in presidential election years. The ANES has data going back to 1948, but the questions regarding the candidates' character have been asked since 1984.
+
+%\section{Hypotheses}\label{sec:hypotheses}
+%I propose three primary hypotheses regarding the relationship between moral judgments of political actors and political behavior and attitudes. Each hypothesis relates to one of the classes of dependent variables I examine (vote choice, affective polarization, and non-electoral participation). I will describe each hypothesis and the reasoning behind it separately. The hypotheses and reasoning build off of the general theory discussed above. The three hypotheses are: 1) Moral judgment will make partisans more loyal to their party's candidates in the voting booth; 2) Moral judgment will increase affective polarization; and 3) Moral judgment will make partisans more likely to engage in activism. These hypotheses and the following analysis focus on establishing empirical support for the thick, black arrow from moral judgments to behavior in Figure \ref{fig:mediation_model}.
+
+
+
+
+
+%\subsection{H2: Moral judgment will increase affective polarization}
+%Stronger moral judgments of candidates will be correlated with higher levels of affective polarization because these judgments will elicit stronger negative moral feelings toward the out-party overall as well as more positive feelings toward the in-party. As I mentioned above, if someone an individual perceives to be immoral leads another group, that group will become more negative in a partisan's mind. One's own group will become more positive as well.
+%
+%The mass public is not as polarized on ideological issues as many people think \cite{DiMaggioetal1996,FiorinaAbramsPope2005,MasonForthcoming}, through partisan sorting \cite{Levendusky2009a} has increased the correlation between ideology and partisanship \cite{AbramowitzSaunders2008}. This lack of strong issue-based differences suggests that moral feelings and attitudes may be channeled through different pathways than then the assumed channels around issues and policies. In recent years scholars have found that partisans increasingly express high levels of hostility toward the other party and its supporters \cite{Iyengaretal2012,Mason2013}, while being relatively close in their issue attitudes. Partisans often overestimate how extreme the other side is in its opinions \cite{Grahametal2012}, which is reinforced by elite polarization. Partisans use their perceptions of elite polarization to make assumptions about the entire out-party, which increases affective polarization. They perceive out-party overall to be similar to the morally condemned out-party leader \cite{Nicholson2012}.
+%
+%It's not issues polarizing the mass public; it's attitudes toward the other side. Overlapping and sorted identities contribute to these feelings of partisan distance \cite{Levendusky2009a,MasonForthcoming}. \citeasnoun{Iyengaretal2012} find that campaign communications contribute a great deal to the increasing affective distance between the parties. Battleground states are more polarized than states that aren't bombarded with campaign communications. I theorize that the morally relevant information in these communications that is doing a significant portion of the work; however, further research is needed to establish this connection. Similarly, partisan media polarizes attitudes about the other side, without necessarily polarizing issue opinions. \citeasnoun{Levendusky2009a} finds that partisan media polarizes its viewers through their negative views of the other party. Watching a clip from Fox News made Republicans less likely to believe President Obama provides strong leadership, for example. These negative perceptions of the out-party endure over a few days post-treatment as well. I extend Levendusky's analysis by considering which types of information that partisan media provide are most likely to increase these negative views. I suspect that partisan media's priming and framing of the other side as morally bad are key to affective polarization. Again, further research is needed to fully establish this causal connection. I cannot get at the sources of people's information regarding these actors with the data analyzed here.
+%
+%These sources of information, campaign advertisements and partisan media, are communicating which side is good and bad---and most people are paying attention to learn who is bad \cite{Levendusky2013a}. This information ``primes citizens' partisanship, strengthening the degree to which they see the world through partisan-colored glasses'' \cite[613]{Levendusky2013b}, and I believe the information is priming attitudes about actors' morality as well as issues'. Additionally, the information these communications provide about morality will have stronger emotional appeal in partisans' minds. Campaigns can manipulate emotions toward the candidates and in turn political behavior \cite{Brader2005}. I hypothesize that these primes can turn actors into moral intuitions. When citizens judge the out-party's candidate as an immoral person, these feelings will drive affective polarization because they feel negative moral emotions whenever they encounter information about the actor.
+%
+%My analysis will explore whether judgments of actors' morality are more influential than judgments of competence for driving affective polarization. I hypothesize that moral judgments because of their strong affective component \cite{Haidt2001,Petersen2010,SteenbergenEllis2006} will be correlated with greater affective polarization.
+
+
+
+\section{Data}
+To explore the role of moral judgments of political actors, I analyze ANES data from 1984 to 2012. The data comes from the ANES's cumulative data file.\footnote{The American National Election Studies (www.electionstudies.org) TIME SERIES CUMULATIVE DATA FILE [dataset]. Stanford University and the University of Michigan [producers and distributors], 2010. These materials are based on work supported by the National Science Foundation under Grant Numbers: SBR-9707741, SBR-9317631, SES-9209410, SES-9009379, SES-8808361, SES-8341310, SES-8207580, and SOC77-08885. Any opinions, findings and conclusions or recommendations expressed in these materials are those of the author(s) and do not necessarily reflect the views of the funding organizations.}
+
+I restrict the analysis to partisans. Leaners are categorized with their respective parties. There are \Sexpr{} cases across all eight presidential elections for which I created the moral judgment index. However, not all of those cases have data for all of the independent and control variables.\footnote{There are about 8,500 cases with at least some of the needed variables. The n-sizes in the models reported below range from 2,200 (when examining the parties separately) to 12,000 for the bivariate models among all partisans.} The data from 1992 to 2012 is weighted using the ANES's post-stratification weights; the ANES does not provide weights for the 1984 and 1988 surveys.
+
+I limit the analysis to presidential election years. Each party clearly has a single person as its standard bearer and leader. The presidential candidates receive significant media attention and are well known to the vast majority of Americans \citeaffixed{DelliCarpiniKeeter1996}{See}. Furthermore, presidential campaigns often focus on the pros and cons of the candidates' as political persons, though not as much as is often thought \cite{Geer2006}. However, even if campaign advertisements are communicating policy-relevant information, they are still conveying information that citizens can use to form impressions of candidates' moral fitness \cite{Clifford2014}.
+
+%Between presidential elections and during midterm elections, people struggle to identify who leads the party that does not hold the White House. For example, in middle of the October 2013 government shutdown, the public struggled to identify who lead the Republican Party.\footnote{Pew Research Center for the People \& the Press Political Survey, Oct 9-13, 2013. Retrieved Jan-8-2014 from the iPOLL Databank, The Roper Center for Public Opinion Research, University of Connecticut. \url{http://www.ropercenter.uconn.edu/data_access/ipoll/ipoll.html}. Data come from an open-ended question asking, ``Thinking about the Republican Party, who do you think of as the leader of the Republican Party these days?''} Speaker of the House John Boehner received the most responses, but only 24\% of all respondents and 21\% of Republicans gave his name. The majority of respondents (56\%) said that either no one lead the GOP or that they didn't know who was leading.\footnote{Among Republicans, 54\% said ``nobody'' or don't know. Non-Tea Party Republicans were especially likely to say they didn't know who the leader of the Republican Party was (50\%). Only 23\% of Tea Party Republicans gave that answer. However, the same percentage (15\%) among both groups responded ``nobody.''} When Democrats were out of the White House, opinion polls found the same circumstances for the Democratic Party. In 2006, in the wake of the Democrats regaining control of Congress, 60\% of respondents said that they didn't know who the leader of the Democratic Party was.\footnote{Pew Research Center for the People \& the Press Post-Election Survey, Nov 9-12, 2006. Retrieved Jan-8-2014 from the iPOLL Databank, The Roper Center for Public Opinion Research, University of Connecticut. \url{http://www.ropercenter.uconn.edu/data_access/ipoll/ipoll.html}. The 2006 midterm elections were on November 7, 2006. Hillary Clinton and Nancy Pelosi were essentially tied with 12\% and 9\%, respectively, among all respondents.} Because I am interested in moral judgments of the out-party, I need to examine years when there is a prominent leader who can exemplify and embody the agenda and policies of each party.
+
+
+\subsection{Moral Judgment Index}
+To measure how individuals morally judge political actors, I created an index of moral judgment using two questions that have appeared on the ANES time-series surveys in every presidential election since 1984. The index combines two values-oriented character traits: ``moral'' and ``really cares about people like me.'' It is designed to capture morally-loaded character judgments \cite{SteenbergenEllis2006}. Combining the traits into a single index taps into a latent dimension of moral judgment.\footnote{Section \vref{sec:sem} highlights the theorized latent relationship between the common trait questions and the two latent dimensions of morality and competence.} Using a single latent dimension of moral judgments also avoids the debates over the bewildering number of trait dimensions scholars have identified \citeaffixed{BenoitMcHale2004,Funk1996b}{See}. A number of considerations can affect the traits that define candidates: from the narratives of the news media \cite{Kinder1986} to accessible moral intuitions \cite{Clifford2014}. As a result, it is difficult to pin down exactly the traits that citizens are thinking of. Recent developments in social psychology support narrowing traits to two underlying dimensions \cite{CuddyFiskeGlick2007,Fiske2011,FiskeCuddyGlick2007}, and I emulate that approach. Past work in political science has also typically identified a moral dimension together with a competence dimension; most of the disagreements focus on supplementary dimensions of likeability, efficacy, etc. \cite{Bartels1993,Funk1996b,Kinder1986}
+
+There are five character traits that have been asked consistently since 1984 on the ANES (question wording is in parentheses): integrity (``moral''), empathy (``really cares about people like me''), intelligence (``intelligent''), knowledge (``knowledgeable''), and leadership (``provides strong leadership'').\footnote{These traits are in every presidential election cross-section survey; however, intelligence was not asked for the Republican nominee in 1996. Because of that I avoid using it in the analysis because it means losing a lot of data.} I label integrity and empathy ``moral,'' and I use knowledge as a control for a candidate's competence. A simple guideline for how these traits are divisible according to moral content is whether they relate to an actor's ``ability'' to serve in elected office or whether they relate to the actor's ``suitability'' for office. Factor analysis of ANES and other sources in Section \vref{tab:trait_factors} supports the distinction between moral and competence traits as well as highlights the great variability in how these traits relate to each other. Leadership is not clearly related to one or the other, especially given the findings that conservatives emphasize authority as a moral dimension \cite{Grahametal2009,Haidt2012}. Empathy and integrity correlate so well that \citeasnoun{Kinder1986} argues that they ``may be so highly correlated that the distinction is hardly worth making'' (248). Previous analysis has found integrity and empathy to correlate the most, while leadership and competence have tended to correlated highly \cite{Funk1996b}. However, leadership contains enough subjectivity between values and objective standards to warrant exclusion.
+
+Compared to other attitudes toward political candidates, such as anxiety and competence, I argue that integrity and empathy are more likely to be related to moral considerations because they rely on more subjective, morally-relevant judgments. For example, Republicans and Democrats are likely to agree on objective standards of competence for a president (e.g. college educated, experience as an elected official, etc.). There will be disagreements over competence, but they are less likely to have roots in core values. On the other hand, what it means to ``really care about'' other people is highly subjective. A Republican might see cuts to welfare as caring because it will encourage recipients to look for jobs; Democrats would see the same cuts as deeply unempathetic. Unlike competence, which I use as a non-moral control, the meanings of ``moral'' and ``caring for people [like the respondent]'' are highly subjective and values-based. One citizen may excuse lying in defense of national security while another may believe it exposes a lack of integrity. Furthermore, there is evidence that citizens will the excuse personal failings of politicians who hold shared policy positions \cite{Stoker1993}, which is evidence that judgments of politicians' morality are subjective and values-based.
+
+[[knitr this paragraph]]Republican and Democratic presidential candidates tend to vary over how well the public rates them on character traits \cite{Hayes2005}. Democrats tend to ``own'' the traits of compassion and empathy while Republicans do better on leadership and integrity. Among the moral traits common to the ANES, Republicans are statistically more likely to rate the out-party candidate negatively on integrity than Democrats, while Democrats are significantly more likely to negatively rate the Republican candidate on empathy.\footnote{Forty-seven percent of Republicans between 1984 and 2012 rated the Democrat negatively on ``moral;'' only 40\% of Democrats gave negative ratings. On ``really cares about me,'' however, the Democrats are more likely to give a negative reaction (80\% vs. 60\%). Republicans are more negative on ``provides strong leadership'' (68\% vs. 56\%), and Democrats rate the GOP's candidate more negatively on competence (37\% vs. 30\%). \citeasnoun{Hayes2005} goes into these partisan differences in-depth.}
+
+The emotional component of the moral judgment index comes from a question that asks whether or not respondents have felt anger toward the candidates for the presidency ``because of the kind of person he is, or because of something he has done.'' Aversion is the emotion of prejudice, of stimuli that we have conditioned responses to \cite[164]{Marcusetal2000}. It is the emotion of moral approbation when our core values are threatened or denigrated \cite{Petersen2010,SteenbergenEllis2006}. However, aversion is often indistinguishable from the other negative emotion of anxiety \cite{HuddyFeldmanCassese2007}. The two negative emotions collapse into a single dimension. In other circumstances, aversion is entirely absent. \cite{Marcusetal2000} find that people felt there was an emotional dimension of aversion in attitudes toward the incumbent Bill Clinton, but aversion was absent from emotions toward the GOP nominee, Bob Dole.
+
+<<anes.dist.moral.judge,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+    setwd("C:/Users/Public/Figures/")
+
+    # Unweighted distribution
+    #counts.partisan <- table(dat.partisan$diff_moral_index_trunc)
+    #n.partisan <- sum(counts.partisan)
+    #percents.partisan <- counts.partisan / n.partisan
+
+    #percents <- c()
+    #percents[seq(1, length(percents.partisan)*2, by = 2)] <- percents.partisan
+    #percents[seq(2, length(percents.partisan)*2-1, by = 2)] <- 0
+
+    # weighted distribution
+    percents.partisan.weight <- svymean(~diff_moral_index_trunc2, design = anes.partisan, na.rm = TRUE)
+
+    percents.weight <- c()
+    percents.weight[seq(1, length(percents.partisan.weight)*2, by = 2)] <- percents.partisan.weight
+    percents.weight[seq(2, length(percents.partisan.weight)*2-1, by = 2)] <- 0
+
+
+
+    pdf("moral_judgment_diff_distribution_partisan.pdf", height = 8.5, width = 11)
+    #jpeg("moral_judgment_diff_distribution_partisan.jpg", height = 5, width = 7, units = "in", res = 100)
+
+    par(mar=c(4,5,3,2))
+    barplot(percents.weight,
+        ylim = c(0,.25),
+        col = partisan.color,
+        density = 5,
+        axes = FALSE,
+        names.arg = "",
+        space = 0)
+    text(seq(.5,length(percents.weight)-.5,by=3), percents.weight[seq(1, length(percents.partisan.weight)*2, by = 2)]+.0075, labels = c(paste(round(percents.weight[seq(1, length(percents.partisan.weight)*2, by = 2)], 2)*100, "%", sep = "")), cex = cex.val)
+    y.labs <- seq(0,25,by=5)
+    y.labs <- c(paste(y.labs, "%", sep = ""))
+    axis(2, y.labs, at = seq(0,.25,by=.05), las = 1, cex.axis = cex.val)
+    axis(1, rep("", times = length(seq(.5,length(percents.weight)-.5,by=2))), at = seq(.5,length(percents.weight)-.5,by=2), las = 1, cex.axis = cex.val)
+    mtext(c("In-party\nImmoral", "", "Ambivalent", "", "", "", "Out-party\nImmoral"), 1, line = 2.25, at = seq(.5,length(percents.weight)-.5,by=2), cex = cex.val)
+    #legend("topright", c("Republicans","Democrats"), bty = "n", cex = cex.val+.5, fill = c(gop.color,dem.color),
+    #    density = c(gop.density,dem.density), angle = c(gop.angle,dem.angle))
+
+    dev.off()
+
+
+
+    # Combined distribution of competence and morality
+    percents.partisan.weight2 <- svymean(~diff_comp_index_trunc2, design = anes.partisan, na.rm = TRUE)
+
+    percents.weight <- c()
+    percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)] <- percents.partisan.weight
+    percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)] <- percents.partisan.weight2
+    percents.weight[seq(3, length(percents.partisan.weight)*3-1, by = 3)] <- 0
+
+
+    pdf("moral_comp_distribution_partisan.pdf", height = 8.5, width = 11)
+    #jpeg("moral_judgment_diff_distribution_partisan.jpg", height = 5, width = 7, units = "in", res = 100)
+
+    par(mar=c(4,5,.5,2))
+    barplot(percents.weight,
+        ylim = c(0,.6),
+        col = c(col.moral, col.comp, "black"),
+        #density = c(density.moral, density.comp, 500),
+        axes = FALSE,
+        names.arg = "",
+        space = 0)
+    text(seq(.5,length(percents.weight)-1.5,by=3), percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)]+.015, labels = c(paste(round(percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)], 2)*100, "%", sep = "")), cex = cex.val-.2)
+
+    text(seq(1.5,length(percents.weight)-.5,by=3), percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)]+.015, labels = c(paste(round(percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)], 2)*100, "%", sep = "")), cex = cex.val-.2)
+
+    y.labs <- seq(0,60,by=10)
+    y.labs <- c(paste(y.labs, "%", sep = ""))
+    axis(2, y.labs, at = seq(0,.6,by=.1), las = 1, cex.axis = cex.val)
+    axis(1, rep("", times = length(seq(1,length(percents.weight)-1,by=3))),
+        at = seq(1,length(percents.weight)-1,by=3), las = 1, cex.axis = cex.val)
+    mtext(c("In-party\nImmoral", "", "Ambivalent", "", "", "", "Out-party\nImmoral"), 1, line = 2.25,
+        at = seq(1,length(percents.weight)-1,by=3), cex = cex.val)
+
+
+    legend("topright", c("Morality","Competence"), bty = "n", cex = cex.val, fill = c(col.moral,col.comp),
+        density = c(density.moral, density.comp))
+        #density = c(density.moral, density.comp), angle = c(90,90) )
+
+    dev.off()
+
+
+
+
+    ## Independents
+    percents.partisan.weight <- svymean(~diff_moral_index, design = anes.ind, na.rm = TRUE)
+    percents.partisan.weight2 <- svymean(~diff_comp_index2, design = anes.ind, na.rm = TRUE)
+
+    percents.weight <- c()
+    percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)] <- percents.partisan.weight
+    percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)] <- percents.partisan.weight2
+    percents.weight[seq(3, length(percents.partisan.weight)*3-1, by = 3)] <- 0
+
+
+    pdf("moral_comp_distribution_ind.pdf", height = 8.5, width = 11)
+    #jpeg("moral_judgment_diff_distribution_ind.jpg", height = 5, width = 7, units = "in", res = 100)
+
+    par(mar=c(4,5,.5,2))
+    barplot(percents.weight,
+        ylim = c(0,.65),
+        col = c(col.moral, col.comp, "black"),
+        #density = c(density.moral, density.comp, 500),
+        axes = FALSE,
+        names.arg = "",
+        space = 0)
+    text(seq(.5,length(percents.weight)-1.5,by=3), percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)]+.015, labels = c(paste(round(percents.weight[seq(1, length(percents.partisan.weight)*3, by = 3)], 2)*100, "%", sep = "")), cex = cex.val-.2)
+
+    text(seq(1.5,length(percents.weight)-.5,by=3), percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)]+.015, labels = c(paste(round(percents.weight[seq(2, length(percents.partisan.weight)*3, by = 3)], 2)*100, "%", sep = "")), cex = cex.val-.2)
+
+    y.labs <- seq(0,60,by=10)
+    y.labs <- c(paste(y.labs, "%", sep = ""))
+    axis(2, y.labs, at = seq(0,.6,by=.1), las = 1, cex.axis = cex.val)
+    axis(1, rep("", times = length(seq(1,length(percents.weight)-1,by=3))),
+        at = seq(1,length(percents.weight)-1,by=3), las = 1, cex.axis = cex.val)
+    mtext(c("GOP\nMoral", "", "", "", "Ambivalent", "", "", "", "Dem.\nMoral"), 1, line = 2.25,
+        at = seq(1,length(percents.weight)-1,by=3), cex = cex.val)
+
+
+    legend("topright", c("Morality","Competence"), bty = "n", cex = cex.val, fill = c(col.moral,col.comp),
+        density = c(density.moral, density.comp))
+
+    dev.off()
+@
+
+\begin{figure}[htb]
+  \centering
+  \caption[Distribution of the Difference in Moral Judgment among All Partisans]{\textbf{Distribution of the Difference in Moral Judgment among All Partisans}\\\footnotesize \textit{Note}: The figure shows the distribution of the moral judgment index among all partisans. The index was created by combining all the negative ratings of the in-party and out-party candidates for president (Positive ratings were set to zero), and subtracting the in-party rating from the out-party. The index was collapsed for positive ratings of the out-party candidate, compared to the in-party. The index was then recoded between zero and one. A zero means a respondent thought the out-party candidate was more moral than the in-party candidate. One means the respondent was positive about the in-party candidate and completely negative about the out-party candidate.}\label{fig:distribution_moral_diff}
+  {\includegraphics[width=0.75\textwidth]{moral_judgment_diff_distribution_partisan.pdf}}
+\end{figure}
+
+Figure \vref{fig:distribution_moral_diff} shows the distribution of the moral judgment index among all partisans. I construct the index of moral judgment by combining the two traits and anger into a single variable for the in-party and out-party candidates. I collapsed the trait ratings to emphasize only negative judgments \cite{Klein1996,Goren2002,Goren2007}. Positive ratings were set to zero, and the two most negative ratings were set to one and two respectively. I then took the difference between these two ratings to reveal the difference that individuals perceive between the candidates. I use the difference to identify only those partisans who truly see a difference between the two candidates and to identify partisans who may rate all politicians either positively \cite{Sears1983} or negatively \cite{Klein1991}. This approach also controls for possible ambivalence about the party's candidates \cite{Lavine2001}. The left-hand side of the scale is truncated because there were few respondents at the pro-out-party extreme of the scale.\footnote{The scale ran from -5 to 5, but the last four values on the left-hand side were truncated into one.} I left two negative points on the scale to capture the 11\% of partisans who rate the out-party candidate higher than they rate the in-party candidate on these moral traits and emotions.\footnote{Republicans were slightly more likely to favor the out-party than Democrats. The number with a more positive judgment of the out-party than the in was 13\% among the GOP, while for Democrats it was 9\%.} The modal judgment was to give a more negative assessment on one or two questions compared to the assessment of the in-party candidate.
+
+Overall, most partisans judge their own party's candidate positively. There are some partisans who do give their own party's candidate negative ratings on this moral index. Figure \vref{fig:appendix_distribution_moral_gopdem} shows the distribution of the moral rating indices for Republicans and Democrats of the in-party and the out-party candidates. Figure \vref{fig:appendix_moral_judge_inparty} shows that there are enough negative moral ratings of in-party candidates to warrant their consideration. To account for these ratings the analysis uses the difference between the moral index of the out-party candidate minus the index for the in-party candidate.\footnote{Throughout the rest of the paper, I will refer to these differences as ``moral judgment'' or the ``moral judgment index'' for simplicity.} Using the difference accounts for respondents who might be giving negative ratings to both candidates. Theoretically, we are interested in partisans who see the out-party candidate as morally bad and see the in-party candidate as morally better.
+
+
+\subsection{Controls}
+All models reported below include a number of controls designed to account for alternative explanations. There are controls for perceptions of the candidate, for demographics, for political attitudes and identities, and for candidate characteristics.
+
+The first level of controls accounts for perceptions of the out-party candidate's competence.\footnote{The control for competence is the difference between the rating of the out-party candidate and the in-party candidate. It is coded as a zero respondents gave a more positive rating to the out-party candidate than the in-party candidate. The variable equals one when the respondent gave a positive ``knowledgeable'' rating to their own candidate and the most negative to the out-party candidate.} The competence control is only one question, an assessment of how well ``knowledgeable'' describes the candidates. I use only one question because the other competence trait, ``intelligent,'' is asked every year except it was not asked of Senator Bob Dole in 1996. Therefore, the data is missing an out-party rating for Democrats in 1996, creating a gap in the ratings since 1984. I also ran the models using an index of competence combining ``knowledgeable'' and ``intelligent,'' and the results are substantively similar.\footnote{In models with the index, the results are essentially the same, but the coefficients for the competence control get bigger and the coefficients for the moral judgment index get marginally smaller. All effects for moral judgment are significant using both specification, but in some cases the significance is slightly smaller with the index. The moral judgment index has consistently and significantly larger coefficient, though in a few cases the two indices have statistically indistinguishable effect sizes.} I only report the models with the single-question control for competence here.
+
+Each model also includes a control for the second dimension of negative affect: anxiety \cite{HuddyFeldmanCassese2007}. Anxiety is an emotion closely identified with the ``surveillance system'' that identifies new threats and signals the need for additional information \cite{Marcusetal2000}, and it can form a distinct factor of negative affect. I include it in the models to control for the negative feelings a new candidate might elicit because of his or her novel background, experience, or policy positions.
+
+The models also include controls for demographic factors, political factors, and candidate factors. Each control aims to account for an alternative explanation for political behavior. The demographic controls are age,\footnote{Age is coded into five-year groups from 17-20 to 75+ and re-scaled between zero and one.} gender,\footnote{Gender is coded zero for men and one for women} race,\footnote{Race is coded one for non-white respondents and zero for white respondents.} income, education, and church attendance. The controls for political identification and attitudes are strength of party identification, strength of ideology, political knowledge, an index of issue positions,\footnote{Issue attitudes is an index ranging from zero to one of four issue questions that was asked in each of the eight presidential election years in the data. The four questions are attitudes toward defense spending, government aid to minorities/blacks, abortion, and government guarantees of jobs. The index is scaled such that agreement with one's own party equals one, and disagreement equals zero.} the respondents' perception of the out-party candidate's ideology, and the respondents' assessment of the national economy in the year leading to the election. All models also had a control for whether the in-party presidential candidate ended up winning the election to account for biases introduced when partisans want to be affiliated with the winning candidate.
+
+I also included model specific controls. In the activism and voting models, there is also a control for the respondents' interest in the election and whether they were contacted by one of the parties. In the logit models, there are also controls for whether the out-party candidate is an incumbent president\footnote{The models were also run with a control variable indicating if the out-party candidate was either a sitting president or vice-president. The results were essentially the same, so I stick with the more clear-cut control for incumbency because opinions are most well formed for sitting presidents, not candidates or even VPs \cite{Kinderetal1980}.} and whether the Democratic candidate is Bill Clinton (1992 and 1996).\footnote{I control on Bill Clinton because he received the most negative ratings of integrity of any presidential candidate in the time frame of this study. Even Democrats rated President Clinton's integrity lowly.} This control has the added positive benefit of also controlling for the two elections when Ross Perot ran strongly as a third-party candidate.\footnote{As a result the control for Clinton actually decreases party loyalty, especially among Republicans. ANES data suggests Perot did slightly better among weak Republicans and Republican leaners than among Democrats.} The models of presidential and congressional vote choice include the difference in thermometer ratings of the parties. Indifference and ambiguity toward the parties is a significant predictor of split-ticket voting \cite{Davis2014,Mulligan2011}. The models for non-electoral participation had an extra control for the difference in enthusiasm respondents felt for the \emph{in-party} candidate \cite{Brader2005}.\footnote{The enthusiasm difference combined feelings of hope and pride toward the in-party candidate minus those feelings toward the out-party candidate.}
+
+%The models were run with increasing numbers of controls. Tables \vref{tab:appendix_effect_summary} and \vref{tab:appendix_effect_summarybyparty} report the coefficients of the moral judgment index at different levels of controls. As more controls are added, the index's coefficients get smaller, as we would expect. In the body of the paper, I report the results from models that contain all of the control variables discussed above.
+
+
+
+%\section{Results}
+%To explore the impact that a moral judgment has on political behavior and attitudes, I analyze its relationship with three classes of dependent variables. The first class is vote choice. The second is feelings toward the major parties. The third is political activism (non-electoral participation). The models for vote choice and activism are logit models. The analysis of affect toward the parties uses OLS models with fixed effects for years. All models cluster the standard errors by year.
+%
+%In each subsection, I look first at the simple bivariate relationship between the moral judgment index and the dependent variables. This descriptive analysis focuses on the relationship between the variables without any additional controls. After the descriptive relationship, I report the regression models exploring the relationship between moral judgments and each dependent variable. The subsections finish looking at the predicted values that the models produce to get a sense of the substantive effects that these moral judgments have.
+
+
+\section{Vote Choice}
+The first dependent variable I will examine is vote choice. There is a long debate regarding the degree to which candidates' personal characteristics matter at the ballot box \citeaffixed{Bartels2002,Funk1999,Hayes2005}{See}, but there is evidence that perceptions of candidates matter when it comes to voting. Therefore, presidential vote choice is a good first place to look for an effect for moral judgments in particular. I will also analyze the effect that moral judgments have on down-ballot vote choice.
+
+This analysis focuses on determining the correlation between perceiving a large moral difference between the two parties and party loyalty at the ballot box. \citeasnoun{Haidt2012} argues that morals ``bind and blind,'' meaning they blind us to the shortcomings of our own ``tribe'' while increasing our in-group loyalty. If moral attitudes toward political actors have the hypothesized influence, if they exert a significant moral influence in their own right, then we should see that strong moral judgments influence those who hold them to be more loyal to their party.
+
+\subsection{Hypothesis: Moral judgment will make partisans more loyal to their party's candidates in both presidential and congressional elections}
+I hypothesize that negative moral judgments of the out-party will make partisans more loyal to their party when they vote because these judgments make voting more likely to be morally expressive, making it a choice between good and evil.
+
+Partisanship dominates the voting landscape \cite{Bartels2000}, but recent scholarship has uncovered moral, or expressive, motivations as a potential force behind vote choices. \citeasnoun{Feddersenetal2009} find that ``in large elections people tend not to be self-interested in their vote choice, but rather tend to support the morally superior candidate'' \cite[819]{Williams2011}. Feddersen et al experimentally manipulated the probability a voter would cast a pivotal ballot to study whether he or she would vote for a self- interested option or for one that was more equitable. As the probability decreased, voting for the moral or ethical principle increased.\footnote{\citeasnoun{Feddersenetal2009} gave participants an opportunity to cast a vote for one of two distributive principle; one principle favored the subjects and an arbitrary group they were assigned, and a second was more equitable to all participants.} Their experiment did not examine moral attitudes toward actors, however, but their theory and findings suggest voters are more likely to support an option that expresses their personal ethics or goodness in larger elections. Vote choice at the federal level is a context where citizens are likely to be expressive and choose the candidate that is the most ``moral'' rather than the one offering the greatest material rewards.\footnote{Of course, in many elections partisanship may already reflect material interests (e.g. union members voting Democrat), and the moral judgments are \emph{post hoc} justifications \cite{Rahnetal1994}. However, I believe those very justifications reveal the moral reasoning partisans are making about their attitudes and preferences, which is meaningful in its own right.} I believe these expressive tendencies are particularly relevant when partisans perceive a moral difference between candidates independent of the morality of their issue positions. The Sacred Values Protection Theory \cite{Tetlock2000,Tetlock2003,Tetlocketal2000} anchors this expressive behavior in a need to affirm one's commitment to important, non-negotiable values. When the actors are the non-negotiable value, the vote choice is an expressive act of moral support.\footnote{More precisely, in the survey data available, self-reporting having voted or intent to vote for the morally better candidate is morally significant affirmation of moral community.} Morally judging candidates changes the motivations behind voting making partisans more likely to support their party.
+
+Furthermore, these moral judgments frame voting as a choice between good and evil, and good men do not go halfway with evil \cite[44]{Sundquist1983}. Moral judgments of the actors will give partisans stronger directional motivations for their vote choice \cite{TaberLodgeGlathar2001} because one side will be associated with an immoral actor. If a Republican sees the leader of the Democratic party as immoral, she will be less likely to support that candidate. She will also see all Democrats as morally compromised because of their association with the compromised entity, increasing the probability she will cast a straight-party ballot at the congressional level.
+
+These same processes will reduce split ticket voting at the congressional level because presidential candidates exemplify what it means to be a member of his or her party \cite{Nicholson2012}. Moral judgments of the presidential candidates reduce indifference and ambivalence about the parties. Indifference and ambivalence contribute to split-ticket voting \cite{Davis2014,Mulligan2011}. Partisans with mixed or apathetic feelings are more likely to split their ballot between the two parties. Those who think one party's leader is an immoral politician will be more likely to believe there is a real meaningful difference between the parties overall, which will make them more motivated to cast a ballot for the ``right'' side. Moral judgments of out-party actors make partisans more loyal.
+
+I hypothesize that believing the out-party's standard bearer is immoral will have the secondary effect of defining the whole out-party as immoral. This effect will make partisans more loyal to the candidate opposing the ``bad'' candidate, and it will make them more loyal to the party's candidates overall.
+
+\subsection{Results: Presidential Vote Choice}
+The first analysis looks at the relationship between moral judgments and presidential vote. The dependent variable of presidential vote choice is coded one if a partisan cast a vote for his or her party's candidate for president.
+
+Figure \ref{fig:presvote_descriptive_diff} shows the bivariate relationship between the moral judgment of the presidential candidates and presidential vote choice. Each bar represents the average percentage of respondents in that category who report voting for their party's presidential candidate. The vertical bars at the top of each group indicates the 95\% confidence-level. The ANES cumulative file offers a large number of respondents over a number of years, so the mean values are quite precise. The horizontal dashed line is the mean percentage of all partisans who reported voting for their party's candidate across all groups.
+
+[[PARAGRAPH NEEDS WORK]] Only those who are ambivalent or negative toward the in-party candidate's morality are below average in loyalty at the presidential level. There is a positive relationship between judging the out-party candidate as immoral and voting for one's party at the presidential level. The percentage of partisans who cast their presidential vote for the in-party candidate increases with each step along the moral judgment index, but the differences are much smaller on the right-hand side of the x-axis. For example, the difference between giving a negative assessment of your own party's candidate and a positive assessment of the other party's and being ambivalent (giving positive or negative to both) is a XXX percent increase in loyalty. The increase moving from the second most negative moral judgment to the most increases loyalty by about XXX percent.
+
+Respondents who judged the out-party candidate higher are much less loyal in the voting booth than respondents who morally favored the in-party candidate. The largest increases in voting loyalty occur in the first five steps in the index. There is still an increase after that point, but it is much more modest. Furthermore, the confidence intervals overlap on the far right, so there is not a statistically significant increase in loyalty with each increase in moral judgment. Moving from the second most negative judgment to the most negative does not increase loyalty in a statistically significant way.
+
+<<anes.bivariate.figs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+iv <- c("diff_moral_index_trunc", "diff_comp_index_trunc")
+iv.short <- c("moral", "comp")
+dv <- c("pres_vote_choice", "inparty_house_vote", "participated", "cheap", "costly")
+dv.short <- c("pres", "house", "participated", "cheap", "costly")
+groups <- c("partisan", "gop", "dem")
+
+figures <- c("combined") #, "moral", "comp")
+
+# Names for y- and x-axis labels
+x.names <- c("Difference in Judgments", "Difference in Moral Judgments", "Difference in Competence Judgments")
+y.names <- c("Presidential Vote\n(Percent voting for in-party candidate)", "House Vote\n(Percent voting for in-party candidate)",
+    "All Participation\n(Percent engaging in at least one activity)", "Cheap Participation\n(Percent engaging in at least one activity)", "Costly Participation\n(Percent engaging in at least one activity)")
+
+for (i in 1:length(dv)) {
+    for (k in 1:length(groups)) {
+
+        ## Loop to calculate values for competence and moral differences
+        for (j in 1:length(iv)) {
+            # Calculating weighted mean
+            setup <- paste(iv.short[j],".mean.data <- svyby(~", dv[i], ",", "~", iv[j], "2, design = anes.",groups[k],", svymean, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            # Calculating weighted variance
+            setup <- paste(iv.short[j],".sd.data <- svyby(~", dv[i], ",", "~", iv[j], "2, design = anes.",groups[k],", svyvar, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            # Converting variance to standard error
+            setup <- paste(iv.short[j],".sd.data <- sqrt(",iv.short[j],".sd.data[2])", sep = "")
+            eval(parse(text = setup))
+
+            # Calculating weighted n-size
+            setup <- paste(iv.short[j],".n.data <- svyby(~one, ~", iv[j], ", design = anes.",groups[k],", svytotal, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            ## Calculating confidence intervals
+            setup <- paste(iv.short[j],".upper.data <- ",iv.short[j],".mean.data[2] + (qnorm(.975) * (",iv.short[j],".sd.data / sqrt(",
+            iv.short[j],".n.data[2])))", sep = "")
+            eval(parse(text = setup))
+
+            setup <- paste(iv.short[j],".lower.data <- ",iv.short[j],".mean.data[2] - (qnorm(.975) * (",iv.short[j],".sd.data / sqrt(",
+            iv.short[j],".n.data[2])))", sep = "")
+            eval(parse(text = setup))
+
+        }
+
+        ## Putting results in vectors
+        moral.m <- c(data.frame(moral.mean.data[2])[,1])
+        comp.m <- c(data.frame(comp.mean.data[2])[,1])
+
+        moral.u <- c(moral.upper.data[,1])
+        comp.u <- c(comp.upper.data[,1])
+
+        moral.l <- c(moral.lower.data[,1])
+        comp.l <- c(comp.lower.data[,1])
+
+
+        ## Creating arrays with proper spacing
+        combined.m <- c(rep(0, times = length(moral.m) * 3 - 1))
+        combined.m[seq(1, length(combined.m), by = 3)] <- moral.m
+        combined.m[seq(2, length(combined.m), by = 3)] <- comp.m
+
+        ## Upper limits
+        combined.u <- c(rep(0, times = length(moral.m) * 2))
+        combined.u[seq(1, length(combined.u), by = 2)] <- moral.u
+        combined.u[seq(2, length(combined.u), by = 2)] <- comp.u
+
+        ## Lower limits
+        combined.l <- c(rep(0, times = length(moral.m) * 2))
+        combined.l[seq(1, length(combined.l), by = 2)] <- moral.l
+        combined.l[seq(2, length(combined.l), by = 2)] <- comp.l
+
+        # Values for y-axis
+        y.min <- 0
+        y.max <- 1
+        y.steps <- .25
+
+        ## Loop to create combined and separate figures
+        for (t in 1:length(figures)) {
+
+            ## Setting the data
+            setup <- paste("results <- ", figures[t], ".m", sep = "")
+            eval(parse(text = setup))
+
+            if (t != 1) {
+                results2 <- results
+                results <- rep(0, time = length(results) * 2 - 1)
+                results[seq(1, length(results), by = 2)] <- results2
+            }
+
+            # X-axis values and settings
+            x.step <- ifelse(t == 1, 3, 2)
+            x.offset <- ifelse(t == 1, 1, .5)
+            x.start <- ifelse(t == 1, 1, .5)
+            x.max <- length(results)
+            x.min <- 1
+
+            if (t == 1) {
+                colors <- c(col.moral, col.comp, "black")
+                densities <- c(density.moral, density.comp, 500)
+            } else {
+                colors <- c("black")
+                densities <- 5
+            }
+
+
+            ## Creating figure
+            name <- paste("DV_",groups[k], "_", dv.short[i],"_",figures[t],".pdf", sep = "")
+            pdf(name, height = 8.5, width = 11)
+
+            par(mar=c(6,8.5,1,1))
+            barplot(results,
+                ylim = c(y.min,y.max),
+                col = colors,
+                axes = FALSE,
+                density = densities,
+                names.arg = "",
+                space = 0)
+
+            # Formatting y-axis
+            axis(2, lab = paste(round(c(seq(y.min,y.max,by=y.steps))*100,0), "%", sep = ""), at = seq(y.min,y.max,by=y.steps), las = 2, cex.axis = cex.val)
+
+            # Formatting x-axis
+            axis(1, c(rep("", times = length(moral.m))), at = seq(x.start,x.max-x.offset,by=x.step), las = 1, cex.axis = cex.val)
+
+            # X-axis labels
+            mtext(c("Favor\nOut-party", "", "Ambivalent", "", "", "", "Favor\nIn-party"), 1, line = 2.5,
+            at = seq(x.start, x.max-x.offset,by=x.step), cex = 1.45)
+
+            # Adding a line to show the means of the DV
+            line <- paste("abline(h = svymean(~",dv[i],", design = anes.", groups[k] ,", na.rm = TRUE)[1], lty = ",'"',"dashed", '"',", col = ",'"',"lightgrey",'"',", lwd = 2)", sep = "")
+            eval(parse(text = line))
+
+            # Adding confidence intervals
+            if (t == 1) {
+                # Moral confidence intervals
+                segments(seq(.5, x.max-1.5,by=3), combined.u[seq(1, x.max, by = 2)], seq(.5, x.max-1.5,by=3), combined.l[seq(1, x.max, by = 2)], col = "black", lwd = 3)
+
+                # Competence confidence intervals
+                segments(seq(1.5, x.max-.5,by=3), combined.u[seq(2, x.max, by = 2)], seq(1.5, x.max-.5,by=3), combined.l[seq(2, x.max, by = 2)], col = "black", lwd = 3)
+
+                legend(x = -1, y = .85, c("Morality","Competence"), bty = "n", cex = cex.val, fill = c(col.moral,col.comp),
+                density = c(density.moral, density.comp), angle = c(45,45))
+            } else {
+                setup <- paste("up <- ", figures[t], ".u", sep = "")
+                eval(parse(text = setup))
+                setup <- paste("low <- ", figures[t], ".l", sep = "")
+                eval(parse(text = setup))
+
+                segments(seq(x.min-.5, x.max-.5,by=2), up, seq(x.min-.5, x.max-.5,by=2), low, col = "black", lwd = 3)
+            }
+
+            mtext(x.names[t], side = 1, line = 4.5, at = x.max / 2, cex = 2)
+            mtext(y.names[i], side = 2, line = 4.5, at = y.max / 2, cex = 1.9)
+
+            dev.off()
+        }
+    }
+}
+@
+
+
+
+<<anes.bivariate.inds,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+iv <- c("diff_moral_index", "diff_comp_index2")
+iv.short <- c("moral", "comp")
+dv <- c("pres_vote_choice") #, "inparty_house_vote", "participated", "cheap", "costly")
+dv.short <- c("pres") #, "house", "participated", "cheap", "costly")
+groups <- c("ind")
+
+figures <- c("combined") #, "moral", "comp")
+
+# Names for y- and x-axis labels
+x.names <- c("Difference in Judgments") #, "Difference in Moral Judgments", "Difference in Competence Judgments")
+y.names <- c("Presidential Vote\n(Percent voting for Democrat)") #, "House Vote\n(Percent voting for in-party candidate)", "All Participation\n(Percent engaging in at least one activity)", "Cheap Participation\n(Percent engaging in at least one activity)", "Costly Participation\n(Percent engaging in at least one activity)")
+
+for (i in 1:length(dv)) {
+    for (k in 1:length(groups)) {
+
+        ## Loop to calculate values for competence and moral differences
+        for (j in 1:length(iv)) {
+            # Calculating weighted mean
+            setup <- paste(iv.short[j],".mean.data <- svyby(~", dv[i], ",", "~", iv[j], ", design = anes.",groups[k],", svymean, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            # Calculating weighted variance
+            setup <- paste(iv.short[j],".sd.data <- svyby(~", dv[i], ",", "~", iv[j], ", design = anes.",groups[k],", svyvar, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            # Converting variance to standard error
+            setup <- paste(iv.short[j],".sd.data <- sqrt(",iv.short[j],".sd.data[2])", sep = "")
+            eval(parse(text = setup))
+
+            # Calculating weighted n-size
+            setup <- paste(iv.short[j],".n.data <- svyby(~one, ~", iv[j], ", design = anes.",groups[k],", svytotal, na.rm = TRUE)", sep = "")
+            eval(parse(text = setup))
+
+            ## Calculating confidence intervals
+            setup <- paste(iv.short[j],".upper.data <- ",iv.short[j],".mean.data[2] + (qnorm(.975) * (",iv.short[j],".sd.data / sqrt(",
+            iv.short[j],".n.data[2])))", sep = "")
+            eval(parse(text = setup))
+
+            setup <- paste(iv.short[j],".lower.data <- ",iv.short[j],".mean.data[2] - (qnorm(.975) * (",iv.short[j],".sd.data / sqrt(",
+            iv.short[j],".n.data[2])))", sep = "")
+            eval(parse(text = setup))
+
+        }
+
+        ## Putting results in vectors
+        moral.m <- c(data.frame(moral.mean.data[2])[,1])
+        comp.m <- c(data.frame(comp.mean.data[2])[,1])
+
+        moral.u <- c(moral.upper.data[,1])
+        comp.u <- c(comp.upper.data[,1])
+
+        moral.l <- c(moral.lower.data[,1])
+        comp.l <- c(comp.lower.data[,1])
+
+
+        ## Creating arrays with proper spacing
+        combined.m <- c(rep(0, times = length(moral.m) * 3 - 1))
+        combined.m[seq(1, length(combined.m), by = 3)] <- moral.m
+        combined.m[seq(2, length(combined.m), by = 3)] <- comp.m
+
+        ## Upper limits
+        combined.u <- c(rep(0, times = length(moral.m) * 2))
+        combined.u[seq(1, length(combined.u), by = 2)] <- moral.u
+        combined.u[seq(2, length(combined.u), by = 2)] <- comp.u
+
+        ## Lower limits
+        combined.l <- c(rep(0, times = length(moral.m) * 2))
+        combined.l[seq(1, length(combined.l), by = 2)] <- moral.l
+        combined.l[seq(2, length(combined.l), by = 2)] <- comp.l
+
+        # Values for y-axis
+        y.min <- 0
+        y.max <- 1
+        y.steps <- .25
+
+        ## Loop to create combined and separate figures
+        for (t in 1:length(figures)) {
+
+            ## Setting the data
+            setup <- paste("results <- ", figures[t], ".m", sep = "")
+            eval(parse(text = setup))
+
+            if (t != 1) {
+                results2 <- results
+                results <- rep(0, time = length(results) * 2 - 1)
+                results[seq(1, length(results), by = 2)] <- results2
+            }
+
+            # X-axis values and settings
+            x.step <- ifelse(t == 1, 3, 2)
+            x.offset <- ifelse(t == 1, 1, .5)
+            x.start <- ifelse(t == 1, 1, .5)
+            x.max <- length(results)
+            x.min <- 1
+
+            if (t == 1) {
+                colors <- c(col.moral, col.comp, "black")
+                densities <- c(density.moral, density.comp, 500)
+            } else {
+                colors <- c("black")
+                densities <- 5
+            }
+
+
+            ## Creating figure
+            name <- paste("DV_",groups[k], "_", dv.short[i],"_",figures[t],".pdf", sep = "")
+            pdf(name, height = 8.5, width = 11)
+
+            par(mar=c(6,8.5,1,1))
+            barplot(results,
+                ylim = c(y.min,y.max),
+                col = colors,
+                axes = FALSE,
+                density = densities,
+                names.arg = "",
+                space = 0)
+
+            # Formatting y-axis
+            axis(2, lab = paste(round(c(seq(y.min,y.max,by=y.steps))*100,0), "%", sep = ""), at = seq(y.min,y.max,by=y.steps), las = 2, cex.axis = cex.val)
+
+            # Formatting x-axis
+            axis(1, c(rep("", times = length(moral.m))), at = seq(x.start,x.max-x.offset,by=x.step), las = 1, cex.axis = cex.val)
+
+            # X-axis labels
+            mtext(c("Favor\nRepublican", "", "", "", "Ambivalent", "", "", "", "Favor\nDemocrat"), 1, line = 2.5,
+            at = seq(x.start, x.max-x.offset,by=x.step), cex = 1.45)
+
+            # Adding a line to show the means of the DV
+            line <- paste("abline(h = svymean(~",dv[i],", design = anes.", groups[k] ,", na.rm = TRUE)[1], lty = ",'"',"dashed", '"',", col = ",'"',"lightgrey",'"',", lwd = 2)", sep = "")
+            eval(parse(text = line))
+
+            # Adding confidence intervals
+            if (t == 1) {
+                # Moral confidence intervals
+                segments(seq(.5, x.max-1.5,by=3), combined.u[seq(1, x.max, by = 2)], seq(.5, x.max-1.5,by=3), combined.l[seq(1, x.max, by = 2)], col = "black", lwd = 3)
+
+                # Competence confidence intervals
+                segments(seq(1.5, x.max-.5,by=3), combined.u[seq(2, x.max, by = 2)], seq(1.5, x.max-.5,by=3), combined.l[seq(2, x.max, by = 2)], col = "black", lwd = 3)
+
+                legend(x = -1, y = .85, c("Morality","Competence"), bty = "n", cex = cex.val, fill = c(col.moral,col.comp),
+                density = c(density.moral, density.comp), angle = c(45,45))
+            } else {
+                setup <- paste("up <- ", figures[t], ".u", sep = "")
+                eval(parse(text = setup))
+                setup <- paste("low <- ", figures[t], ".l", sep = "")
+                eval(parse(text = setup))
+
+                segments(seq(x.min-.5, x.max-.5,by=2), up, seq(x.min-.5, x.max-.5,by=2), low, col = "black", lwd = 3)
+            }
+
+            mtext(x.names[t], side = 1, line = 4.5, at = x.max / 2, cex = 2)
+            mtext(y.names[i], side = 2, line = 4.5, at = y.max / 2, cex = 1.9)
+
+            dev.off()
+        }
+    }
+}
+@
+
+
+\begin{figure}[htb]
+  \centering
+  \caption[Presidential Vote Choice by Difference in Judgment]{\textbf{Presidential Vote Choice by Difference in Moral and Competence Judgments}\\ \footnotesize \textit{Note}: Vote choice on the y-axis is coded as one if respondents cast a ballot for their in-party candidate; it is zero otherwise. The bars show the percentage of respondents who voted for the in-party candidate for each bin of the moral judgment index. The horizontal line shoes the average for all partisans.}\label{fig:presvote_descriptive_diff}
+  {\includegraphics[width=0.75\textwidth]{DV_partisan_pres_combined.pdf}}
+\end{figure}
+
+I run a logistic regression model on vote choice, where a zero indicated that a respondent voted but did not vote for the in-party candidate while a one indicates that he or she voted for the in-party candidate.\footnote{Data is included only for respondents who reported turning out to vote. A zero for presidential vote choice could any of these three cases: voted for the other party's candidate, voted for a third- party candidate, or did not cast a vote for a presidential candidate.} Most partisans cast a ballot for their own party's candidate, but as we saw in Figure \ref{fig:presvote_descriptive_diff} the partisans who favor the out-party presidential candidate or are ambiguous between them are less loyal.\footnote{In a separate analysis not reported here, moral judgment did not have a significant effect on self-reported turnout. Moral judgments of the candidates aren't getting people to the polls.} There is variation in loyalty at the ballot box that appears correlated with moral judgments. However, a regression analysis is needed to control for other factors. It may simply be that stronger partisans rank higher on moral judgment and are more loyal, for example.
+
+Table \vref{tab:vote_results} shows the coefficients for presidential vote choice when regressed on the moral judgment index and the control variables. The table also shows the coefficients for key control variables. The results are displayed for all partisans combined and then for Republicans and Democrats separately. I repeat this pattern in each regression table in the rest of the analysis.
+
+Consistent with Hypothesis 1, moral judgment indexes have a significant positive effect on voting for one's in-party candidate. Among all partisans, moral judgment has a strong, statistically significant effect in the hypothesized direction. The coefficient is similarly large and positive for the separate partisan groups. The coefficient is marginally larger among Republicans. Moral judgment, however, seems to have a similar effect among both partisan groups. More negative moral judgments of the out-party's candidate compared to the in-party candidate is correlated with more loyal voting. The coefficient for competence judgments is larger among Democrats than among Republicans, on the other hand.
+
+<<anes.regressions,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+iv <- c("diff_moral_index_trunc", "diff_comp_index_trunc")
+iv.short <- c("moral", "comp")
+dv <- c("pres_vote_choice", "inparty_house_vote", "participated", "cheap", "costly")
+dv.short <- c("pres", "house", "participated", "cheap", "costly")
+groups <- c("partisan", "gop", "dem")
+
+QAIC <- function(model.candidate, c_hat) {
+  k <- length(model.candidate$coefficients)+1      # add 1 for the estimate of c_hat
+  ((model.candidate$deviance/c_hat)+2*k)[1]
+}
+
+
+for (i in 1:length(groups)) {
+    for (d in 1:length(dv)) {
+        setup <- paste("model.", groups[i], ".", dv.short[d], " <- svyglm(", dv[d], " ~ diff_moral_index_trunc + diff_comp_index_trunc + outparty_incumbent + clinton + age_years + age_square + female + non_white + str_party2 + str_ideology2 + income3 + education3 + cand_ideo_diff + interest_election2 + pres_care_wins2 + issue_index, family = quasibinomial(), design = anes.",groups[i],", na.action = ", '"',"na.omit",'"',")", sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("c_hat <- summary(model.", groups[i], ".", dv.short[d], ")$dispersion", sep = "")
+        eval(parse(text = setup))
+
+        setup <- paste("model.", groups[i], ".", dv.short[d], "$aic <- QAIC(model.", groups[i], ".", dv.short[d], ", c_hat)", sep = "")
+        eval(parse(text = setup))
+    }
+}
+
+
+
+stargazer(model.partisan.pres, model.gop.pres, model.dem.pres,
+    type = "latex", style = "apsr",
+    title = "Effect of Moral and Competence Judgments on Presidential Vote Choice",
+    column.labels = c("Partisans", "Republicans", "Democrats"),
+    keep = c("diff_moral_index_trunc", "diff_comp_index_trunc", "str_party2", "str_ideology2", "cand_ideo_diff", "interest_election2", "pres_care_wins2", "issue_index"),
+    #covariate.labels <- c("Diff. in Moral Judgment", "Diff. in Competence Judgment", "Strength of Party ID", "Strength of Ideology", "Diff. in Candidate Ideology", "Interest in Election", "Cares who Wins", "Issue Index"),
+    dep.var.caption = "",
+    digits = 2,
+    dep.var.labels.include = FALSE,
+    label = "tab:pres_vote_table"
+)
+
+
+
+
+#apsrtable(model.partisan.pres, model.gop.pres, model.dem.pres,
+#        se=c("vcov"), # Can designate type of errors. "robust"
+#        model.counter=1, # Changes first number in model label
+#        digits = 2,    # Changes included number of significant digits
+#        stars=1,      #You can change suppress stars (=0)
+#        lev=.01,      #Changes level of significance you want to use for stars (stars must equal 1)
+#        align = c("center"),  #Changes the alignment of the columns ("left", "center", "right")
+#        coef.names = c("Intercept", "Diff. in Moral Judgment", "Diff. in Competence Judgment", "Strength of Party ID", "Strength of Ideology", "Diff. in Candidate Ideology", "Interest in Election", "Cares who Wins", "Issue Index"),
+#        label = c("fig:ols"), #Inserts tex label
+#        caption = c("Table"), #Inserts tex caption
+#        omitcoef = c("outparty_incumbent", "clinton", "age_years", "age_square", "female", "non_white", "income3", "education3")
+#)
+
+
+@
+
+
+
+
+
+
+\begin{table}[htb]
+\centering
+\caption[Effect of Difference in Moral Judgment and Key Controls on Vote Choice in Presidential Elections]{\textbf{Effect of Difference in Moral Judgment and Key Controls on Vote Choice in Presidential Elections}}\label{tab:vote_results}
+\scalebox{.8}{
+\begin{tabular}{lccc} \hline \hline
+ & (1) & (2) & (3) \\
+ & All Partisans & Republicans & Democrats \\ \hline
+\\
+Moral Judgment Difference & 4.22*** & 5.02*** & 3.81*** \\
+ & (0.32) & (0.67) & (0.67) \\
+Competence Difference & 1.57*** & 1.30* & 1.91*** \\
+ & (0.36) & (0.51) & (0.49) \\
+Anxiety Difference & 1.28** & 1.22** & 1.24*** \\
+ & (0.44) & (0.45) & (0.36) \\
+Strength of Partisanship & 0.41\textasciicircum & 0.50* & 0.37 \\
+ & (0.21) & (0.21) & (0.29) \\
+Strength of Ideology & 0.04 & 0.10 & -0.13 \\
+ & (0.27) & (0.30) & (0.29) \\
+Issue Index & 1.09** & 0.57 & 0.93* \\
+ & (0.40) & (0.46) & (0.44) \\
+Feelings toward the Parties & 4.67*** & 4.22*** & 4.78*** \\
+ & (0.35) & (0.69) & (0.78) \\
+ &  &  &  \\
+Observations & 5,882 & 2,526 & 3,356 \\
+Pseudo R-squared & 0.362 & 0.423 & 0.350 \\
+\\ \hline \hline
+\multicolumn{4}{c}{Robust standard errors in parentheses} \\
+\multicolumn{4}{c}{*** p$<$0.001, ** p$<$0.01, * p$<$0.05, \textasciicircum p$<$0.1} \\
+\multicolumn{4}{c}{Coefficients from a logistic regression.} \\
+\end{tabular}
+}
+\end{table}
+
+It is also significant that the moral judgment index's coefficient is the largest effect, except for partisan affect. It is statistically larger than all of the other effects in Table \ref{tab:vote_results} (p $<$ 0.001 for each pair-wise Wald test); however, the coefficient for feelings toward the parties is statistically and substantively larger (p $<$ 01). We should expect an index constructed from three questions to have higher validity and strength than variables based on a single question, so it is not entirely a surprise that moral judgment would have a larger effect than most of the other controls. However, one might have expected the coefficients for partisan strength or issue attitudes to have had similarly large effects. Strength of partisanship would have a stronger effect if pure independents were included. The data here support the overall dearth of evidence in favor of issue voting, especially at the presidential level \cite{MeierCampbell1979}. The control for issue positions is made from multiple questions, and it is statistically smaller than the moral judgment index. This result lends support for my emphasis on actors as morally important entities. Most theories of morals and politics focus on how moral issues affect political behavior \cite{Haidt2012,SkitkaMorgan2014}, but that focus misses this pathway through which moral judgments affect mass political behavior.
+
+<<anes.predicted.prob.figs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures/")
+
+iv <- c("diff_moral_index_trunc", "diff_comp_index_trunc")
+iv.short <- c("moral", "comp")
+dv <- c("pres_vote_choice", "inparty_house_vote", "participated", "cheap", "costly")
+dv.short <- c("pres", "house", "participated", "cheap", "costly")
+groups <- c("partisan", "gop", "dem")
+groups.formal <- c("Partisans", "Republicans", "Democrats")
+
+
+## Calculating predicted probabilities
+index.values <- c(0, 0.1666667, 0.3333333, 0.5, 0.6666667, 0.8333333, 1)
+
+# Creating figures with predicted probablities for all partisans, gop, and dems for each DV
+for (d in 1:length(dv)) {
+    for (i in 1:length(groups)) {
+
+      setup <- paste("betas <- model.", groups[i],".", dv.short[d], "$coefficients", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("n.size <- sum(table(model.", groups[i],".", dv.short[d], "$y))", sep = "")
+      eval(parse(text = setup))
+
+      n.beta <- length(betas)
+
+      # moving key coefficient to front
+      betas2 <- betas[2:length(betas)]
+      intercept <- betas[1]
+
+      names(betas2) <- c("diff_moral_index_trunc", "diff_comp_index_trunc", "outparty_incumbent", "clinton", "age_years", "age_square", "female", "non_white", "str_party2", "str_ideology2", "income3", "education3", "cand_ideo_diff", "interest_election2", "pres_care_wins2", "issue_index")
+
+      #KeepVars <- c("diff_moral_index_trunc", "diff_comp_index_trunc", "outparty_incumbent", "clinton", "age_years", "age_square", "female", "non_white", "str_party2", "str_ideology2", "income2.34to67", "income2.68to100", "income2.refused", "education2.some", "education2.plus", "cand_ideo_diff", "interest_election2", "pres_care_wins2", "issue_index")
+
+      KeepVars <- c("diff_moral_index_trunc", "diff_comp_index_trunc", "outparty_incumbent", "clinton", "age_years", "age_square", "female", "non_white", "str_party2", "str_ideology2", "income3", "education3", "cand_ideo_diff", "interest_election2", "pres_care_wins2", "issue_index")
+
+
+      ## Creating a simple data set for running predicted probabilities
+      setup <- paste("dat.pred <- dat.", groups[i], "[ , KeepVars]", sep = "")
+      eval(parse(text = setup))
+
+      predicted.values <- c()
+      predicted.se <- c()
+      predicted.comp.values <- c()
+      predicted.comp.se <- c()
+
+
+      # Save moral values
+      moral.vals <- dat.pred$diff_moral_index_trunc
+      comp.vals <- dat.pred$diff_comp_index_trunc
+
+      # Moral predicted values
+      for (j in 1:length(index.values)) {
+            dat.pred$diff_moral_index_trunc <- index.values[j]
+            setup <- paste("outcome <- predict(model.", groups[i],".", dv.short[d], ", newdata=dat.pred, type = ", '"', "link", '"', ", se.fit = T)", sep = "")
+            eval(parse(text = setup))
+
+            outcome <- ftable(outcome)
+
+            predicted.values[j] <- mean(outcome[,1], na.rm = TRUE)
+            predicted.se[j] <- mean(outcome[,2], na.rm = TRUE)
+      }
+
+
+
+      # Competence predicted values
+      dat.pred$diff_moral_index_trunc <- moral.vals # Resetting moral values
+      for (j in 1:length(index.values)) {
+            dat.pred$diff_comp_index_trunc <- index.values[j]
+            setup <- paste("outcome <- predict(model.", groups[i],".", dv.short[d], ", newdata=dat.pred, type = ", '"', "link", '"', ", se.fit = T)", sep = "")
+            eval(parse(text = setup))
+
+            outcome <- ftable(outcome)
+
+            predicted.comp.values[j] <- mean(outcome[,1], na.rm = TRUE)
+            predicted.comp.se[j] <- mean(outcome[,2], na.rm = TRUE)
+      }
+
+      upper <- predicted.values + (qnorm(.975) * predicted.se)
+      lower <- predicted.values - (qnorm(.975) * predicted.se)
+
+      upper.comp <- predicted.comp.values + (qnorm(.975) * predicted.comp.se)
+      lower.comp <- predicted.comp.values - (qnorm(.975) * predicted.comp.se)
+
+      setup <- paste("fit2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(predicted.values)", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("upper2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(upper)", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("lower2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(lower)", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("fit.comp2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(predicted.comp.values)", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("upper.comp2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(upper.comp)", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("lower.comp2 <- model.", groups[i],".", dv.short[d], "$family$linkinv(lower.comp)", sep = "")
+      eval(parse(text = setup))
+
+
+      # Saving results for later use
+      setup <- paste("fit.", dv.short[d], ".", groups[i], " <- fit2", sep = "")
+      eval(parse(text = setup))
+      setup <- paste("up.", dv.short[d], ".", groups[i], " <- upper2", sep = "")
+      eval(parse(text = setup))
+      setup <- paste("low.", dv.short[d], ".", groups[i], " <- lower2", sep = "")
+      eval(parse(text = setup))
+
+      setup <- paste("fit.comp.", dv.short[d], ".", groups[i], " <- fit.comp2", sep = "")
+      eval(parse(text = setup))
+      setup <- paste("up.comp.", dv.short[d], ".", groups[i], " <- upper.comp2", sep = "")
+      eval(parse(text = setup))
+      setup <- paste("low.comp.", dv.short[d], ".", groups[i], " <- lower.comp2", sep = "")
+      eval(parse(text = setup))
+
+
+
+      ## Creating figures
+      name <- paste("pp_",dv.short[d],"_",groups[i],".pdf", sep = "")
+      pdf(name, height = 8.5, width = 11)
+
+      #layout(matrix(c(1,2),1,2),
+      #    widths = c(5.5, 5.5))
+
+      steps <- length(fit2)
+      y.min <- 0
+      y.max <- 1
+      y.lim <- c(y.min, y.max)
+      y.steps <- .25
+      x.lim <- c(1, steps)
+      setup <- paste("pch.val <- pch.", groups[i], sep = "")
+      eval(parse(text = setup))
+      setup <- paste("col.val <- ", groups[i], ".color", sep = "")
+      eval(parse(text = setup))
+      setup <- paste("lty.val <- ", groups[i], ".lty", sep = "")
+      eval(parse(text = setup))
+
+      # Predicted Probablity figure
+      par(mar=c(7,7,2,2))
+      plot(c(1,steps),c(y.min,y.max),
+          axes = FALSE,
+          type = "n",
+          xlab = "",
+          ylab = "",
+          )
+      # Adding ambivalent line
+      abline(v = 3, col = "lightgrey", lty = "dashed", lwd = 2.5)
+      points(fit2, col = col.val, bg = col.val, type = "b", lty = lty.val, lwd = 3, pch = pch.val)
+      lines(lower2, col = col.val, lty = "dashed", lwd = 1)
+      lines(upper2, col = col.val, lty = "dashed", lwd = 1)
+
+      axis(1, c(rep("", times = steps)), at = seq(1,steps,by=1), las = 1, cex.axis = cex.val)
+      mtext(c("Favor\nOut-party", "", "Ambivalent", "", "", "", "Favor\nIn-party"), 1, line = 2.5, at = seq(1,steps,by=1), cex = cex.val)
+
+      #axis(2, c(signif(seq(y.min,y.max,by=((y.max-y.min)/5)), digits = 2)), at = seq(y.min,y.max,by=((y.max-y.min)/5)), las = 1, cex.axis = cex.val)
+      axis(2, lab = paste(round(c(seq(y.min,y.max,by=y.steps))*100,0), "%", sep = ""), at = seq(y.min,y.max,by=y.steps), las = 2, cex.axis = cex.val)
+      #title(groups.formal[i], cex.main = cex.val)
+      mtext("Predicted Probability", 2, line = 4.5, at = (y.max / 2), cex = cex.val+.4)
+      mtext("Moral Judgment", 1, line = 4.5, at = median(x.lim), cex = cex.val+.4)
+
+      dev.off()
+
+
+
+      # Combined moral and competence figure
+      name <- paste("pp_",dv.short[d],"_",groups[i],"_moralcomp.pdf", sep = "")
+      pdf(name, height = 8.5, width = 11)
+
+      #layout(matrix(c(1,2),1,2),
+      #    widths = c(5.5, 5.5))
+
+      steps <- length(fit2)
+      y.min <- 0
+      y.max <- 1
+      y.lim <- c(y.min, y.max)
+      y.steps <- .25
+      x.lim <- c(1, steps)
+      lty.val <- "solid"
+
+
+
+      # Predicted Probablity figure
+      par(mar=c(7,7,2,2))
+      plot(c(1,steps),c(y.min,y.max),
+          axes = FALSE,
+          type = "n",
+          xlab = "",
+          ylab = "",
+          )
+      # Adding ambivalent line
+      abline(v = 3, col = "lightgrey", lty = "dashed", lwd = 2.5)
+
+      # Moral judgments
+      points(fit2, col = col.moral, bg = col.moral, type = "b", lty = lty.val, lwd = 3, pch = pch.moral)
+      lines(lower2, col = col.moral, lty = "dashed", lwd = 1)
+      lines(upper2, col = col.moral, lty = "dashed", lwd = 1)
+
+      # Competence judgments
+      points(fit.comp2, col = col.comp, bg = col.comp, type = "b", lty = lty.val, lwd = 3, pch = pch.comp)
+      lines(lower.comp2, col = col.comp, lty = "dashed", lwd = 1)
+      lines(upper.comp2, col = col.comp, lty = "dashed", lwd = 1)
+
+
+      axis(1, c(rep("", times = steps)), at = seq(1,steps,by=1), las = 1, cex.axis = cex.val)
+      mtext(c("Favor\nOut-party", "", "Ambivalent", "", "", "", "Favor\nIn-party"), 1, line = 2.5, at = seq(1,steps,by=1), cex = cex.val)
+
+      #axis(2, c(signif(seq(y.min,y.max,by=((y.max-y.min)/5)), digits = 2)), at = seq(y.min,y.max,by=((y.max-y.min)/5)), las = 1, cex.axis = cex.val)
+      axis(2, lab = paste(round(c(seq(y.min,y.max,by=y.steps))*100,0), "%", sep = ""), at = seq(y.min,y.max,by=y.steps), las = 2, cex.axis = cex.val)
+      #title(groups.formal[i], cex.main = cex.val)
+      mtext("Predicted Probability", 2, line = 4.5, at = (y.max / 2), cex = cex.val+.4)
+      mtext("Moral Judgment", 1, line = 4.5, at = median(x.lim), cex = cex.val+.4)
+
+
+      legend("bottomright", c("Morality", "Competence"), pch = c(pch.moral, pch.comp),
+          pt.bg = c(col.moral, col.comp), col = c(col.moral, col.comp), lty = lty.val,
+          bg = "white", cex = 1.75, lwd = 3, bty = "n")
+
+      dev.off()
+
+
+    }
+}
+@
+
+\begin{figure}[htb]
+  \centering
+  \caption[Predicted Effect of the Difference in Moral Judgment on Vote Choice in Presidential Elections]{\textbf{Predicted Effect of the Difference in Moral Judgment on Vote Choice in Presidential Elections}\\ \footnotesize \textit{Note}: The figure shows the predicted probability of voting for the in-party presidential candidate among all partisans with the 95\% confidence interval. The vertical dotted line highlights where the moral judgment is ambivalent between the in-party and out-party candidates (meaning respondents gave the same ratings to both candidates).}\label{fig:pp_pres_partisan}
+  {\includegraphics[width=0.75\textwidth]{pp_pres_partisan.pdf}}
+\end{figure}
+
+Figure \ref{fig:pp_pres_partisan} shows the predicted probabilities for each value along the moral judgment index. On the left-hand side of the scale on the x-axis we see that partisans who judge the out-party candidate more favorably than the in-party candidate have a predicted probability just above 64\% of voting for the in-party candidate. These voters who are more favorable toward the out-party account for about 5\% of all partisans, which is not insignificant but hardly overwhelming. A more populous group of partisans, those who are ambivalent toward the two candidates' morality, who are 18 percent of all partisans, have a predicted probability of voting for the in-party of 80 percent. On the other hand, the partisans with the two strongest moral judgments of the out-party candidate have a predicted probability of 96 percent and 98 percent, respectively. The predicted probability of voting loyally is above 90 percent among the voters who aren't even mostly judging the out-party candidate as immoral. It doesn't take a very strong negative moral judgment to contribute to high partisan loyalty. The large effect seen in Table \vref{tab:vote_results} appear to be largely driven by the 29 percent of partisans who either morally favor the out-party candidate or are ambivalent between the two candidates.
+
+Moral judgments of presidential candidates significantly affect presidential vote. Partisans who negatively judge the out-party's presidential candidate are much more likely to support their party's candidate on Election Day. I now turn my attention to whether these judgments have effects on Congressional vote choice.
+
+
+
+
+\subsection{Results: U.S. House Vote}\label{sec:split_ticket}
+Presidential vote is not the only vote choice that moral judgments of political actors may affect. I hypothesize that negative moral judgments at the top of the ticket will have secondary effects that make people more likely to support their party's candidates for the U.S. House and Senate. Presidential candidates are the leaders of their parties, and votes for other offices are often portrayed as votes for or against the president or the presidential candidates. Presidential candidates also exemplify what it means to be a member of their parties \cite{Hayes2005,Nicholson2012}, as a result I expect negative moral judgments at the top to make voting for the other party on any level less likely. Voters who believe that a bad person leads the out-party will want to oppose his or her agenda wherever possible. In short, I hypothesize there is a moral ``coattail'' effect that reduces split-ticket voting.
+
+To analyze the effects on down-ballot voting, I combine votes for the U.S. House of Representatives and the U.S. Senate into one variable to assess the probability of casting a straight-ticket ballot. I do this to summarize whether people are loyal to their party across their entire ballot or if they split their tickets. Split tickets are fairly common.\footnote{About $\frac{1}{3}$ of all partisans in the ANES data file report splitting their votes for the president, House, and Senate.} The variable is coded one to indicate that the respondent voted loyally for their party's candidates in both Congressional elections; a zero indicates they did not.\footnote{I ran the models with a dummy variable where there was a mid-point to distinguish respondents who voted for one of the two in-party congressional candidates. The results were substantively a bit stronger, but the coefficients and predicted probabilities were hard to interpret. The coefficient for partisans were statistically significant; the results were statistically and substantively very similar for the partisans separately. Because I am most interested in partisan loyalty I use the variable that combines split-ticket and complete defection into one.} The analysis sheds light on the probability that voters will support their party's candidates given that they believe the out-party's presidential candidate is immoral. I expect loyalty to increase with higher moral judgments.
+
+In Figure \ref{fig:DV_partisan_house_combined} we can see that the relationship between the moral judgment of presidential candidates and vote choice in congressional elections is similar to that in presidential elections. The most loyal partisans are those who perceive the greatest moral difference between the out-party candidate and the in-party. At first glance, moral judgments appear to have a ``coat-tails'' effect. Partisans who have a dim view of their party's nominee are less likely to vote for their party's candidates for the U.S. House and Senate. Those who make moral judgments favorable of the out-party on average split their vote; they vote for one in-party candidate and one out-party. Partisans who make ambivalent judgments vote for one of the in-party candidates and then are about 50-50 in whether they'll vote for the second. As the moral judgments of the out-party get more negative, the more likely the partisans are to vote straight ticket. This descriptive relationship supports my hypothesis.
+
+\begin{figure}[htb]
+  \centering
+  \caption[Percentage of Partisans Voting for the In-party House Candidate]{\textbf{Percentage of Partisans Voting for the In-party House Candidate by Moral Judgment Index}\\ \footnotesize \textit{Note}: The x-axis shows the moral judgment index. The y-axis shows the percentage of partisans who report they voted for the in-party candidate for the U.S. House of Representatives.}\label{fig:DV_partisan_house_combined}
+  {\includegraphics[width=0.75\textwidth]{DV_partisan_house_combined.pdf}}
+\end{figure}
+
+The results in Table \ref{tab:congress_results} find that among all partisans there is a significant effect for moral judgment, but it is entirely a product of Republicans. The effect is insignificant and nearly zero among Democrats. The most influential variable is feeling toward the major-parties, followed by issue positions.
+
+Republicans' moral judgments matter for down-ballot voting. The trait dimension that is significant in the aggregate for Democrats is competence. Furthermore, anxiety is marginally significant among Democrats while its effect is smaller but marginally significant among Republicans. I did not have theoretical expectations for a difference between Republicans and Democrats on using these judgments in Congressional elections. On average, Democrats have more negative moral judgments of presidential candidates than Republicans (See Figure \ref{fig:appendix_distribution_moral_diff_gopdem}), but why these harsher judgments would be insignificant at the congressional level is unclear. Appendix Table \ref{tab:appendix_housesenate_results} shows the results of models that split out congressional vote by the two chambers. Democrats do not have statistically significant effects for either election. The effect is there for both chambers for Republicans.
+
+\begin{table}[htb]
+\centering
+\caption[Effect of Difference in Moral Judgment and Key Controls on Straight-ticket Voting in Congressional Elections]{\textbf{Effect of Difference in Moral Judgment and Key Controls on Straight-ticket Voting in Congressional Elections}}\label{tab:congress_results}
+\scalebox{.8}{
+\begin{tabular}{lccc} \hline \hline
+ & (1) & (2) & (3) \\
+ & All Partisans & Republicans & Democrats \\ \hline
+\\
+Moral Judgment Difference & 0.68** & 1.15** & 0.05 \\
+ & (0.23) & (0.38) & (0.39) \\
+Competence Difference & 0.33\textasciicircum & -0.19 & 0.78** \\
+ & (0.17) & (0.46) & (0.26) \\
+Anxiety Difference & 0.60*** & 0.54\textasciicircum & 0.67** \\
+ & (0.16) & (0.28) & (0.25) \\
+Strength of Partisanship & 0.44*** & 0.66*** & 0.17 \\
+ & (0.12) & (0.16) & (0.12) \\
+Strength of Ideology & 0.24 & 0.47** & 0.03 \\
+ & (0.16) & (0.18) & (0.25) \\
+Issue Index & 1.38*** & 1.74*** & 1.53** \\
+ & (0.42) & (0.52) & (0.47) \\
+Feelings toward the Parties & 2.99*** & 2.26** & 3.52*** \\
+ & (0.45) & (0.71) & (0.45) \\
+ &  &  &  \\
+Observations & 3,169 & 1,384 & 1,785 \\
+Pseudo R-squared & 0.112 & 0.147 & 0.116 \\
+\\ \hline \hline
+\multicolumn{4}{c}{Robust standard errors in parentheses} \\
+\multicolumn{4}{c}{*** p$<$0.001, ** p$<$0.01, * p$<$0.05, \textasciicircum p$<$0.1} \\
+\multicolumn{4}{c}{Coefficients from a logistic regression.} \\
+\end{tabular}
+}
+\end{table}
+
+Figure \vref{fig:appendix_cong_pp_diff_gopdem} shows the predicted probabilities for each partisan group (columns 2 and 3 in Table \ref{tab:congress_results}). The predicted probability of voting for both the Republican House and Senate candidates changes from 60 percent to 80 percent, an increase of 20 percentage points. A Republican whose moral judgments favors the Democratic presidential candidate is likely to to cast one vote for a Republican and another for someone else. The Republicans who make negative moral judgments of the out-party are likely to stay loyal and cast a united balloted. Among Democrats the trend is flat because there is no effect.
+
+There is no effect for moral judgment among Democrats, but it significantly increases loyalty among Republican partisans. During presidential elections, moral judgments of Democratic candidates have significant down-ballot effect in Congressional elections. These data do not speak to the effects moral judgments have during midterm elections, so the story may be different when there isn't a presidential candidate on the ballot. In presidential election years, there is evidence Republican congressional candidates receive higher support from their base when the base believes the Democratic party's presidential candidate is immoral. Democratic congressional candidates get no such help. These data support the hypothesis among Republicans, but not among Democrats. It is unclear why, though Democrats' larger effect for competence traits and anxiety may indicate that Democrats may judge Republicans differently. Democrats may see Republican candidates as threatening because they do not know how to run the economy, which affects their congressional votes. Competence and anxiety also seemed to matter a bit more at the presidential level among Democrats as well.
+
+\begin{figure}[htb]
+  \centering
+  \caption[Predicted Effect of the Difference in Moral Judgment on Congressional Vote Choice]{\textbf{Predicted Effect of the Difference in Moral Judgment on Congressional Vote Choice}\\ \footnotesize \textit{Note}: The figure shows the predicted probability of voting for both of the in-party's candidates for the House and Senate among Republicans and Democrats separately, with the 95\% confidence interval. The vertical dotted lines highlights where the moral judgment index shifts from against the in-party's candidate to against the out-party's.}\label{fig:appendix_cong_pp_diff_gopdem}
+  {\includegraphics[width=0.65\textwidth]{pp_house_partisan.pdf}}
+\end{figure}
+
+After examining the effect of moral judgments on vote choice, the evidence supports the hypotheses, but with caveats. Moral judgments do make partisans more loyal at the ballot box, but the effect is strongest among Republicans. Democrats care relatively more about competence, and moral judgments at the top of the ticket do not have an effect on their votes for other offices. The reasons for these partisan differences are probably related to \citeasnoun{Hayes2005} theory of trait ownership. Republicans own one of the two moral traits. The partisan gap is smaller on the second moral trait. On the other hand, Democrats own the one competence trait. Partisans may use these traits to justify their opposition to the other party, which in turn increases support for their own party.
+
+These results for the effect of moral judgments are supported in an analysis of panel data from the National Annenberg Election Surveys (NAES) is 2004 and 2008. Because of the panel design, these surveys allow a better examination of the causal relationship between moral judgments and voting. The traits and other covariates were measured before the election.\footnote{The NAES surveys did not have all the same controls available as the ANES data, but I used proxies where available. A few controls are omitted.} All of the dependent variables were measured after the election. The gap between the two waves ranged from a few days to a couple months. Unfortunately, only the 2004 survey had data on emotional reactions, so the 2008 analysis is just moral traits. The moral traits index or moral judgment index were then regressed on vote choice, split ticket voting, House vote, and Senate vote. The results support my hypotheses and largely fit the results from the ANES cumulative cross-section analysis. See Table \vref{tab:annenberg_2008_vote} and Table \vref{tab:annenberg_2004_vote} for the specifics. These results are important because they show that trait attributions on the moral dimension are important even after a significant amount of time has passed. This relationship suggests that these trait judgments' effects are long-lasting. Of course, it is possible these trait judgments are stable justifications for previously decided candidate preferences.
+
+
+
+
+
+\section{Political Activism}
+The evidence in the previous section showed that moral judgments of candidates have a significant relationship with vote choice. Those who are ambivalent or favor the out-party candidate on morality are significantly less likely to vote for their party's nominee. In this section, I turn to political behavior beyond the ballot box to examine the relationship between moral judgments of political leaders and political activism.
+
+Elections are more than showing up to cast a vote. Presidential elections dominate news headlines for months ahead of time, and tens of thousands of citizens commit significant amounts of time and treasure to advance the cause of their preferred candidate. Perceptions of candidates' moral character
+
+Non-electoral participation comes in two forms \cite{Valentinoetal2011}. The first form is the costly activism that involves spending one's time and money, such as volunteering in phone banks, attending meetings, or giving money.\footnote{The three ``costly'' activities in the ANES data are: 1) attending a political meeting; 2) working for a party or candidate; and 3) giving money to a party or candidate.} The second form is ``cheap'' activism that ``[requires] little effort or resources'' \cite[164]{Valentinoetal2011}.\footnote{The two ``cheap'' activities are: 1) displaying a campaign button,  a bumper sticker, or a sign; and 2) talking to someone about voting for or against a party or candidate.}
+
+<<anes.descrip.activism,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+participated <- round(svymean(~participated, design = anes.partisan, na.rm = TRUE), 2) * 100
+cheap <- round(svymean(~cheap, design = anes.partisan, na.rm = TRUE), 2) * 100
+costly <- round(svymean(~costly, design = anes.partisan, na.rm = TRUE), 2) * 100
+@
+
+Overall, levels of self-reported activism are low. Only \Sexpr{participated} percent of respondents report engaging in any non-electoral activism. Most of those who report any activity are engaging in cheap forms of activism (\Sexpr{cheap} percent), especially trying to persuade others who to vote for. Even fewer citizens report doing the costly activities (only \Sexpr{costly} percent). True levels of activism may be even lower, since respondents may be tempted to over-estimate their activism because they think it is important.\footnote{It's also possible that respondents to the ANES are more political active than other citizens to begin with. Responding to the survey requires a non-trivial amount of time, which someone who is more political active and interested is more likely to commit.}
+
+
+
+\subsection{Hypothesis: Moral judgment will make partisans more likely to engage in activism, especially less costly forms}
+Finally, I hypothesize that partisans who hold stronger negative moral judgments of the out-party candidate will feel a need to outwardly confirm their commitment to their morally ``right'' candidate through non-electoral participation, particularly participation that is visible to others.
+
+People have sacred values that they are unwilling to compromise on \cite{Ryan2014,SkitkaMorgan2014,Tetlock2003}. The motivational nature of partisan affiliations suggests that it is an identity that is resistent to compromise \cite{Levendusky2013b,TaberLodgeGlathar2001}. Partisans will increase their cognitive effort to defend and justify their party's positions \cite{Petersenetal2013}. As individuals encounter partisan actors, these actors become morally charged through affective transfer \cite{LodgeTaber2013}, thus partisan affiliation becomes a protected value \cite{Tetlock2000}. Protected values are not just entities that people are hesitant to compromise over; they are also realms where merely contemplating the alternative will lead people to feel a need to publicly ``cleanse'' and reaffirm their commitment to the right.
+
+Actors are likely to cause people to feel \emph{moral outrage}, which \citeasnoun{Tetlocketal2000} define as ``a composite psychological state that subsumes cognitive reactions (harsh character attributions to those who endorse the proscribed thoughts and even to those who do not endorse, but do tolerate, this way of thinking in others), affective reactions (anger and contempt for those who endorse the proscribed thoughts), and behavioral reactions (support for ostracizing and punishing deviant thinkers)'' (853-854). Politicians from the other party are highly likely to elicit moral outrage because they often espouse morally taboo positions or affiliations---or at the very least tolerate them in their party. For example, even though until May 2012 President Obama was personally opposed to same-sex marriage, supporters of traditional marriage would still have been very likely to feel moral outrage toward him because he tolerated---if not implicitly supported---those in his party who were openly in favor. The actors' affiliation with these moral feelings will make the actors themselves feel morally verboten to out-partisans.
+
+Once an individual feels moral outrage toward someone or something, he or she will feel a need to outwardly express their commitment to the moral principle that the condemned individual transgressed. I hypothesize that this moral cleansing takes the form of non-electoral participation, particularly the ``cheap'' forms of participation that others can see such as displaying a button, bumper sticker, or sign or trying to convince a friend for whom to vote. A bumper sticker, for example, public affirms one's commitment to the complex web of morally relevant issues and positions that candidates and party platforms represent. Similarly, since most people's social networks are politically homogenous \cite{Mutz2006}, one can attempt to convince someone for whom to vote, but it is really an exercise of reaffirming one's commitment to the morally right candidate among those who agree.
+
+\citeasnoun{Tetlocketal2000} theorize that morally bad entities will evoke the ``mere contemplation effect'' (855). A partisan does not have to vote for or support an actor he or she considers morally bad to feel the need to express their commitment to what they feel is the correct moral order. Merely thinking about the morally bad actor can activate the need.
+
+%The morally significant emotion of anger (aversion) contributes to non-electoral political participation. \citeasnoun{Valentinoetal2011} found that anger increased participation, especially in ``cheap'' forms of participation. When they experimentally induced anger, they found that it increased participation. Anxiety and enthusiasm did not increase participation, which runs counter to \citeasnoun{Brader2005} finding that advertisements that invoke enthusiasm increase participation. These findings aren't contradictory, however, because Brader explores intention to vote while Valentino et al are interested in activism.
+
+\subsection{Results}
+In Figure \vref{fig:participated_descriptive_diff} we see that there is a positive relationship between the moral judgment index and non-electoral participation, though the relationship isn't a straightforward as we saw with the two other dependent variables.\footnote{I will use ``activism'' and ``non-electoral participation'' interchangeably.}  Cheap and costly non-electoral participation are dichotomous variables reporting whether respondents reported doing any one of activities in each category. The relationship on the left-hand side of the x-axis in Figure \ref{fig:cheap} is a bit muddled. Ambivalent respondents (those who saw no difference between the candidates) were the least likely to participate; however, those who favored the out-party were still below average even though they were more active than the ambivalent. There is a monotonic positive relationship between moral judgment and non-electoral participation among the respondents who favored their party's nominee over the other's. The relationship between the two variables is flat among the left-hand extreme and the ambivalent for costly participation, but it increases with each step toward the other extreme. The bins that are higher than average are those for the partisans with the most negative judgments of the out-party's candidate. There seems to be a positive relationship between these judgments and getting involved in costly ways. Believing that the most prominent member of the out-party is morally bad would be a strong motivator for activism.
+
+I focus the analysis on cheap forms moving forward because they have a more direct theoretical link with moral cleansing. Hypotheses three argues that as partisans judge the out-party candidate more harshly than the in-party candidate they will feel a need to outwardly express their disapproval of the morally ``bad'' candidate and re-affirm their commitment to the good \cite{Tetlock2003,Tetlocketal2000}. Tetlock's sacred values protection theorem suggests that as citizens encounter information about the presidential candidates that is morally relevant they will feel a greater desire to engage in activism---especially activism that symbolically reaffirms one's ``solidarity with their moral community'' \cite[855]{Tetlocketal2000}.
+
+I ran the analysis with dependent variables for cheap, costly, and combined participation, but I present only the results for cheap participation. The effects for moral judgments were insignificant on costly participation; they were substantively and statistically very similar for the combined dependent variable. At the end of the section, I will briefly describe the results of models looking at combined cheap and costly forms.
+
+\begin{figure}[htb]
+  \centering
+  \caption[Political Activism by Moral Judgment]{\textbf{Political Activism by Moral Judgment Index}\\ \footnotesize \textit{Note}: The figure shows the percentage of respondents who report engaging in one or more of the three forms of costly participation or of the two cheap forms of participation. The horizontal lines show the average participation rate for all partisans.}\label{fig:DV_partisan_participated_combined}
+  {\includegraphics[width=0.75\textwidth]{DV_partisan_participated_combined.pdf}}
+%  \subfloat[\label{fig:both}\textbf{``Cheap'' and ``Costly''}] \\
+%  \subfloat[\label{fig:cheap}\textbf{``Cheap'' Only}]{\includegraphics[width=0.4\textwidth]{DV_cheap_moral_diff_partisans.pdf}} \qquad
+%  \subfloat[\label{fig:costly}\textbf{``Costly'' Only}]{\includegraphics[width=0.4\textwidth]{DV_costly_moral_diff_partisans.pdf}}
+\end{figure}
+
+Now, I turn to an analysis of just the least expensive forms of participation --- talking to someone about politics and displaying a sign or button --- because they are the most accessible forms of activism and have the most public symbolism for reconfirming one's moral standing. An individual who feels the need to morally cleanse and make clear their allegiance to the morally correct candidate is easily able to engage in these two activities whenever the need arises. More costly forms of activism are not immediately available and the need to cleanse, so to speak, may subside by the time an individual can attend a meeting, volunteer, or make a donation. Furthermore, cheap participation has the advantage of being social. If partisans feel a need to ``cleanse'' when they merely contemplate a morally wrong entity, as \citeasnoun{Tetlocketal2000} argues they will, then cheap participation seems the most likely candidate. Politics are distant from many citizens' lives \cite{Downs1957}, thus any sacred values that they feel a need to defend through a public stand would be less likely to motivate larger acts of re-commitment. For the distant offense caused by the moral fitness of a presidential candidate, a bumper sticker, button, or a talk with a friend will be enough to satisfy the need to confirm one's moral rectitude. Publicly showing one's support for or opposition to the morally bad actor will be enough without the paying higher costs of other forms of activism.
+
+Table \ref{tab:cheap_results} shows the results of logistic regression models where the dependent variable is an dummy of whether respondents either talked to a friend or displayed a sign or button, or both. The effect of moral judgment on cheap participation is more modest than in some of the analysis above. Nevertheless, moral judgments do significantly correlate with higher rates of participation on ``cheap'' activism. The effect is stronger among Republicans than Democrats. The GOP's effect size is significantly larger than some of the other key control variables, including strength of partisanship, but not ideology, the issue index, enthusiasm, and interest in the election. For Democrats, the moral judgment index's effect is similar to most of the other key control variables, though it is statistically larger than the effect of strength of partisanship. These models all confirm the hypothesis of moral judgments increasing non-electoral participation.
+
+\begin{table}[htb]
+\centering
+\caption[Effect of Difference in Moral Judgment and Key Controls on ``Cheap'' Non-voting Political Participation]{\textbf{Effect of Difference in Moral Judgment and Key Controls on ``Cheap'' Non-voting Political Participation}}\label{tab:cheap_results}
+\scalebox{.8}{
+\begin{tabular}{lccc} \hline \hline
+ & (1) & (2) & (3) \\
+ & All Partisans & Republicans & Democrats \\ \hline
+\\
+Moral Judgment Difference & 0.63*** & 0.92*** & 0.50** \\
+ & (0.15) & (0.19) & (0.18) \\
+Competence Difference & 0.25*** & 0.12 & 0.35* \\
+ & (0.06) & (0.19) & (0.15) \\
+Anxiety Difference & 0.39* & 0.38* & 0.38* \\
+ & (0.17) & (0.19) & (0.18) \\
+Enthusiasm Difference & 0.70*** & 0.84*** & 0.57*** \\
+ & (0.15) & (0.20) & (0.17) \\
+Strength of Partisanship & 0.35*** & 0.46*** & 0.27** \\
+ & (0.08) & (0.13) & (0.10) \\
+Strength of Ideology & 0.39** & 0.55* & 0.23 \\
+ & (0.15) & (0.24) & (0.16) \\
+Issue Index & 0.60** & 0.89** & 0.18 \\
+ & (0.23) & (0.32) & (0.16) \\
+Interest in Election & 1.38*** & 1.08*** & 1.58*** \\
+ & (0.13) & (0.16) & (0.10) \\
+ &  &  &  \\
+Observations & 7,380 & 3,090 & 4,290 \\
+Pseudo R-squared & 0.129 & 0.136 & 0.129 \\
+\\ \hline \hline
+\multicolumn{4}{c}{Robust standard errors in parentheses} \\
+\multicolumn{4}{c}{*** p$<$0.001, ** p$<$0.01, * p$<$0.05, \textasciicircum p$<$0.1} \\
+\multicolumn{4}{c}{Coefficients from a logistic regression.} \\
+\end{tabular}
+}
+\end{table}
+
+The predicted probabilities in Figure \ref{fig:appendix_cheap_pp_diff_gopdem} from the Republican and Democratic models in Table \ref{tab:cheap_results} (columns 2 and 3) show an increase in the probability of engaging in cheap activities as people move across the moral judgment index. The confidence intervals around the predicted probabilities are indicative of the great variation in participation. Nevertheless, we can see that moral judgment increases cheap political participation, especially among Republicans. The effect is much more modest among Democrats. Republicans' predicted probability of participating in these activities increases from about 40 percent to 59 percent, crossing from unlikely to participate below 50 percent to likely to participate. The Republicans in the two highest bins of moral judgment are statistically more likely to participate than their fellow partisans. The Democrats' predicted probability does not cross the 50-percent threshold. Those who favor the out-party have a 38 percent probability; the Democrats on the other end have a 48 percent probability, just shy of 50 percent. The Democratic partisans at the right-hand side of the index are also statistically more likely than other Democrats to participate in these cheap ways than the others.
+
+\begin{figure}[htb]
+  \centering
+  \caption[Predicted Effect of the Difference in Moral Judgment on Non-electoral Political Participation]{\textbf{Predicted Effect of the Difference in Moral Judgment on Non-electoral Political Participation}\\ \footnotesize \textit{Note}: The figure shows the predicted probability of engaging in any of the five ``cheap'' and ``costly'' forms of political participation, with the 95\% confidence interval. The vertical dotted line highlights where the moral judgment index shifts from against the in-party's candidate to against the out-party's.}\label{fig:pp_participated_partisan}
+  {\includegraphics[width=0.65\textwidth]{pp_participated_partisan.pdf}}
+\end{figure}
+
+The effect of moral judgment on ``costly'' participation is statistically insignificant in all cases, so I do not present those results here. The increase in activism that correlates with moral judgment is a result of increased ``cheap'' participation. Believing that the out-party nominee is morally bad appears to lead people to be more active politically in the least costly ways, but in ways that are visible to others. Putting a bumper sticker on your car has much higher visibility than volunteering to make calls at a campaign's phone bank. Displaying support for a candidate is a public affirmation that one holds the right opinions regarding the presidential election. Other forms of activity, such as giving money or attending a meeting, probably don't have the same public payoff.\footnote{Social media is potentially shifting the publicity of the pay-offs associated with costly participation because individuals can easily share pictures or notifications to their social networks highlighting their attendance at a rally, volunteering, or even giving money.}
+
+A table with the regression results for cheap and costly participation together is not shown; the results are essentially the same as those in Table \ref{tab:cheap_results}. A short discussion of the combined results will suffice. The effect size among all partisans and Republicans is significant; for Democrats it is also significant but smaller. Republicans drive the overall impact of moral judgments on combined participation. These results support my hypothesis, but the evidence among Democrats is a bit weaker. Negative moral judgments motivate Republicans more strongly than Democrats, while Democrats have strong effects associated with negative judgments of competence and anxiety when participation is combined into a single dependent variable. Among all partisans, the predicted probability of reporting engagement in any one of the five non-electoral forms of participation moves from about 45 percent to around 55 percent. This probability crosses from being narrowly unlikely to participation to marginally likely to participate. Republicans are more significantly moved than Democrats (figure not shown).
+
+
+
+\section{Conclusion}
+The results of my analysis were largely supportive of my hypotheses, which a few unexpected outcomes. The results support each of the three hypotheses broadly, but there are some adjustments that are needed. Moral judgments of actors are significantly correlated with increases in party loyalty, affective polarization, and activism.
+
+Respondents who reported feeling the greatest difference on the moral judgment index between the in-party and the out-party were more likely to vote for their party at the presidential level. In the Senate, House, and split-ticket vote analysis, however, the hypothesized effect is only among Republicans. Moral judgments do not encourage less split ticket voting among Democrats, as we saw in Section \ref{sec:split_ticket}; there also weren't statistically significant effects among Democrats on their individual votes for House and Senate (see Appendix Section \ref{sec:house_senate}). I did not anticipate finding a partisan difference at the congressional level. Further work is needed to explore the theoretical reasons for this difference.
+
+Moral judgments also appear to contribute to affective polarization. Among both Republicans and Democrats, the respondents who made the strongest negative moral judgments also those who had the largest affective gap between the parties. Believing that the out-party is lead by an immoral leader changes how people feel about the parties. This finding will need further analysis because the causal arrow is unclear. Feeling a greater gap between the parties could cause the moral judgments or it could be the other way around. Experimental evidence is needed to resolve the question.
+
+Finally, moral judgments also increase non-electoral participation. Again, the results show a difference between Republicans and Democrats. Democrats' judgments on average have smaller effects on these behaviors. Republicans are more motivated to engage in ``cheap'' political activism when they hold negative moral judgments of the out-party's presidential candidate.
+
+Experimental evidence is needed to further explore the relationship between these moral judgments and political behavior. The evidence I present here cannot address direction of the causal relationship. It is possible that these moral judgments are just rationalizations for candidate preferences \cite{Rahnetal1994}. I have designed a survey experiment to explore these relationships. Nevertheless, the fact that moral judgments---even if they are rationalizations---seem to have a particularly significant effect on key forms of political behavior suggests they are the most accessible and therefore prominent considerations in people's minds.
+
+Overall, however, these results support the theorized link between moral judgments of political actors and political behavior. These kinds of judgments have significant effects on vote choice, affective polarization, and activism, even when alternative explanations are controlled for. The data available over the years regarding these judgments is limited. I was unable to control for moral intuitions or moral convictions, but the proxies available did not offset the hypothesized relationships. The survey as did not have questions directly linking trait judgments with affect. Despite these shortcomings, the results are supportive of the theory and encourage further work. Partisans can make two primary types of judgments about presidential candidates: are they competence and are they moral. These results suggest that judgments regarding morality are particularly potent when added to feelings of moral condemnation.

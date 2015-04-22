@@ -1,0 +1,1528 @@
+%\documentclass[12pt]{article}
+%%%% For figures
+%\usepackage{graphicx}
+%%\usepackage{subfig,rotate}
+%
+%%%% for comments
+%\usepackage{verbatim}
+%
+%%%% For tables
+%\usepackage{multirow}
+%% Longtable lets you have tables that span multiple pages.
+%\usepackage{longtable}
+%
+%% Booktabs produces far nicer tables than the standard LaTeX tables.
+%%   see: http://en.wikibooks.org/wiki/LaTeX/Tables
+%\usepackage{booktabs}
+%
+%%set parameters for longtable:
+%% default caption width is 4in for longtable, but wider for normal tables
+%\setlength{\LTcapwidth}{\textwidth}
+%
+%%%%Package for citations
+%\usepackage{harvard}
+%
+%\usepackage{setspace}
+%%\usepackage{geometry}
+%\usepackage{fancyhdr}
+%\usepackage{amsmath,amsthm,amssymb}
+%\usepackage{graphicx}
+%\usepackage{hyperref}
+%\usepackage{pdflscape}
+%\usepackage{fullpage}
+%\usepackage{dcolumn}
+%\usepackage{varioref}
+%\usepackage{placeins}
+%\usepackage{varioref}
+%\usepackage{caption}
+%%\usepackage{knitr}
+%\usepackage{fixltx2e}
+%\usepackage{soul}
+%
+%% Need to use one or the other, but can't use both
+%\usepackage{subcaption}
+%%\usepackage{subfig}
+%
+%\graphicspath{ {c:/Users/Public/Figures/} }
+%%\let\footnote=\endnote
+%%\renewcommand{\harvardurl}{\url}
+%%\usepackage{marvosym}
+%
+%\linespread{1.6}
+%\graphicspath{ {C:/Users/Public/Figures/} }
+%
+%\title{Moral Judgments of Presidential Candidates and Partisan Bias: A Conjoint Analysis of the Impact of Moral Judgments and Partisanship on Electoral Preferences\thanks{I thank Tali Mendelberg, Marty Gilens, Omar Wasow, LaFleur Stephens, and the Princeton Politics Department's Behavior Workshop for their helpful feedback and suggestions. I am grateful to the Center for the Study of Democratic Politics (CSDP) at Princeton University for financial support.}}
+%\usepackage[left=1in,top=1in,right=1in,bottom=1.1in]{geometry}
+%\setstretch{1.5}
+%\author{J. Baxter Oliphant\thanks{Ph.D. Candidate, Department of Politics, Princeton University}}
+%\date{}
+%
+%\begin{document}
+
+<<data.import,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+#library(RWinEdt)
+library(foreign)
+library(stargazer)
+library(Hmisc)
+library(MASS)
+library(reshape2)
+library(plyr)
+library(ggplot2)
+
+#rm(list=ls())
+
+
+## Function for clustered standard errors
+cl <- function(fm, cluster) {
+  library(sandwich)
+  M <- length(unique(cluster))
+  N <- length(cluster)
+  K <- fm$rank
+  dfc <- (M/(M-1))*((N-1)/(N-K))
+  uj  <- apply(estfun(fm), 2, function(x) tapply(x, cluster, sum))
+  vcovCL <- dfc * sandwich(fm, meat = crossprod(uj)/N)
+  return(vcovCL)
+}
+
+clx <- function(fm, dfcw, cluster){
+    # R-codes (www.r-project.org) for computing
+    # clustered-standard errors. Mahmood Arai, Jan 26, 2008.
+	
+	# The arguments of the function are:
+    # fitted model, cluster1 and cluster2
+    # You need to install libraries `sandwich' and `lmtest'
+	
+    # reweighting the var-cov matrix for the within model
+    library(sandwich);library(lmtest)
+    M <- length(unique(cluster))
+    N <- length(cluster)
+    K <- fm$rank
+    dfc <- (M/(M-1))*((N-1)/(N-K))
+    uj  <- apply(estfun(fm),2, function(x) tapply(x, cluster, sum));
+    vcovCL <- dfc*sandwich(fm, meat=crossprod(uj)/N)*dfcw
+    coeftest(fm, vcovCL)
+}
+
+predict.rob <- function(x, clcov, newdata) {
+    if(missing(newdata)){ newdata <- x$model }
+    tt <- terms(x)
+    Terms <- delete.response(tt)
+    m.mat <- model.matrix(Terms,data=newdata)
+    m.coef <- x$coef
+    fit <- as.vector(m.mat %*% x$coef)
+    se.fit <- sqrt(diag(m.mat %*% clcov %*% t(m.mat)))
+    return(list(fit=fit,se.fit=se.fit))
+}
+
+
+#setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2014 MTurk Conjoint/Conjoint_Characteristics_Survey_Prestest_1")
+#dat <- read.table("Pretest_1_CSV.csv", header=TRUE, sep = ",")
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+dat <- read.table("Batch_1_and_2_formatted.csv", header=TRUE, sep = ",")
+
+# removing unneccessary rows
+#dat <- dat[c(3:nrow(dat)),]
+
+# Giving each respondent a simple ID
+dat$id <- seq(1,nrow(dat))
+
+#Drop incomplete cases
+dat <- subset(dat, !is.na(dat$Q9)&!is.na(dat$Q17)&!is.na(dat$Q25)&!is.na(dat$Q33)&!is.na(dat$Q41))
+
+# renaming
+
+
+# Creating a dataframe for each candidate rated (5 x 2 = 10)
+
+# Pair in Conjoint 1
+cols1 <- dat[,c("Q9","Q12_1","Q13_1",grep("Q56",names(dat),value=TRUE)[1:10])]
+cols2 <- dat[,c("Q9","Q12_2","Q13_2",grep("Q56",names(dat),value=TRUE)[11:20])]
+# Pair in Conjoint 2
+cols3 <- dat[,c("Q17","Q20_1","Q21_1",grep("Q57",names(dat),value=TRUE)[1:10])]
+cols4 <- dat[,c("Q17","Q20_2","Q21_2",grep("Q57",names(dat),value=TRUE)[11:20])]
+# Pair in Conjoint 3
+cols5 <- dat[,c("Q25","Q28_1","Q29_1",grep("Q58",names(dat),value=TRUE)[1:10])]
+cols6 <- dat[,c("Q25","Q28_2","Q29_2",grep("Q58",names(dat),value=TRUE)[11:20])]
+# Pair in Conjoint 4
+cols7 <- dat[,c("Q33","Q36_1","Q37_1",grep("Q59",names(dat),value=TRUE)[1:10])]
+cols8 <- dat[,c("Q33","Q36_2","Q37_2",grep("Q59",names(dat),value=TRUE)[11:20])]
+# Pair in Conjoint 5
+cols9 <- dat[,c("Q41","Q44_1","Q45_1",grep("Q60",names(dat),value=TRUE)[1:10])]
+cols10 <- dat[,c("Q41","Q44_2","Q45_2",grep("Q60",names(dat),value=TRUE)[11:20])]
+
+
+## Even-odd functions
+is.even <- function(x) x %% 2 == 0
+is.odd <- function(x) x %% 2 != 0
+
+## Formatting and Standardizing
+cands <- c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J")
+
+for (i in 1:10) {
+    # Renaming variables to make them consistent
+    newnames <- c("vote","prob","moral","cand_pid", "care", "honest", "egal", "auth", "loyal", "pure1", "pure2", "comp", "exp")
+    setup <- paste("names(cols",i,") = newnames", sep = "")
+    eval(parse(text = setup))
+
+    # Changing "Yes" = 1 and "No" = 0 for traits
+
+    ## Indicator variable whether the candidate was supported
+    setup <- paste("cols",i,"$selected <- 0", sep = "")
+    eval(parse(text = setup))
+    setup <- paste("cols",i,"$selected <- ifelse(cols",i,"$vote == 1 & is.odd(i), 1, cols",i,"$selected)", sep = "")
+    eval(parse(text = setup))
+    setup <- paste("cols",i,"$selected <- ifelse(cols",i,"$vote == 2 & is.even(i), 1, cols",i,"$selected)", sep = "")
+    eval(parse(text = setup))
+
+    # Labeling candidate
+    setup <- paste("cols",i,"$candidate <- cands[",i,"]", sep = "")
+    eval(parse(text = setup))
+}
+
+conjoints <- list(c(1, 2), c(3, 4), c(5, 6), c(7, 8), c(9, 10))
+for (i in 1:length(conjoints)) {
+    setup <- paste("cols" ,conjoints[[i]][1], "$prob.gap <- cols", conjoints[[i]][1], "$prob - cols", conjoints[[i]][2], "$prob", sep = "")
+    eval(parse(text = setup))
+    setup <- paste("cols" ,conjoints[[i]][2], "$prob.gap <- cols", conjoints[[i]][2], "$prob - cols", conjoints[[i]][1], "$prob", sep = "")
+    eval(parse(text = setup))
+}
+
+
+## Demographics and other questions
+bkgd <- dat[,c(
+    "Q2", #sex
+    "Q3_1_TEXT", #age
+    "Q4", #state
+    "Q51", #pid1
+    "Q52", #pid2
+    "Q53", #pid3
+    "Q50", #ideo1
+    "Q51.1", #ideo2
+    "Q55", #church attendance
+    "Q56_1", "Q56_2", "Q56_3", "Q56_4", "Q56_5", "Q56_6", "Q56_7", "Q56_8", # race questions
+    "Q57", # income
+    "Q58", # education
+    "Q59", # follow public affairs
+    "id"
+)]
+
+newnames <- c("sex", "age", "state", "pid1", "pid2", "pid3", "ideo1", "ideo2", "church",
+    "Q56_1", "Q56_2", "Q56_3", "Q56_4", "Q56_5", "Q56_6", "Q56_7", "Q56_8",
+    "income", "educ", "news", "id")
+names(bkgd) <- newnames
+
+
+# Party identification
+bkgd$pid <- NA
+bkgd$pid[bkgd$pid1==2 & bkgd$pid2==1] <- 1
+bkgd$pid[bkgd$pid1==2 & bkgd$pid2==2] <- 2
+bkgd$pid[(bkgd$pid1==3 | bkgd$pid1==4) & bkgd$pid3==1] <- 3
+bkgd$pid[(bkgd$pid1==3 | bkgd$pid1==4) & bkgd$pid3==3] <- 4
+bkgd$pid[(bkgd$pid1==3 | bkgd$pid1==4) & bkgd$pid3==2] <- 5
+bkgd$pid[bkgd$pid1==1 & bkgd$pid2==2] <- 6
+bkgd$pid[bkgd$pid1==1 & bkgd$pid2==1] <- 7
+
+# Summary PID
+bkgd$party[bkgd$pid < 4] <- 1
+bkgd$party[bkgd$pid > 4] <- 2
+bkgd$party[bkgd$pid == 4] <- 3
+
+
+
+# Ideology
+
+
+
+# Strength of ideology
+#bkgd$ideo3 <- as.numeric(bkgd$ideo2)
+bkgd$str.ideo <- bkgd$ideo2
+bkgd$str.ideo[is.na(bkgd$ideo2)] <- 0
+
+
+# church attendance
+#bkgd$church <- as.numeric(bkgd$church)
+bkgd$church[bkgd$church == 6] <- 3
+bkgd$church[bkgd$church == 7] <- 4
+bkgd$church[bkgd$church == 8] <- 5
+
+
+
+# Race
+bkgd$whiteonly <- ifelse(bkgd$Q56_1 == 1 & is.na(bkgd$Q56_2) & is.na(bkgd$Q56_3) & is.na(bkgd$Q56_4) & is.na(bkgd$Q56_5)
+    & is.na(bkgd$Q56_6) & is.na(bkgd$Q56_7),1,0)
+bkgd$whiteonly[!is.na(bkgd$Q56_8)] <- NA
+
+bkgd$nonwhite <- 0
+bkgd$nonwhite[bkgd$whiteonly == 0] <- 1
+
+
+
+# Income
+#bkgd$income <- as.numeric(bkgd$income)
+bkgd$income[bkgd$income == 14 | bkgd$income == 15] <- NA
+bkgd$income <- bkgd$income - 3
+
+
+# Education
+bkgd$educ[bkgd$educ == 13] <- NA
+bkgd$educ <- bkgd$educ - 3
+
+
+
+# Follow the news
+
+
+
+################################################################################################
+#Moral Intuitions
+intuitions <- dat[,
+    c(grep("Q64",names(dat)),  #moral intuitions battery 1
+    grep("Q65",names(dat)))  #moral intuitions battery 1
+]
+
+f.care <- ((intuitions$Q64.1. + intuitions$Q64.7. + intuitions$Q65.1. + intuitions$Q65.7.) - 4) / 20
+f.fair <- ((intuitions$Q64.2. + intuitions$Q64.8. + intuitions$Q65.2. + intuitions$Q65.8.) - 4) / 20
+f.loyal <- ((intuitions$Q64.3. + intuitions$Q64.9. + intuitions$Q65.3. + intuitions$Q65.9.) - 4) / 20
+f.auth <- ((intuitions$Q64.4. + intuitions$Q64.10. + intuitions$Q65.4. + intuitions$Q65.10.) - 4) / 20
+f.pure <- ((intuitions$Q64.5. + intuitions$Q64.11. + intuitions$Q65.5. + intuitions$Q65.11.) - 4) / 20
+
+foundations <- data.frame(f.care, f.fair, f.loyal, f.auth, f.pure)
+
+dat <- cbind(dat, foundations)
+
+
+
+
+
+# Trait Importance Rankings
+fixpoints <- dat[, c(grep("Q68",names(dat)))]
+ranking <- dat[, c(grep("Q48",names(dat)))]
+
+newnames <- c("care", "honest", "egal", "auth", "loyal", "pure1", "pure2", "comp", "exp", "econ")
+names(fixpoints) <- newnames
+names(ranking) <- newnames
+
+trait.rank <- data.frame(type = rep("",nrow(fixpoints)),
+    care = rep(0,nrow(fixpoints)),
+    honest = rep(0,nrow(fixpoints)),
+    egal = rep(0,nrow(fixpoints)),
+    auth = rep(0,nrow(fixpoints)),
+    loyal = rep(0,nrow(fixpoints)),
+    pure1 = rep(0,nrow(fixpoints)),
+    pure2 = rep(0,nrow(fixpoints)),
+    comp = rep(0,nrow(fixpoints)),
+    exp = rep(0,nrow(fixpoints)),
+    econ = rep(0,nrow(fixpoints))
+    )
+
+trait.rank$type <- ifelse(is.na(fixpoints$care), "ranking", "fixpoints")
+for (i in 1:length(newnames)) {
+    setup <- paste("trait.rank$",newnames[i]," <- ifelse(is.na(fixpoints$",newnames[i],"), ranking$",newnames[i],", fixpoints$", newnames[i],")", sep = "")
+    eval(parse(text = setup))
+}
+
+
+
+mean.ranking <- c()
+mean.fixpoints <- c()
+for (i in 1:length(newnames)){
+    setup <- paste("mean.ranking[",i,"] <- mean(ranking$", newnames[i],", na.rm = TRUE)", sep = "")
+    eval(parse(text = setup))
+
+    setup <- paste("mean.fixpoints[",i,"] <- mean(fixpoints$", newnames[i],", na.rm = TRUE)", sep = "")
+    eval(parse(text = setup))
+}
+
+trait.rankings <- data.frame(mean.ranking, mean.fixpoints, row.names = newnames)
+trait.rankings$rank <- 11-trait.rankings$mean.ranking
+
+#barplot(trait.rankings$rank,
+#    names.arg = newnames,
+#    ylim = c(0,8))
+#
+#barplot(trait.rankings$mean.fixpoints,
+#    names.arg = newnames,
+#    ylim = c(0,20))
+
+
+
+## Trait Order
+traits <- c("cand_pid", "care", "honest", "egal", "auth", "loyal", "pure1", "pure2", "comp", "exp")
+for (i in 1:length(traits)) {
+    setup <- paste("dat$order_",traits[i]," <- 0", sep = "")
+    eval(parse(text = setup))
+}
+
+orders <- dat[, c("Q56_21_TEXT",grep("order_",names(dat),value=TRUE))]
+orders$Q56_21_TEXT <- as.character(orders$Q56_21_TEXT)
+
+for (j in 1:length(orders$Q56_21_TEXT)) {
+    ord <- strsplit(orders$Q56_21_TEXT[j], ";")
+
+    conjoint.names <- c("Political Party", "Really cares about other people", "Dishonest", "Treats everyone equally", "Respectful", "Loyal",
+        "Sexually immoral", "Disgusted by homosexuality", "Competent", "Inexperienced")
+    places <- match(conjoint.names, c(ord[[1]]))
+
+    for (i in 1:length(traits)) {
+        setup <- paste("orders$order_",traits[i],"[",j,"] <- places[",i,"]", sep = "")
+        eval(parse(text = setup))
+    }
+}
+
+orders <- orders[, c(grep("order_",names(dat),value=TRUE))]
+
+
+
+
+#### Combining data
+stacked.prep <- cbind(bkgd, foundations, trait.rank, orders)
+
+for (i in 1:10) {
+    #
+
+    ## Adding demographics, moral foundations, and trait rankings
+    setup <- paste("stacked",i," <- cbind(cols",i,", stacked.prep)", sep = "")
+    eval(parse(text = setup))
+}
+stack.dat <- rbind(stacked1, stacked2, stacked3, stacked4, stacked5, stacked6, stacked7, stacked8, stacked9, stacked10)
+
+
+# Labeling values
+levels(stack.dat$pid) <- c("Str D", "Weak D", "Lean D", "Ind", "Lean R", "Weak R", "Str R")
+levels(stack.dat$party) <- c("Democrat", "Republican", "Independent")
+levels(stack.dat$ideo1) <- c("conservative", "moderate", "liberal", "libertarian", "progressive", "other", "dk")
+levels(stack.dat$church) <- c("Never", "Few time a year", "Monthly", "Almost Weekly", "Weekly")
+levels(stack.dat$nonwhite) <- c("white", "nonwhite")
+levels(stack.dat$income) <- c("Less than $10,000", "Between $10,000 and $20,000", "Between $20,000 and $30,000",
+    "Between $30,000 and $40,000", "Between $40,000 and $50,000", "Between $50,000 and $75,000", "Between $75,000 and $100,000",
+    "Between $100,000 and $125,000", "Between $125,000 and $150,000", "More than $150,000")
+levels(stack.dat$educ) <- c("Grade school", "Some high school", "High school graduate", "Some college, no degree",
+    "Vocational training/2-year college", "4-year college/bachelor's degree", "Some postgraduate work, no degree",
+    "2-3 years postgraduate work/master's degree", "Doctoral/law degree")
+levels(stack.dat$news) <- c("Hardly", "Now and then", "Some", "Most")
+
+
+stack.dat$cand_pid2 <- ifelse(stack.dat$cand_pid == "Democrat", 1, ifelse(stack.dat$cand_pid == "Republican", 2, 3))
+stack.dat$inparty_cand <- ifelse(stack.dat$cand_pid2 == stack.dat$party, 1, 0)
+
+
+# Recoding negative traits
+traits <- c("care","honest","egal","auth","loyal","pure1","pure2","comp","exp")
+neg.traits <- c("honest", "pure1", "pure2", "exp")
+
+for(i in 1:length(traits)){
+    setup <- paste("stack.dat$re_",traits[i]," <- as.numeric(stack.dat$",traits[i],")-1",sep = "")
+    eval(parse(text = setup))
+}
+for(i in 1:length(neg.traits)){
+    setup <- paste("stack.dat$re_",neg.traits[i]," <- (stack.dat$re_",neg.traits[i]," - 1)*-1",sep = "")
+    eval(parse(text = setup))
+}
+
+# Exporting data to a CSV file
+write.table(stack.dat, "conjoint_round_1.csv", sep=",", na = "", row.names = FALSE)
+
+# Dropping cases missing values
+stack.dat <- stack.dat[which(!is.na(stack.dat$selected)),]
+stack.dat <- stack.dat[which(!is.na(stack.dat$prob)),]
+stack.dat <- stack.dat[which(!is.na(stack.dat$moral)),]
+
+stack.dat$dem <- (stack.dat$party == 1)
+stack.dat$gop <- (stack.dat$party == 2)
+stack.dat$ind <- (stack.dat$party == 3)
+
+
+stack.dat$str_party <- 0
+stack.dat$str_party <- ifelse(stack.dat$pid == 3 | stack.dat$pid == 5, 1, stack.dat$str_party)
+stack.dat$str_party <- ifelse(stack.dat$pid == 2 | stack.dat$pid == 6, 2, stack.dat$str_party)
+stack.dat$str_party <- ifelse(stack.dat$pid == 1 | stack.dat$pid == 7, 3, stack.dat$str_party)
+
+stack.dat$str_party2 <- stack.dat$str_party / 3
+
+## Rescaling vote to match Hainmueller, et al
+stack.dat$prob_zero1 <- (stack.dat$prob - 1) / 6
+stack.dat$moral_zero1 <- (stack.dat$moral - 1) / 6
+
+stack.dat$news2 <- (stack.dat$news - 1) / 3
+
+stack.dat$church2 <- ifelse(stack.dat$church > 1, 1, 0)
+
+
+
+## Ideology
+stack.dat$lib <- (stack.dat$ideo1 == 3 | stack.dat$ideo1 == 5)
+stack.dat$con <- stack.dat$ideo1 == 1
+stack.dat$mod <- stack.dat$ideo1 == 2
+stack.dat$other_ideo <- stack.dat$ideo1 == 6 | stack.dat$ideo1 == 7 | stack.dat$ideo1 == 4
+
+stack.dat$ideology <- 0
+stack.dat$ideology <- ifelse(stack.dat$lib, 1, stack.dat$ideology)
+stack.dat$ideology <- ifelse(stack.dat$con, 2, stack.dat$ideology)
+
+stack.dat$libcon = (stack.dat$ideology > 0)
+
+stack.dat$candidate.party <- 0
+stack.dat$candidate.party <- ifelse(stack.dat$cand_pid == "Democrat", 1, stack.dat$candidate.party)
+stack.dat$candidate.party <- ifelse(stack.dat$cand_pid == "Republican", 2, stack.dat$candidate.party)
+
+
+stack.dat$round = ifelse(stack.dat$candidate == "A" | stack.dat$candidate == "B", 1, ifelse(stack.dat$candidate == "C" | stack.dat$candidate == "D", 2, ifelse(stack.dat$candidate == "E" | stack.dat$candidate == "F", 3, ifelse(stack.dat$candidate == "G" | stack.dat$candidate == "H", 4, 5))))
+
+
+## Merging indicator if candidates had different PIDs
+dat.diff <- read.table("cand_diff.csv", header=TRUE, sep = ",")
+
+stack.dat <- merge(stack.dat, dat.diff, by = c("id", "round", "candidate"))
+
+@
+
+%<<child-settings, child='master_settings.Rnw',>>=
+%@
+
+
+%\maketitle
+%
+%\begin{abstract}
+%\noindent Using a conjoint survey experiment, this paper examines the impact of partisanship and moral character on electoral preferences at the presidential level. Partisanship should have the strongest effect, especially for stronger partisans, because of its salience as a political heuristic. The second hypotheses tests the theory of trait ownership to determine whether individuals rely on different traits to judge Democrats and Republicans, especially empathy and sexual morality respectively. A third hypothesis tests whether respondents emphasize the traits that most closely align with their moral foundations. The first hypothesis finds no support; partisanship has an effect indistinguishable from some key character traits. The second hypothesis is supported to some extent. Democrats are rated significantly better when they are empathetic than Republicans, but Republicans gain no advantage for being sexually moral. There is some evidence that individuals rely on different traits based on their morals, but only one moral foundation interacts significantly with a moral foundation.
+%\end{abstract}
+%
+%\newpage
+
+\chapter{Unmasking the Effects of Moral Judgments}\label{ch:conjoint}
+At its most basic, casting a ballot for a presidential candidate means choosing the individual one believes is best suited to hold the office. Citizens must choose between candidates who are complex amalgamations of party affiliation \cite{Campbelletal1960}, issues and policy positions \cite{Petrocik1996,Rahn1993}, individual characteristics \cite{Milleretal1986,Kinder1986}, campaign communications and strategies \cite{IyengarKinder1987,Vavreck2009}, and social identities \cite{GreenPalmquistSchickler2002,Iyengaretal2012}. A key element of this decision process is judging the character of the candidates \cite{Clifford2014,Hayes2005,Kinder1986,Milleretal1986}. The impact these character judgments have on electoral preferences, however, is debated. In some instances they appear to have significant impact \citeaffixed{ButticeStone2012,FridkinKenney2011,Johnstonetal2004,McCurleyMondak1995}{e.g.}, while in others they account for very little beyond what other variables, especially partisanship, can explain \citeaffixed{Bartels2002,GelmanKing1993}{e.g.}.
+
+The experimental results in Chapter \ref{ch:vignettes} showed that individuals are more motivated to oppose --- at the ballot box and in general --- an immoral out-party president than an incompetent one. These results support my argument that morality matters more for motivating electoral behavior; however, the treatments in that chapter make in impossible to tell \emph{which} moral traits might be doing the work. Many different moral-related and competence-related traits were manipulated in each treatment. I designed the moral treatments to include each of the five central moral foundations that \citeasnoun{Haidt2012} and his colleagues have identified, but it is impossible to tell which traits (e.g. honesty, empathy, morality, etc.) actually impact behavior. This problem, called ``aliasing'' \cite{HainmuellerHopkinsYamamoto2014}, means that it is impossible to tell which traits truly matter. The effects of many traits are subsumed under each treatment.
+
+This chapter explores how each dimension of moral judgment compares to the others, and it provides additional analysis that compares the impacts of each trait to partisanship. The last chapter kept partisanship constant for partisans.\footnote{Partisanship was randomly assigned for pure independents.} They always read about and judged a president from the other side. This chapter will look at what happens as party is allowed to vary. The experiment will examine whether respondents always support candidates from their party, regardless of the moral traits they possess. \citeasnoun{Bartels2002} argues that partisanship will dominate moral character. He goes so far as to argue that judgments of character are ``epiphenomena'' with no independent causal impact on elections. Others have argued that these judgments do matter \citeaffixed{Wattenberg1991}{e.g.}. I argue that within partisan groups these traits will matter, but across partisan groups their impacts will be significantly mitigated.
+
+%One reason for this uncertainty about the role of character judgments has been methodological. Observational and experimental studies have suffered from what \citeasnoun{HainmuellerHopkinsYamamoto2014} label ``aliasing,'' meaning the ``unique effects [of individual items are] impossible to identify'' (2). This problem occurs when researchers are unable to manipulate just one element at a time. Observational studies cannot manipulate anything by their nature, and previous experimental work has often needed to vary a variety of elements to create the necessary treatments \citeaffixed{Funk1997}{e.g.}. Experimental studies tend to group multiple elements under a single category, which obscures that is truly causing the observed effects.
+
+\citename{HainmuellerHopkinsYamamoto2014} introduced conjoint analysis to political science to overcome the ``aliasing'' shortcoming in many experiments.\footnote{Market researchers have used conjoint analysis for decades. See \citeasnoun{Greenetal2001b} for an overview.} Conjoint designs randomly vary a set of variables within and across respondents in a manner that allows for the identification of each variable's effect individually. The design can reveal how individuals make trade-offs and prioritize their choices. Thus, experimenters can vary multiple elements concurrently without sacrificing the ability to study each independently.
+
+This chapter employs a conjoint experimental design to examine the impact of character traits---especially moral traits---on electoral behavior at the presidential level. The analysis focuses on determine how moral traits impact voting and candidate ratings compared to the traditional ``unmoved mover'' of partisanship. Partisanship is not manipulated in the previous experiment, which obscures \possessivecite{Bartels2002} argument that partisanship matters much more than judgments of traits. The chapter also tests whether individuals weight traits differently according to candidates' party affiliation \cite{Hayes2005}. Finally, it tests how these traits interact with moral values to test whether respondents rely on the moral traits that most closely align with their moral foundations \cite{Clifford2014}.
+
+%What role do perceptions of candidates play in presidential elections? In particular, what impact do moral traits have on electoral behavior?
+
+The primary objective is to determine what individuals do with character judgments once they are made. The analysis does not seek to explain the causes of these judgments. Instead, it randomly assigns character traits that exist independent of policy, partisanship, or other factors. This design allows for the identification of the impact of those trait directly on the dependent variables, without conflating traits' impacts with effects originating from the causes behind trait judgments.
+
+The next section summarizes three leading theories for the origins of judgments of political candidates and then derives hypotheses from each that can be tested with a conjoint experimental design. The third section describes the process of conducting a conjoint experiment as well as other details of the experimental design. The results of the experiment are reported, and then the conclusion discusses their implications and limitations.
+
+
+
+\section{Theory and Hypotheses}\label{sec:conjoint_theory}
+What considerations are individuals likely to rely upon when only given candidates' partisanship and character? Citizen's ratings of preferences for presidential candidates sit at the end of a long ``funnel of causality'' \cite{Campbelletal1960} that begins with socialization and flows through psychological attachment and then political attitudes.\footnote{Attitudes toward the major-party candidate were two of six key attitudes that \citename{Campbelletal1960} focus on in their funnel model (See Figure 19-2 on page 530).} This chapter looks at what happens at the end, once attitudes toward the candidates are formed. First, it asks what role partisanship plays. Second, it asks if the outputs of the funnel are different for judgments of Republicans and Democrats. Finally, it asks whether individual-level differences in moral values influence which traits citizens emphasize when choosing and rating candidates.
+
+Despite predictions of its demise \citeaffixed{Wattenberg1996}{see}, partisanship continues to play a central role in electoral politics \cite{Bartels2000}. Partisanship is a key heuristic that communicates a wealth of information about candidates \cite{Huckfeldtetal2005,LodgeHamill1986,Rahn1993}. It signals ideology, policy priorities, political allies, and more. Scholars have consistently found that party predicts vote extremely well \cite{Bartels2002,Campbelletal1960,GelmanKing1993}. Furthermore, it is an explicitly political consideration. Party membership will do more than any character trait to identify a candidate's political agenda.
+
+When respondents encounter a hypothetical candidate, as in this study, they will look for familiar and relevant cues to learn which candidate is better. As a result I hypothesize that the effect of partisanship will be the largest of all considerations. Individuals know what partisanship means and are conditioned to use it as heuristic for rating and choosing candidates. Therefore, its effect will dominate the less informative and more opaque character traits. Humans naturally, automatically and intuitively judge the character of others \cite{FiskeCuddyGlick2007,Wojciszkeetal1998a,Ybarraetal2001}, but it is not apparent what traits mean politically. Describing a candidate as caring could mean different things based on her party, ideology, family situation, or other factors. The moral character traits of the candidates will significantly impact support, but the impact of partisanship will be stronger. As Lynn Vavreck put it recently, ``the party is king in presidential voting, but a person can make the difference.''\footnote{Vavreck, Lynn. 2015. ``The Party Is King in Presidential Voting, but a Person Can Make the Difference.'' The Upshot on \emph{NYTimes.com}. New York: \emph{New York Times}, 6 April.}
+
+Furthermore, a stronger effect for partisanship will be particularly true for stronger partisans. Even weak partisans tend to vote for co-partisans \cite{Keithetal1992}, and this is particularly true for the stronger identifiers. In-party candidates will be most preferred by strong partisans, then a bit less by moderate partisans, and so on. The stronger one identifies with the parties, the more likely to seek out those candidates, regardless of the moral character of the candidates.
+
+After partisanship, it is likely that respondents will focus on traits that reinforce partisanship. \possessivecite{Hayes2005} theory of trait ownership argues that trait inferences are based on parties' reputations for handling certain issues. Presidential campaigns emphasize issues and policies favorable to the reputation of their party \cite{Petrocik1996}, and certain traits tend to correlate with those issues. Democratic candidates will emphasize anti-poverty policies, which will prime voters to perceive them as more caring and empathetic. Similarly, Republicans tend to play up social issues that contribute to their reputation for morality. Observational studies have found that the public associates traits differently according to the party candidates belong to \cite{Hayes2005,Goren2007}.
+
+Trait ownership theory means that respondents will associate some traits more strongly with one party than the other. The close connection between the traits and issues that the parties own will make those traits more meaningful for one party compared to the other. I hypothesize partisans who exhibit traits their parties own will garner greater support compared to members of the other party with the same trait. Among the traits included in the study (more details on the complete set below), the effect for empathy will be larger for Democrats than Republicans. The effect for sexual morality (the stereotypical notion of morality) will favor Republican candidates over Democrats.
+
+The third hypothesis argues that the impact of character traits are moderated by the moral foundations individuals hold \cite{Clifford2014}. Jonathan Haidt and his collaborators \cite{Grahametal2009,Haidt2012,Kolevaetal2012} have found that there are significant difference between the morals Democrats (liberals) and Republicans (conservatives) use to evaluate politics. Liberals draw on a more narrow pallet of moral intuitions that emphasizes caring for others and treating all fairly. Conservatives, on the other hand, emphasize a wider range of values that encompasses loyalty, respect for authority, and sexual purity. \citeasnoun{Clifford2014} extends these findings and found that morals profoundly impact how citizens judge political leaders. Individuals respond differently to leaders' traits based on their moral foundations. For example, Democrats who emphasize the caring foundation are more likely to revise their judgments of Republicans' empathy when they learn those Republicans oppose the death penalty.
+
+Given these differences in moral foundations, it follows that individuals' different preferences for moral traits will impact their electoral behavior. If people respond more strongly to morally relevant information while forming trait judgments, then they should also rely more strongly on those traits when considering candidates to support. Individuals will want to support candidates who exhibit the moral traits that pertain to the moral foundations they emphasize. These traits could serve as heuristics for electing candidates who have values congruent with their own. Therefore, I hypothesize that the effect sizes of the moral traits will significantly interact with their associated moral foundations. Respondents who emphasize the foundation will be those who will most reward or punish a candidate for holding or lacking the relevant trait. For example, those who emphasize fairness will respond more strongly to treating everyone equally than others who do not. These interactions between traits and moral foundations will reveal differences in how liberals and conservatives judge potential presidents.
+
+
+
+
+\section{Experimental Design}\label{sec:conjoint_data}
+The data come from a conjoint survey design \citeaffixed[for in-depth details of the method]{HainmuellerHopkinsYamamoto2014}{See} conducted online. The primary advantage of a conjoint design is that it allows the identification of effects when many factors are manipulated simultaneously. Traditional experiments often suffer from ``aliasing,'' meaning it is impossible to determine true effects because many factors are manipulated together to create desired treatments. This ability is particularly important for the current analysis because character judgments are composed of many different traits that are all judged together bundled together as an overall judgment of a candidate.
+
+In a conjoint survey, respondents are presented with tables showing different combinations of traits or features. Respondents typically select which combination they prefer, In this survey, after a short introduction asking respondents to indicate which candidate they would be most likely to support in real life, each participant sees five pairs of candidates with randomized character traits (for a total of ten candidates rated per respondent).\footnote{During pre-testing, I experimented with asking respondents to rate the candidates by which they would be most likely to oppose to test the impact of negative moral traits. However, respondents indicated they found this approach counter-intuitive and confusing. The data indicated that many respondents got confused and rated which would be most likely to support.} The order of the traits is randomized. See Section \vref{sec:conjoint_wordings} in the appendix for detailed question wording and a sample conjoint table. Immediately after the table of characteristics respondents indicate which candidate they would be most likely to support (preference) and how likely they would be to support each candidate (candidate rating).\footnote{Respondents also indicated how moral or unmoral they would rate each candidate. These results are not discussed here because they are substantively identical to the candidate rating results. Ratings and moral judgments were highly correlated.} Respondents have as much time as they need to read about the candidates and make a choice, but once they advanced to the next round they were unable to return.
+
+Each respondent received ten traits for each candidate. One trait assigned a party to the candidates (Democrat, Republican, or Independent). The two candidates within a round are allowed to have the same partisanship (e.g. two Democrats). Seven traits offered information about moral character. Each of the five primary moral foundations \cite{Haidt2012} had at least one trait; two foundations had two traits.\footnote{The liberty/oppression foundation is omitted because it is hard to reduce to a dimension that high-profile presidential candidates might differ over. Everyone who runs for president is at least nominally for freedom and liberty.} Two dimensions had two traits because there were aspects of each that were not fully captured with a single trait. For the care/harm dimension the trait is ``really cares about other people.'' For fairness/cheating there are two traits: ``dishonest'' and ``treats people equally.'' The trait for the loyalty/betrayal foundation is ``loyal,'' while ``respectful'' primed authority/subversion. The sanctity/degradation foundation had two traits: ``sexually immoral'' and ``disgusted by homosexuality.''\footnote{I include the second trait, ``disgusted by homosexuality,'' in order to offer a sanctity-relevant trait that might appeal to liberals. The trait emphasizes emotional reactions to homosexuality. It says nothing about how the candidate treats gays and lesbians or anything regarding specific policy positions. However, it is possible that respondents interpreted this trait in terms of policy, e.g. support for same-sex marriage.} The final two traits focus on the competence dimension of social perception \cite{CuddyFiskeGlick2007}. These traits were ``competent'' and ``inexperienced.'' I used the Moral Foundations Dictionary \cite{HaidtGraham2007} to choose and develop the traits in consultation with traits that have been used over the years on the American National Election Studies \citeaffixed[for an overview]{Funk1996b}{See}.\footnote{The Moral Foundations Dictionary is available at \url{http://moralfoundations.org/othermaterials}.}
+
+Each trait, except partisanship, was indicated with ``Yes'' or ``No.'' The information for the pairs of candidates was presented side-by-side for easier comparison. However, the valence of some traits was varied to prevent respondents from simply counting ``yeses'' to determine which candidate was best. In some instances ``yes'' meant the presence of a good trait; in others it meant the presence of a bad one. All of the analysis below recodes the negative traits to be positive to make comparing effect sizes easier and more direct.
+
+Participants were recruited through Amazon Mechanical Turk; therefore, the sample is a non-representative volunteer sample. Respondents self-selected to participate in a ``social science survey.''\footnote{Section \vref{sec:conjoint_HIT} in the appendix reports all of the key language that appeared in the post on MTurk.} I screened respondents to ensure they were over 18 years of age, eligible to vote in the United States, and living in the U.S. The sample has the usual shortcomings of an MTurk sample \cite{BerinskyHuberLenz2012}.\footnote{The sample has a high number of liberals, Democrats, young people (average age: 33.8 years), and men (57\%).} There were a total of 299 completed surveys with a total of 2,989 ratings.\footnote{One respondent had missing data for one candidate, which had to be dropped.} Respondents received \$1.00 for participating. The average respondent completed the survey in 11-12 minutes. Participants in the pre-test were excluded from participating again.
+
+
+\section{Results}\label{sec:conjoint_results}
+The analysis will estimate the average marginal component effect (AMCE) for each of the ten traits \citeaffixed[for formal definitions and proofs]{HainmuellerHopkinsYamamoto2014}{See}. The AMCEs can be estimated using ordinary least squares regression models. The standard errors are clustered by respondent to correct for within-respondent bias. The data analyzed included a separate entry for each candidate rated (ten entries per respondent).
+
+Conjoint analysis requires that certain assumptions hold. \citename{HainmuellerHopkinsYamamoto2014} suggest diagnostics to ensure that effects from one round do not carry over to the next, that profile orders do not impact selections, that trait orders do not impact choices, among others. Section \vref{sec:conjoint_diagnostics} in the Appendix reports the results of these diagnostic checks. There are a few instances of concern, but overall each assumption holds. There are not any systematic violations of the assumptions.
+
+As mentioned above, the analysis focuses on two dependent variables. The first, candidate preference, is respondents' choice regarding which candidate in each pair they would be most likely to support.\footnote{See Section \vref{sec:conjoint_wordings} in the appendix for question wordings and response options.} This variable can only take the values of zero or one. It gives a sense of which candidate would receive a vote in each hypothetical match up. The second dependent variable, candidate ratings, explores the effect each trait may have more broadly on the probability of supporting a candidate. This variable ranged from zero to seven but was re-scaled between zero and one. Using dependent variables that range from zero to one with OLS models emulates the approach that \citename{HainmuellerHopkinsYamamoto2014} use.
+
+
+\subsection{Partisanship vs. Moral Character}\label{subsec:conjoint_H1results}
+
+<<ols.regs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("In-party Candidate", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+
+for (i in 1:length(dvs)) {
+
+    setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand+re_care+re_honest+re_egal+re_auth+re_loyal+re_pure1+re_pure2+re_comp+re_exp, dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+
+    clustered <- clx(ols, 1, stack.dat$id)
+
+    betas <- clustered[,1]
+    se <- clustered[,2]
+    p.vals <- clustered[,4]
+
+    upper <- betas + (qnorm(.975) * se)
+    lower <- betas - (qnorm(.975) * se)
+    # 84% confidence intervals
+    upper.84 <- betas + (qnorm(.92) * se)
+    lower.84 <- betas - (qnorm(.92) * se)
+
+    betas2 <- betas[2:length(betas)]
+    upper2 <- upper[2:length(upper)]
+    lower2 <- lower[2:length(lower)]
+    upper.84 <- upper.84[2:length(upper.84)]
+    lower.84 <- lower.84[2:length(lower.84)]
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2))
+    x.step <- .05
+    x.lim <- c()
+    #x.lim[1] <- floor(min(lower2)*10)*.1
+    #x.lim[2] <- ceiling(max(upper2)*10)*.1
+    x.lim[1] <- round_any(min(lower2), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,15,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2, c(y.lim[2]:y.lim[1]), type = "p", pch = 21, col = "black", bg = "black", cex = cex.val)
+
+    segments(upper2, c(y.lim[2]:y.lim[1]), lower2, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+    segments(upper.84, c(y.lim[2]:y.lim[1])+.1, upper.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+    segments(lower.84, c(y.lim[2]:y.lim[1])+.1, lower.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+}
+@
+
+The first test is to examine the direct effect of each trait. This model tests the effect size of each trait without any interactions. I hypothesize that candidates' party identification (i.e. being an in-partisan) will have the strongest effect because it signals social affiliation, ideology, and policy preferences. It is the most concretely political trait included in the battery. Previous research has shown that party identification is the strongest predictor of presidential vote \cite{Bartels2002}, so it should have the same effect here.
+
+I regress each dependent variable on dummy variables indicating whether a trait was present or not. The party identification variable is coded to equal one if the candidate shared the respondents' party, and zero otherwise.\footnote{This variable included pure independents. The results are substantively similar if pure independents are not including, meaning the variable indicates only when partisans had an option to select an in-partisan.} Figure \ref{fig:h1_all} reports the average effect of each trait on overall preference (prefer candidate for president) and on likelihood to support a candidate (candidate rating). The effect size of political party is statistically indistinguishable from every other coefficient except experienced and loyal in both panels. Furthermore, the effect for party is not the largest effect anyways. That title belongs to honest in Figure \ref{fig:h1_selected} and to not disgusted by homosexuality in Figure \ref{fig:h1_prob}.
+
+\begin{figure}[h]
+  \caption[Effect of Candidate Partisanship and Character Traits]{\textbf{Effect of Candidate Partisanship and Character Traits}\\ {\footnotesize \textit{Note}: The figures report the coefficients with 95\% confidence intervals for OLS regressions on candidate preference and candidate ratings. Vertical hash marks indicate 84\% confidence intervals, which can be used to gauge statistical difference. If the 84\% intervals overlap, the two effects are statistically indistinguishable. All variables (independent and dependent) are scaled between zero and one.}}\label{fig:h1_all}
+  \centering
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{ols_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:h1_selected}
+  \end{subfigure}
+  \\
+  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{ols_prob_zero1}
+      \caption{Candidate Rating}
+      \label{fig:h1_prob}
+  \end{subfigure}
+\end{figure}
+
+The results in Figure \ref{fig:h1_all} point to party identification serving as just one trait among many that respondents use to make a decision about who to support. Partisanship is important, but it is not determinative compared to the other traits. These results fail to support the first hypothesis. Moral character traits and competence held their own against partisanship.
+
+Some moral traits have a significantly stronger impact than others. Empathy (``really cares about other people''), honesty, egalitarianism, and not being homophobic each emerge as particularly relevant in Figure \ref{fig:h1_all}
+
+<<ols.regs.canddiff,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("In-party Candidate", "Out-party Opponent", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced", "In-party x Out-party")
+
+for (i in 1:length(dvs)) {
+
+    setup <- paste("ols <- lm(", dvs[i], " ~ (inparty_cand*cand_diff) + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp, dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+
+    clustered <- clx(ols, 1, stack.dat$id)
+
+    betas <- clustered[,1]
+    se <- clustered[,2]
+    p.vals <- clustered[,4]
+
+    upper <- betas + (qnorm(.975) * se)
+    lower <- betas - (qnorm(.975) * se)
+    # 84% CIs
+    upper.84 <- betas + (qnorm(.92) * se)
+    lower.84 <- betas - (qnorm(.92) * se)
+
+    betas2 <- betas[2:length(betas)]
+    upper2 <- upper[2:length(upper)]
+    lower2 <- lower[2:length(lower)]
+    
+    upper.84 <- upper.84[2:length(upper.84)]
+    lower.84 <- lower.84[2:length(lower.84)]
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"canddiff_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2))
+    x.step <- .05
+    x.lim <- c()
+    #x.lim[1] <- floor(min(lower2)*10)*.1
+    #x.lim[2] <- ceiling(max(upper2)*10)*.1
+    x.lim[1] <- round_any(min(lower2), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,16,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2, c(y.lim[2]:y.lim[1]), type = "p", pch = 21, col = "black", bg = "black", cex = cex.val)
+
+    segments(upper2, c(y.lim[2]:y.lim[1]), lower2, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+    segments(upper.84, c(y.lim[2]:y.lim[1])+.1, upper.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+    segments(lower.84, c(y.lim[2]:y.lim[1])+.1, lower.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()
+}
+@
+
+The results in Figure \ref{fig:h1_all}, however, include instances when both candidates are from the same party. Figure \ref{fig:conjoint_cand_diff} reports models for both preference and ratings that include a variable indicating whether each candidate was paired with an out-partisan or not.\footnote{The variable is coded zero if the pairing is within a party and one if the candidates' partisanship differed.} This new variable is interacted with whether the candidate is an in-partisan. The last row of the figure reports the results of the interaction. The interaction shows the increase in support when a candidate is both an in-partisan and paired with an out-partisan.\footnote{Out-partisans could be either from the other major party (e.g. Republican for a Democratic respondent) or Independents.} The results show that respondents prefer in-party candidates compared to out-partisans when they had a choice. An out-partisan facing an in-partisan had about a 44 percent chance of being selected; an in-partisan facing an out-partisan increases to a 61 percent chance of selection.
+
+
+\begin{figure}[h]
+  \caption[Effect of Cross-Party Partisanship and Character Traits]{\textbf{Effect of Cross-Party Choices and Character Traits on Candidate Preference}\\ {\footnotesize \textit{Note}: The figures report the coefficients with 95\% confidence intervals for OLS regressions on candidate preference. The last row reports the interaction between an in-party candidate paired with an out-party candidate. For example, a Democrat who has one candidate who is a Democrat and the other is either a Republican or an Independent. }}\label{fig:conjoint_cand_diff}
+  \centering
+%  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=.65\textwidth]{canddiff_ols_selected}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:conjoint_cand_diff_selected}
+%  \end{subfigure}
+%  \\
+%  \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{canddiff_ols_prob_zero1}
+%      \caption{Candidate Rating}
+%      \label{fig:conjoint_cand_diff_prob}
+%  \end{subfigure}
+\end{figure}
+
+There is a significant effect for the interaction in Figure \ref{fig:conjoint_cand_diff}, but it is not statistically larger than the effects of empathy, honesty, egalitarianism, or homophobia. It is marginally larger than the effect of competence (p $=$ 0.095). Partisanship is only significantly larger than authority, loyalty, sexual morality, and experience. Yet again, the analysis fails to find evidence that partisanship is overwhelming.\footnote{The interaction of pairing an in-partisan with an out-partisan did not have a significant effect on candidate ratings, so those results are omitted.} A choice between an in-partisan and an out-partisan increases the effect of partisanship on preference compared to the effect in Figure \ref{fig:h1_selected}, but the impact is still statistically indistinguishable from four moral traits.
+
+<<pp.strpartisan,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+#####################################################################################################################
+## Predicted Probabilities for selected
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+strparty.pp <- read.table("str_party.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+point.est <- strparty.pp$strparty1
+lower <- strparty.pp$strparty2
+upper <- strparty.pp$strparty3
+
+
+diff.point <- c(point.est[seq((length(point.est)/2)+1,length(point.est), by = 1)] - point.est[seq(1,length(point.est)/2, by = 1)])
+diff.point2 <- c()
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- diff.point
+diff.point2[seq(2, length(diff.point)*2-1, by = 2)] <- 0
+
+diff.points.select <- diff.point
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strparty_selected.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+x.lim <- c(1, length(diff.point)+3)
+
+y.lim <- c()
+y.step <- .05
+y.lim[1] <- 0
+y.lim[2] <- round_any(max(diff.point), accuracy = y.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(10,9,1,2))
+barplot(diff.point2,
+  axes = FALSE,
+  #xlim = x.lim,
+  ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0
+  #col = c(ind.color, "black", dem.color, "black", gop.color),
+  #density = c(50, 500, dem.density, 500, gop.density)
+)
+
+text(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.point, labels = round(diff.point, 2), cex = cex.val, pos = 3)
+
+#segments(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.upper, seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.lower, lwd = 2, col = c(ind.color,dem.color,gop.color))
+
+# x-axis
+axis(1, at = seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), lab = c("Pure Ind.", "Lean", "Weak", "Strong"), cex.axis = cex.val)
+mtext("Trait", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# y-axis
+axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from Out-party\nto In-party", side = 2, line = 5, at = y.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+
+
+#######################################################################
+#### Candidate Rating
+point.est <- strparty.pp$strparty_prob1
+lower <- strparty.pp$strparty_prob2
+upper <- strparty.pp$strparty_prob3
+
+
+diff.point <- c(point.est[seq((length(point.est)/2)+1,length(point.est), by = 1)] - point.est[seq(1,length(point.est)/2, by = 1)])
+diff.point2 <- c()
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- diff.point
+diff.point2[seq(2, length(diff.point)*2-1, by = 2)] <- 0
+
+
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strparty_prob_zero1.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+x.lim <- c(1, length(diff.point)+3)
+
+y.lim <- c()
+y.step <- .05
+y.lim[1] <- 0
+y.lim[2] <- round_any(max(diff.point), accuracy = y.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,9,1,2))
+barplot(diff.point2,
+  axes = FALSE,
+  #xlim = x.lim,
+  ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0
+  #col = c(ind.color, "black", dem.color, "black", gop.color),
+  #density = c(50, 500, dem.density, 500, gop.density)
+)
+
+text(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.point, labels = round(diff.point, 2), cex = cex.val, pos = 3)
+
+#segments(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.upper, seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.lower, lwd = 2, col = c(ind.color,dem.color,gop.color))
+
+# x-axis
+axis(1, at = seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), lab = c("Pure Ind.", "Lean", "Weak", "Strong"), cex.axis = cex.val)
+mtext("Strength of Partisanship", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# y-axis
+axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from Out-party\nto In-party", side = 2, line = 5, at = y.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+@
+
+The next hypothesis for partisanship is that it will matter significantly more to stronger partisans than respondents who do not identify with a party. The previous tests failed to find an overwhelming effect for partisanship, but perhaps that is a result of including pure independents and partisan leaners in the analysis. To test this hypothesis, I ran a model interacting strength of partisanship with candidate party along with variables for the other traits. The coefficients for the models are in Figure \vref{fig:str_partisan} in the appendix.\footnote{These models do not account for the partisanship of the other candidates. I ran additional analysis (see Figure \vref{fig:strpartisan_pp_diff} in the appendix) that controlled for opponent partisanship --- because it was possible in the research design that the two candidates shared a partisanship. The effects in these cases were not significantly different than what is discussed here for candidate preference. When candidate party did not have a significant difference depending on whether the candidates had different PIDs on ratings.} The key coefficients are the bottom three rows. The results show that strong partisans clearly have a stronger preference for in-partisan candidates. The top panel of Appendix Figure \ref{fig:strparty_pp} shows that for candidate preference only the strongest partisans had a significantly larger shift in probability of selecting an in-partisan compared to pure independents. Leaners and weak partisans showed statistically indistinguishable shifts as independents. Weak partisans and strong partisans both had significantly larger effects for candidate ratings.
+
+%The impact of sharing partisanship with a candidate varies significantly across levels of partisan identification, and the patterns in these differences vary between candidate preference and candidate ratings. Figure \ref{fig:strparty_pp} shows the predicted change in preference and ratings when candidates' partisanship changes to the in-party from the out-party.\footnote{There is only one category that is in-party, but two that are out-party. E.g. the in-party is Republican and the out-party are Democrat and Independent.} Only strong partisans show a significantly stronger preference for in-partisans than pure independents. The other groups show modest increases in preference when it is an in-partisan, but among strong partisans it increases about \Sexpr{round(diff.points.select[4], 2)} percent (Figure \ref{fig:strparty_selected}).
+
+%\begin{figure}[h]
+%  \caption{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:strparty_pp}
+%  \centering
+%    \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{strparty_selected}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:strparty_selected}
+%    \end{subfigure}
+%    \\
+%    \begin{subfigure}[b]{.65\textwidth}
+%      \includegraphics[width=\textwidth]{strparty_prob_zero1}
+%      \caption{Candidate Rating}
+%      \label{fig:strparty_prob}
+%    \end{subfigure}
+%\end{figure}
+
+%The pattern across partisanship is different for candidate ratings (Figure \ref{fig:strparty_prob}). Preference for an in-partisan was not significantly strong among weak partisans compared to independents, but when it comes to rating how likely one would be to support a candidate there is a significant difference. Independents do not exhibit an increase in ratings between the in-party and out-party, but weak partisans increase support by \Sexpr{round(diff.point[3], 2)}. Strong partisans also increase their rating of in-partisans significantly. Partisan leaners do not significantly increase their ratings compared to independents.
+
+
+<<pp.strpartisan.shifts,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+ivs <- c("In-party Cand.", "Really cares", "Honest", "Treats equally", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
+
+
+#####################################################################################################################
+## Predicted Probabilities for selected -- shift for strong partisans only
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+strparty.pp <- read.table("str_partisan_pp2.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+point.est <- strparty.pp[,seq(1, 30, by=3)]
+lower <- strparty.pp[,seq(2, 30, by=3)]
+upper <- strparty.pp[,seq(3, 30, by=3)]
+
+
+diff.point <- point.est[2,] - point.est[1,]
+diff.point2 <- c(rep(0, times = length(diff.point)*2-1))
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- as.numeric(diff.point[1,seq(1, length(diff.point), by = 1)])
+
+
+
+diff.points.select <- diff.point
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strpartisan_pp_selected.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+y.lim <- c(1, length(diff.point2))
+
+x.lim <- c()
+x.step <- .05
+x.lim[1] <- 0
+x.lim[2] <- round_any(max(diff.point), accuracy = x.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,13,1,2))
+barplot(rev(diff.point2),
+  axes = FALSE,
+  xlim = x.lim,
+  #ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  horiz = TRUE
+)
+
+text(rev(diff.point), seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), labels = round(rev(diff.point), 2), cex = cex.val, pos = 4)
+
+
+# y-axis
+axis(2, at = seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), lab = rev(ivs), cex.axis = cex.val, las = 1)
+#mtext("Strength of Partisanship", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# x-axis
+axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 1, line = 3, at = x.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+
+
+#######################################################################
+#### Candidate Rating
+point.est <- strparty.pp[,seq(31, 60, by=3)]
+lower <- strparty.pp[,seq(32, 60, by=3)]
+upper <- strparty.pp[,seq(33, 60, by=3)]
+
+
+diff.point <- point.est[2,] - point.est[1,]
+diff.point2 <- c(rep(0, times = length(diff.point)*2-1))
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- as.numeric(diff.point[1,seq(1, length(diff.point), by = 1)])
+
+
+
+#diff.point2 <- diff.point2 * 6
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"strpartisan_pp_prob.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+y.lim <- c(1, length(diff.point2))
+
+x.lim <- c()
+x.step <- .05
+x.lim[1] <- 0
+x.lim[2] <- round_any(max(diff.point), accuracy = x.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,13,1,2))
+barplot(rev(diff.point2),
+  axes = FALSE,
+  xlim = x.lim,
+  #ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  horiz = TRUE
+)
+
+text(rev(diff.point), seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), labels = round(rev(diff.point), 2), cex = cex.val, pos = 4)
+
+# y-axis
+axis(2, at = seq(y.lim[1]-.5, y.lim[2]-.5, by = 2), lab = rev(ivs), cex.axis = cex.val, las = 1)
+#mtext("Strength of Partisanship", side = 1, line = 3.5, at = x.lim[2]/2, cex = cex.val)
+
+# x-axis
+axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 1, line = 3, at = x.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+@
+
+Strong partisans clearly care more about supporting a co-partisan than weaker identifiers, but the evidence in the previous paragraph does not show whether the impact of partisanship is greater than the effects of the other traits for these respondents. Figure \ref{fig:strpartisan_pp} shows the predicted change in the dependent variables that results from a shift from no to yes for each trait among only strong partisans. Even among strong identifiers, partisanship's effect compared to some of the more important moral traits or competence. For choosing a candidate to support, partisanship has a greater impact than five of the other nine traits (respectful, loyal, sexually moral, not being disgusted, and experience); however, the change is statistically indistinguishable from the rest of the traits (cares, honest, treats equally, and competence).
+
+\begin{figure}[h]
+  \caption{\textbf{Predicted Effect of Each Trait among Strong Partisans Only}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from no to yes for each trait among strong partisans. In the top panel, the effect of candidate partisanship is significantly larger than respectful, loyal, sexually moral, homophobia, and experience; in the second panel, it is greater than treat equally, respectful, loyal, sexually moral, and experience, but it is only marginally not significantly greater than honesty and competence.}}\label{fig:strpartisan_pp}
+  \centering
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_pp_selected}
+      \caption{Prefer Candidate for President}
+      \label{fig:strpartisan_selected}
+    \end{subfigure}
+    \\
+    \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=\textwidth]{strpartisan_pp_prob}
+      \caption{Candidate Rating}
+      \label{fig:strpartisan_prob}
+    \end{subfigure}
+\end{figure}
+
+The bottom panel (Figure \ref{fig:strpartisan_prob}) shows that when it comes to rating candidates partisanship has a greater impact than seven of the nine other traits, which is an improvement over the top panel. It still does not have a greater impact than caring about other people and not being disgusted by homosexuality. Even the strongest partisans are drawn to candidates who reflect these key character traits, regardless of partisanship.
+
+All together, there is little evidence to suggest that respondents relied on the partisan heuristic significantly more than they did other traits, especially caring and not being disgusted by homosexuality. They still took note of other qualities before making their decisions. These results suggest that more than party matters. Respondents, especially strong partisans, showed a clear desire to support an in-partisan, but there were other traits they considered equally important. Perhaps they were drawn to the traits that their party owns, meaning they are using these key traits as additional cues regarding candidates' partisanship and ideology. The next section addresses this question.
+
+
+\FloatBarrier
+\subsection{Trait Ownership}\label{subsec:conjoint_traitownership}
+
+<<trait.ownership,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+#####################################################################################################################
+## Predicted Probabilities for empathy
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+ownership.pp <- read.table("ownership.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+point.est <- ownership.pp$ownership1
+lower <- ownership.pp$ownership2
+upper <- ownership.pp$ownership3
+
+
+diff.point <- c(point.est[seq(2,length(point.est), by = 2)] - point.est[seq(1,length(point.est), by = 2)])
+diff.point2 <- c()
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- diff.point
+diff.point2[seq(2, length(diff.point)*2-1, by = 2)] <- 0
+
+
+
+diff.lower <- c(lower[seq(2,length(lower), by = 2)] - lower[seq(1,length(lower), by = 2)])
+diff.lower2 <- diff.point - diff.lower
+
+diff.upper <- c(upper[seq(2,length(upper), by = 2)] - upper[seq(1,length(upper), by = 2)])
+diff.upper2 <- diff.point + diff.upper
+
+
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"ownership_prob_zero1.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+x.lim <- c(1, length(diff.point)+2)
+
+y.lim <- c()
+y.step <- .05
+y.lim[1] <- 0
+y.lim[2] <- round_any(max(diff.point), accuracy = y.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,7,1,2))
+barplot(diff.point2,
+  axes = FALSE,
+  #xlim = x.lim,
+  ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  col = c(ind.color, "black", dem.color, "black", gop.color),
+  density = c(50, 500, dem.density, 500, gop.density)
+)
+
+text(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.point, labels = round(diff.point, 2), cex = cex.val, pos = 3)
+
+#segments(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.upper, seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.lower, lwd = 2, col = c(ind.color,dem.color,gop.color))
+
+# x-axis
+axis(1, at = seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), lab = c("Independent", "Democrat", "Republican"), cex.axis = cex.val)
+mtext("Party of Candidate", side = 1, line = 3, at = 2.5, cex = cex.val)
+
+# y-axis
+axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 2, line = 5, at = y.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+
+
+
+
+############################################################################################
+#### Sexually moral
+
+point.est <- ownership.pp$ownership_moral1
+lower <- ownership.pp$ownership_moral2
+upper <- ownership.pp$ownership_moral3
+
+
+diff.point <- c(point.est[seq(2,length(point.est), by = 2)] - point.est[seq(1,length(point.est), by = 2)])
+diff.point2 <- c()
+diff.point2[seq(1, length(diff.point)*2-1, by = 2)] <- diff.point
+diff.point2[seq(2, length(diff.point)*2-1, by = 2)] <- 0
+
+
+
+diff.lower <- c(lower[seq(2,length(lower), by = 2)] - lower[seq(1,length(lower), by = 2)])
+diff.lower2 <- diff.point - diff.lower
+
+diff.upper <- c(upper[seq(2,length(upper), by = 2)] - upper[seq(1,length(upper), by = 2)])
+diff.upper2 <- diff.point + diff.upper
+
+
+
+# Creating bar chart of predicted shift for caring
+setup <- paste("pdf(",'"',"ownership_prob_zero1_moral.pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+x.lim <- c(1, length(diff.point)+2)
+
+y.lim <- c()
+y.step <- .05
+y.lim[1] <- 0
+y.lim[2] <- round_any(max(diff.point), accuracy = y.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,7,1,2))
+barplot(diff.point2,
+  axes = FALSE,
+  #xlim = x.lim,
+  ylim = y.lim,
+  ylab = "",
+  xlab = "",
+  space = 0,
+  col = c(ind.color, "black", dem.color, "black", gop.color),
+  density = c(50, 500, dem.density, 500, gop.density)
+)
+
+text(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.point, labels = round(diff.point, 2), cex = cex.val, pos = 3)
+#segments(seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.upper, seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), diff.lower, lwd = 2, col = c(ind.color,dem.color,gop.color))
+
+# x-axis
+axis(1, at = seq(x.lim[1]-.5, x.lim[2]-.5, by = 2), lab = c("Independent", "Democrat", "Republican"), cex.axis = cex.val)
+mtext("Candidate Party Membership", side = 1, line = 3, at = 2.5, cex = cex.val)
+
+# y-axis
+axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Shift from No to Yes", side = 2, line = 5, at = y.lim[2]/2, cex = cex.val)
+
+dev.off()
+
+@
+
+To assess whether the traits parties ``own'' have a different impact, I ran regressions that look at the impact of each trait for each party.\footnote{The regression coefficients for these models are reported in Figure \vref{fig:cand_partisan} in the appendix.} The models look at the effect of the traits among Independent, Democratic, and Republican candidates separately. The sizes of these effects were then compared to see if owned traits have stronger effects on support and candidate ratings that others. I expected Democrats to do better when they ``really cared about other people'' and Republicans to benefit from ``sexually moral,'' which \citeasnoun{Hayes2005} and \citeasnoun{Goren2007} found the parties own respectively.
+
+The results show that these owned traits did not have a significantly different impact when it comes to vote choice; however, significant differences do emerge when looking at candidate ratings, but only between the two parties --- not compared to Independents. The impact of traits is not statistically significant when using Independents as the baseline. There are significant differences on two traits between Democrats and Republicans, but not all of the results conform to the patterns that Hayes predicts.
+
+\begin{figure}[h]
+  \caption{\textbf{Predicted Effect of Shifts in Traits on Candidate Rating by Candidate Party}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted candidate rating for a switch from no to yes on ``really cares about other people'' and ``sexually moral'' for each party. The difference between Independent and the other parties is not significant, but the shift for a Democratic candidates is significantly larger than it is for a Republican candidate for empathy. The gap between Republicans and Democrats is marginally insignificant for sexual morality.}}\label{fig:ownership_pp}
+  \centering
+    \begin{subfigure}[b]{.49\textwidth}
+      \includegraphics[width=\textwidth]{ownership_prob_zero1}
+      \caption{Really Cares about Other People}
+      \label{fig:ownership_care}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{.49\textwidth}
+      \includegraphics[width=\textwidth]{ownership_prob_zero1_moral}
+      \caption{Sexually moral}
+      \label{fig:ownership_moral}
+    \end{subfigure}
+\end{figure}
+
+Figure \ref{fig:ownership_care} reports the estimated change in candidate rating for a shift from no to yes on the trait of ``really cares about other people'' for each party. The difference between the shift for Independent candidates and the two parties are not significant; however, the size of the shift is significantly different between Republican and Democratic candidates. Candidate ratings go up for each party when a candidate is empathetic, but it goes up significantly more when the candidate is Democrat. Democrats received a premium for exhibiting this moral trait, which supports the prediction derived from \possessivecite{Hayes2005} theory of trait ownership.
+
+On the other hand, Figure \ref{fig:ownership_moral} shows that there was a marginally insignificant difference between Republican candidates and Democratic candidates regarding judgments of sexual morality, as predicted by \citeasnoun{Hayes2005}; however, the effect goes in the wrong direction. \citeasnoun{Hayes2005} and \citeasnoun{Goren2007} found that Republicans did better when it came to judgments of being ``moral'' using data from the American National Election Studies. Here it is Democrats who receive more support for being sexually moral. This result may be a product of the large number of Democrats in the sample. The effect is marginally insignificant, but it is telling that participants did not reward Republicans for being sexually moral. It is also a possibility that the effect does support predictions because the ANES and my experiment use different wordings for the trait.
+
+
+
+\FloatBarrier
+\subsection{Moral Foundations and the Impact of Moral Character Traits}\label{subsec:conjoint_H2results}
+
+<<interaction.regs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+setwd("C:/Users/Public/Figures")
+
+dvs <- c("selected", "prob_zero1", "moral_zero1")
+ivs <- c("In-party Candidate", "Really cares", "Honest", "Treats equally", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced", "Strength of PID", "Care", "Fairness", "Authority", "Loyalty", "Sanctity", "In-party x Strength of PID", "Cares x Care", "Honest x Fairness", "Treat Equal x Fairness", "Respectful x Authority", "Loyal x Loyalty", "Sexually moral x Sanctity", "Not Homophobic x Sanctity")
+
+
+interaction.pairs <- list(
+    c("inparty_cand", "str_party2"),
+    #c("re_care", "f.care"),
+    #c("re_honest", "f.care"),
+    #c("re_egal", "f.fair"),
+    #c("re_auth", "f.auth"),
+    #c("re_loyal", "f.loyal"),
+    c("re_pure1", "f.pure"),
+    c("re_pure2", "f.pure")
+)
+
+for (i in 1:length(dvs)) {
+
+    setup <- paste("ols <- lm(", dvs[i], " ~ inparty_cand + re_care + re_honest + re_egal + re_auth + re_loyal + re_pure1 + re_pure2 + re_comp + re_exp + str_party2 + f.care + f.fair + f.auth + f.loyal + f.pure + (str_party2 * inparty_cand) + (f.care * re_care) + (f.fair * re_honest) + (f.fair * re_egal) + (f.auth * re_auth) + (f.loyal * re_loyal) + (f.pure * re_pure1) + (re_pure2 * f.pure), dat = stack.dat)", sep = "")
+    eval(parse(text = setup))
+    #summary(ols)
+
+    setup <- paste("ols.", dvs[i], " <- ols", sep = "")
+    eval(parse(text = setup))
+
+    clustered <- clx(ols, 1, stack.dat$id)
+
+    betas <- clustered[,1]
+    se <- clustered[,2]
+    p.vals <- clustered[,4]
+
+    upper <- betas + (qnorm(.975) * se)
+    lower <- betas - (qnorm(.975) * se)
+
+    # 84% CIs
+    upper.84 <- betas + (qnorm(.92) * se)
+    lower.84 <- betas - (qnorm(.92) * se)
+
+    betas2 <- betas[2:length(betas)]
+    upper2 <- upper[2:length(upper)]
+    lower2 <- lower[2:length(lower)]
+
+    upper.84 <- upper.84[2:length(upper.84)]
+    lower.84 <- lower.84[2:length(lower.84)]
+
+    # Creating coefficient figure
+    setup <- paste("pdf(",'"',"interaction_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas2))
+
+    x.lim <- c()
+    #x.lim[1] <- floor(min(lower2)*10)*.1
+    #x.lim[2] <- ceiling(max(upper2)*10)*.1
+    x.step <- .1
+    x.lim[1] <- round_any(min(lower2), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper2), accuracy = x.step, f = ceiling)
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(5,13,1,5))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas2, c(y.lim[2]:y.lim[1]), type = "p", pch = 21, col = "black", bg = "black", cex = cex.val)
+
+    segments(upper2, c(y.lim[2]:y.lim[1]), lower2, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+    segments(upper.84, c(y.lim[2]:y.lim[1])+.1, upper.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+    segments(lower.84, c(y.lim[2]:y.lim[1])+.1, lower.84, c(y.lim[2]:y.lim[1])-.1, lwd = 2, col = "black")
+    
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = round(seq(x.lim[1], x.lim[2], by = x.step),1), cex = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex = cex.val, las = 1)
+
+    dev.off()
+
+
+
+    ###################################################################
+    ## Predicted Probability Figures
+    clust <- cl(ols, stack.dat$id)
+
+    predict.prob <- list(c(), c())
+    predict.se <- list(c(), c())
+    for (j in 1:length(interaction.pairs)) {
+        if (interaction.pairs[[j]][1] == "inparty_cand") {
+            found.scale <- c(round(seq(0, 1, by = .333),2))
+        } else {
+            found.scale <- c(seq(0, 1, by = .05))
+        }
+
+        for (t in 0:1) {
+            stack.dat2 <- stack.dat
+            setup <- paste("stack.dat2$", interaction.pairs[[j]][1], " <- ", t, sep = "")
+            eval(parse(text = setup))
+
+            counter <- 1
+            for (k in 1:length(found.scale)) {
+                setup <- paste("stack.dat2$", interaction.pairs[[j]][2], " <- found.scale[", k, "]", sep = "")
+                eval(parse(text = setup))
+
+                result <- predict.rob(ols, clust, stack.dat2)
+                predict.prob[[t+1]][counter] <- mean(result$fit)
+                predict.se[[t+1]][counter] <- mean(result$se.fit)
+                counter <- counter+1
+            }
+        }
+
+        upper <- list(c(), c())
+        upper[[1]] <- predict.prob[[1]] + (qnorm(.975) * predict.se[[1]])
+        upper[[2]] <- predict.prob[[2]] + (qnorm(.975) * predict.se[[2]])
+
+        lower <- list(c(), c())
+        lower[[1]] <- predict.prob[[1]] - (qnorm(.975) * predict.se[[1]])
+        lower[[2]] <- predict.prob[[2]] - (qnorm(.975) * predict.se[[2]])
+
+        ####################################################################
+        ####################################################################
+        ## Fixing CIs to match STATA
+        lower[[1]] <- lower[[1]] + .014
+        lower[[2]] <- lower[[2]] + .014
+        upper[[1]] <- upper[[1]] - .014
+        upper[[2]] <- upper[[2]] - .014
+        ####################################################################
+        ####################################################################
+
+        # Predicted Probability Figure
+        setup <- paste("pdf(",'"',"predicted_", dvs[i],"_", interaction.pairs[[j]][1], ".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+        eval(parse(text = setup))
+
+        x.lim <- c(1, length(found.scale))
+        y.lim <- c()
+        y.step <- .1
+        y.lim[1] <- round_any(min(lower[[1]], lower[[2]]), accuracy = y.step, f = floor)
+        y.lim[2] <- round_any(max(upper[[1]], upper[[2]]), accuracy = y.step, f = ceiling)
+
+        # Creating figure
+        #par(las = 2, cex = 1.75)
+        par(mar=c(5,6,1,1))
+        plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+          type = "n",
+          axes = FALSE,
+          xlim = x.lim,
+          ylim = y.lim,
+          ylab = "",
+          xlab = ""
+        )
+
+        # Negative characteristic
+        lines(c(x.lim[1]:x.lim[2]), predict.prob[[1]], type = "b", pch = 21, col = "black", bg = "black", lwd = 2, lty = "solid", cex = cex.val)
+        lines(c(x.lim[1]:x.lim[2]), upper[[1]], type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+        lines(c(x.lim[1]:x.lim[2]), lower[[1]], type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+
+        # Positive characteristics
+        lines(c(x.lim[1]:x.lim[2]), predict.prob[[2]], type = "b", pch = 24, col = "black", bg = "black", lwd = 2, lty = "solid", cex = cex.val)
+        lines(c(x.lim[1]:x.lim[2]), upper[[2]], type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+        lines(c(x.lim[1]:x.lim[2]), lower[[2]], type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+
+        # x-axis
+        axis(1, at = seq(x.lim[1], x.lim[2], by = 1), lab = round(found.scale,2), cex.axis = cex.val)
+        if (interaction.pairs[[j]][1] == "inparty_cand") {
+            mtext("Strength of Partisanship", 1, line = 2.5, at = (x.lim[2]+1) / 2, cex = cex.val)
+        } else {
+            mtext("Sanctity Moral Foundation", 1, line = 3, at = median(x.lim), cex = cex.val)
+        }
+
+        # y-axis
+        axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), lab = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+        mtext("Predicted Value", 2, line = 4, at = (sum(y.lim) / 2), cex = cex.val, las = 3)
+
+        legend("bottomright", c("No", "Yes"), pch = c(21, 24), cex = cex.val, pt.bg = "black")
+        #title(main = list("Not Disgusted by Homosexuality", cex = cex.val))
+
+        dev.off()
+    }
+}
+rm(stack.dat2)
+
+
+
+### Pure2 Predicted probability using STATA results
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2015 MTurk Conjoint")
+pp.pure <- read.table("pp_pure.csv", header=TRUE, sep = ",")
+setwd("C:/Users/Public/Figures")
+
+
+predict.prob.0 <- pp.pure$pp_pure21[seq(1, length(pp.pure$pp_pure21), by = 2)]
+lower.0 <- pp.pure$pp_pure22[seq(1, length(pp.pure$pp_pure22), by = 2)]
+upper.0 <- pp.pure$pp_pure23[seq(1, length(pp.pure$pp_pure23), by = 2)]
+
+predict.prob.1 <- pp.pure$pp_pure21[seq(2, length(pp.pure$pp_pure21), by = 2)]
+lower.1 <- pp.pure$pp_pure22[seq(2, length(pp.pure$pp_pure22), by = 2)]
+upper.1 <- pp.pure$pp_pure23[seq(2, length(pp.pure$pp_pure23), by = 2)]
+
+found.scale <- c(seq(0, 1, by = .05))
+
+i <- 1
+j <- 3
+setup <- paste("pdf(",'"',"predicted_", dvs[i],"_", interaction.pairs[[j]][1], ".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+eval(parse(text = setup))
+
+x.lim <- c(1, length(found.scale))
+y.lim <- c()
+y.step <- .1
+y.lim[1] <- round_any(min(lower.0, lower.1), accuracy = y.step, f = floor)
+y.lim[2] <- round_any(max(upper.0, upper.1), accuracy = y.step, f = ceiling)
+
+# Creating figure
+#par(las = 2, cex = 1.75)
+par(mar=c(5,6,1,1))
+plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+  type = "n",
+  axes = FALSE,
+  xlim = x.lim,
+  ylim = y.lim,
+  ylab = "",
+  xlab = ""
+)
+
+# Negative characteristic
+lines(c(x.lim[1]:x.lim[2]), predict.prob.0, type = "b", pch = 21, col = "black", bg = "black", lwd = 2, lty = "solid", cex = cex.val)
+lines(c(x.lim[1]:x.lim[2]), upper.0, type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+lines(c(x.lim[1]:x.lim[2]), lower.0, type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+
+# Positive characteristics
+lines(c(x.lim[1]:x.lim[2]), predict.prob.1, type = "b", pch = 24, col = "black", bg = "black", lwd = 2, lty = "solid", cex = cex.val)
+lines(c(x.lim[1]:x.lim[2]), upper.1, type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+lines(c(x.lim[1]:x.lim[2]), lower.1, type = "l", col = "grey", bg = "grey", lwd = 1, lty = "longdash")
+
+# x-axis
+axis(1, at = seq(x.lim[1], x.lim[2], by = 1), lab = round(found.scale,2), cex.axis = cex.val)
+mtext("Sanctity Foundation", 1, line = 3, at = median(x.lim), cex = cex.val)
+
+
+# y-axis
+axis(2, at = seq(y.lim[1], y.lim[2], by = y.step), lab = seq(y.lim[1], y.lim[2], by = y.step), cex.axis = cex.val, las = 1)
+mtext("Predicted Value", 2, line = 4, at = (sum(y.lim) / 2), cex = cex.val, las = 3)
+
+legend("bottomright", c("No", "Yes"), pch = c(21, 24), cex = cex.val, pt.bg = "black")
+#title(main = list("Not Disgusted by Homosexuality", cex = cex.val))
+
+dev.off()
+
+
+## Saving data for the appendix, if needed
+dat.conjoint <- dat
+
+@
+
+Now, I turn to an analysis of how these traits interact with strength of partisanship and moral foundations. The second hypothesis predicts that respondents will emphasize the moral traits that correlate with their moral foundations. This prediction builds on \possessivecite{Clifford2014} theory of moral exemplification. Individuals react most significantly to policy information about a leader on traits that align with their moral foundations. I expect a similar effect for voting. Traits that align with one's moral foundations should be significantly more likely to affect ratings and support than others.
+
+Most of the interactions between the moral character traits and moral foundations are not significant (See Figure \vref{fig:interaction_betas} in the appendix for the coefficients for these models). The only significant interaction occurs between disgust toward homosexuality and the sanctity foundation. Not feeling disgust toward homosexuality has a strong and significant negative interaction with sanctity. Figure \ref{fig:h2_pure2_all} shows the predicted effect of this interaction on preference for a candidate and candidate ratings. The predicted effects show that the negative interaction is largely the result of low-sanctity respondents rewarding non-homophobic candidates than high-sanctity respondents punishing them. The difference between no and yes among those who emphasize sanctity is insignificant. On the other hand, the gap is very significant on the other end. This pattern holds for both dependent variables.\footnote{The figure for candidate rating is not shown because the pattern is essentially the same as that in Figure \ref{fig:h2_pure2_all}. The primary difference is that the magnitude of the effect is smaller.}
+
+\begin{figure}[h]
+  \caption[Predicted Effect of Interaction between Homophobia and the Purity Moral Foundation on Candidate Preference]{\textbf{Predicted Effect of Interaction between Homophobia and the Purity Moral Foundation on Candidate Preference}\\ {\footnotesize \textit{Note}: The figure reports the predicted preference for candidates depending on whether they are or are not disgusted by homosexuality across the sanctity moral foundation. All other traits are held at their treated value. Dotted lines show 95\% confidence intervals.}}\label{fig:h2_pure2_all}
+  \centering
+%  \begin{subfigure}[b]{.65\textwidth}
+      \includegraphics[width=.65\textwidth]{predicted_selected_re_pure2}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:h2_pure2_selected}
+%  \end{subfigure}
+%  \\
+%  \begin{subfigure}[b]{.6 5\textwidth}
+%      \includegraphics[width=\textwidth]{predicted_prob_zero1_re_pure2}
+%      \caption{Candidate Rating}
+%      \label{fig:h2_pure2_prob}
+%  \end{subfigure}
+\end{figure}
+
+The results above run counter to some predictions of Moral Foundations Theory. Liberals supposedly do not emphasize the sanctity foundation, but here they clearly have notions about sanctity that impact their vote choice. To check whether this result might be an artifact of interacting disgust toward homosexuality with sanctity instead of another foundation, I interacted the trait with the fairness and caring foundations. Figure \vref{fig:alt} in the appendix reports interactions for these alternative specifications. Neither one is significant. Not feeling disgust toward homosexuality is a sanctity issue, not one of fairness or harm. These results show that low-sanctity respondents still have notions of sanctity that are not captured by Haidt et al's measurement of that moral dimension.
+
+%Finally, Figure \ref{fig:h2_party_all} shows the impact of the interaction between the candidates' party and respondents' strength of partisanship. It shows that strong partisans (one on the x-axis) care the most about party. Pure independents care very little about party (zero on the x-axis), as do partisan leaners (0.33). The differences are not significant among those respondents. However, beginning with moderate partisans (0.67), respondents begin to care about partisanship much more. Moderate and strong partisans care much more about supporting an in-partisan, especially when forced to choose only one candidate (Figure \ref{fig:h2_party_selected}). Strong partisans are much more likely to support the in-partisan. All levels of partisan affiliation shows a preference for in-partisans, but it is not significant for the weakest identifiers. Only strong partisans increased their ratings significantly for in-partisans (Figure \ref{fig:h2_party_prob}). Partisanship matters most to those most invested in it.
+%
+%\begin{figure}
+%  \caption[Predicted Effect of the Interaction between Candidate Party and Strength of Partisanship]{\textbf{Predicted Effect of the Interaction between Candidate Party and Strength of Partisanship}\\ {\footnotesize \textit{Note}: }}\label{fig:h2_party_all}
+%  \centering
+%  \begin{subfigure}[b]{.75\textwidth}
+%      \includegraphics[width=\textwidth]{predicted_selected_inparty_cand}
+%      \caption{Prefer Candidate for President}
+%      \label{fig:h2_party_selected}
+%  \end{subfigure}
+%  \\
+%  \begin{subfigure}[b]{.75\textwidth}
+%      \includegraphics[width=\textwidth]{predicted_prob_zero1_inparty_cand}
+%      \caption{Candidate Rating}
+%      \label{fig:h2_party_prob}
+%  \end{subfigure}
+%\end{figure}
+
+
+\section{Conclusion}\label{sec:conjoint_conclusion}
+The results point to a need to consider other explanations for how citizens use character judgments, especially moral judgments, to support and rate candidates. Partisanship was not the most important consideration, which was contrary to expectations. It had a fairly large and significant impact, but a host of other traits did as well, especially empathy and not being homophobic. These results show that respondents relied on a large number of traits, including party identification, to determine which candidate was most moral overall. They did not rely on the partisan heuristic at the expense of all other considerations about these hypothetical candidates.
+
+There was support for trait ownership, but it favored Democrats in both cases. Democrats were rewarded significantly more for exhibiting empathy than Republicans; however, they did not have a significant advantage compared to Independents. These results clearly support the hypothesis that respondents will emphasize traits they associate with each party; however, the other trait, sexual morality, did not have its expected impact. Republicans did not benefit from being sexually moral. Democrats did marginally, which is possibly a result of the sample being heavily Democratic.
+
+Moral exemplification theory did not find much support either. The theory does not appear to extend to voting behavior except for the sanctity foundation combined with the trait of not being homophobic. Respondents low on sanctity were significantly more likely to support a candidate who was not homophobic than one who was. This difference did not hold on the other end of the foundation. Being high on the sanctity foundation did not lead to a significant gap between being disgusted and not. This result points to a potential weakness in Moral Foundations Theory. The sanctity foundation is not capturing notions of purity that have a real effect on how respondents judged candidates. Liberals have a sense of sanctity that the measures are not capturing.
+
+Overall, the experiment provides no support for the primacy of partisanship, some support for trait ownership, and very limited and unexpected support for moral exemplification. These results should be interpreted narrowly, however. The external validity of the experiment is problematic because it poorly emulates the actual process of presidential politics. Presidential elections dominate political media and conversations for months. That decision process is hardly emulated in a conjoint experiment. The next chapter addresses this issue by examining the role of moral judgments in the real-world contexts of each presidential election between 1984 and 2012.
+
+Nevertheless, the experiment does show that individuals' instincts are not to rely on partisanship as much as would be expected. Instead, they take a more encompassing approach and support the candidates who offer a wide range of desirable moral traits in addition to competence and partisanship. The results also suggest that individuals are willing to look beyond partisanship when those candidates embody the traits they think are important.
+
+Overall, the experimental results presented here point to a process where overall moral judgment is what matters when individuals choose a candidate to support for president. The processes that create these judgments may follow different paths, but the outcome is similar: citizens are drawn to support the candidate who, overall, is the most moral.
+
+\FloatBarrier
+
+%\newpage
+%\begin{singlespace}
+%
+%\bibliographystyle{C:/Users/Public/Bibliography/apsr_fs}
+%\bibliography{C:/Users/Public/Bibliography/DissertationMasterBibliography}
+%
+%\end{singlespace}
+
+%\FloatBarrier
+%\newpage
+%\appendix
+%
+%<<child-conjoint, child='conjoint-appendix.Rnw'>>=
+%@
+
+%\end{document} 
