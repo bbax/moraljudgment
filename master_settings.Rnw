@@ -80,8 +80,8 @@ cohens_d <- function(x, y) {
 
   #density.moral <- 7.5
   #density.comp <- 20
-  density.moral <- 50
-  density.comp <- 500
+  density.moral <- 500
+  density.comp <- 10
 
   gop.angle <- 0
   dem.angle <- 90
