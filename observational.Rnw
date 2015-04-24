@@ -8,6 +8,8 @@ library(apsrtable)
 library(Hmisc)
 library(MASS)
 library(reshape2)
+library(plyr)
+library(survey)
 
 #rm(list=ls())
 
@@ -42,8 +44,6 @@ setwd("C:/Users/Public/Figures/")
 
 
 ## Creating a frame with survey weights
-library(survey)
-
 dat.all <- dat
 
 groups <- c("all", "partisan", "gop", "dem", "ind")
@@ -436,7 +436,7 @@ for (i in 1:length(dv)) {
 
 I run a logistic regression model on vote choice, where a zero indicated that a respondent voted but voted for the in-party candidate while a one indicates that he or she voted for the out-party candidate (i.e. defected).\footnote{Data is included only for respondents who reported turning out to vote. A one for presidential vote choice could be any of these: voted for the other party's candidate, voted for a third- party candidate, or did not cast a vote for president but did for other races.} Most partisans cast a ballot for their own party's candidate, but as we saw in Figure \ref{fig:presvote_descriptive_diff} the partisans who favor the out-party presidential candidate or are ambiguous between them are less loyal.\footnote{In a separate analysis not reported here, moral judgment have a small, significant effect on self-reported turnout. Judgments of competence have no effect. Partisans who thought the out-party candidate was more moral had about a 25\% change of not turning out. Ambivalent partisans had a 21\% chance. Partisans who believed their party's nominee was the most moral had only a 17\% chance of reporting they did not turn out. However, other variables, especially education, had strongers effects. It is likely the traditional resource-drive model of participation is a better explanation for turnout \citeaffixed{Bradyetal1995}{see}, and moral judgments are only a small part. For this reason, the results are not covered here.} There is variation in loyalty at the ballot box that appears correlated with moral judgments. However, a regression analysis is needed to control for other factors. It may simply be that stronger partisans rank higher on moral judgment and are more loyal, for example.
 
-[[REVISE; NO TABLE NOW]] Table \vref{tab:vote_results} shows the coefficients for presidential vote choice when regressed on the moral judgment index and the control variables. The table also shows the coefficients for key control variables. The results are displayed for all partisans combined and then for Republicans and Democrats separately. I repeat this pattern in each regression table in the rest of the analysis.
+[[REVISE; NO TABLE NOW; Figure in appendix with coefficients "fig:anes_partisan_betas_pres"]] Table \vref{tab:vote_results} shows the coefficients for presidential vote choice when regressed on the moral judgment index and the control variables. The table also shows the coefficients for key control variables. The results are displayed for all partisans combined and then for Republicans and Democrats separately. I repeat this pattern in each regression table in the rest of the analysis.
 
 [[REVISE; NO TABLE NOW]] Consistent with Hypothesis 1, moral judgment indexes have a significant positive effect on voting for one's in-party candidate. Among all partisans, moral judgment has a strong, statistically significant effect in the hypothesized direction. The coefficient is similarly large and positive for the separate partisan groups. The coefficient is marginally larger among Republicans. Moral judgment, however, seems to have a similar effect among both partisan groups. More negative moral judgments of the out-party's candidate compared to the in-party candidate is correlated with more loyal voting. The coefficient for competence judgments is larger among Democrats than among Republicans, on the other hand.
 %
@@ -540,7 +540,7 @@ I run a logistic regression model on vote choice, where a zero indicated that a 
 [[REVISE; NO TABLE NOW]] It is also significant that the moral judgment index's coefficient is the largest effect, except for partisan affect. It is statistically larger than all of the other effects in Table \ref{tab:vote_results} (p $<$ 0.001 for each pair-wise Wald test); however, the coefficient for feelings toward the parties is statistically and substantively larger (p $<$ 01). We should expect an index constructed from three questions to have higher validity and strength than variables based on a single question, so it is not entirely a surprise that moral judgment would have a larger effect than most of the other controls. However, one might have expected the coefficients for partisan strength or issue attitudes to have had similarly large effects. Strength of partisanship would have a stronger effect if pure independents were included. The data here support the overall dearth of evidence in favor of issue voting, especially at the presidential level \cite{MeierCampbell1979}. The control for issue positions is made from multiple questions, and it is statistically smaller than the moral judgment index. This result lends support for my emphasis on actors as morally important entities. Most theories of morals and politics focus on how moral issues affect political behavior \cite{Haidt2012,SkitkaMorgan2014}, but that focus misses this pathway through which moral judgments affect mass political behavior.
 
 <<anes.predicted.prob.figs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
-library(plyr)
+
 vote.types <- c("pres", "house")
 
 for (v in 1:length(vote.types)) {
@@ -575,7 +575,7 @@ for (v in 1:length(vote.types)) {
     y.steps <- .1
     y.min <- round_any(min(moral.low, comp.low), accuracy = x.step, f = floor)
     y.max <- round_any(max(moral.up, comp.up), accuracy = y.steps, f = ceiling)
-    
+
     ## Loop to create combined and separate figures
     t <- 1
     for (z in 0:1) {

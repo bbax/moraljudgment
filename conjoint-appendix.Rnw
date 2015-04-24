@@ -414,7 +414,7 @@ for (i in 1:length(dvs)) {
 @
 
 \begin{figure}
-  \caption[Effect of Candidate Party by Strength of Partisanship]{\textbf{Effect of Candidate Party by Strength of Partisanship}\\ {\footnotesize \textit{Note}: }}\label{fig:str_partisan}
+  \caption[Effect of Candidate Party by Strength of Partisanship]{\textbf{Effect of Candidate Party by Strength of Partisanship}\\ {\footnotesize \textit{Note}: Figure reports the coefficients with 95\% confidence intervals for effect of traits on candidate preference and ratings among strong partisans.}}\label{fig:str_partisan}
   \centering
   \begin{subfigure}[b]{.65\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_ols_selected}

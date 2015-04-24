@@ -4,4 +4,82 @@
 
 \section{Descriptive Statistics}
 
-\section{Additional Tables and Figures}
+\section{Additional Tables and Figures} 
+
+<<anes.appendix.vote.regs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+dvs <- c("pres", "house")
+ivs <- c("Moral Judgment", "Competence Judgment", "Issue Index", "Out-incumbent", "Clinton", "South", "Age", "Age Squared", "Sex", "Race", "Strength of Partisanship", "Strength of Ideology", "Income", "Education", "Candidates' Ideology", "Interest in Election", "Care Who Wins")
+
+
+for (i in 1:length(dvs)) {
+    ## Importing predicted values for vote
+    setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/1980-2012 ANES Cumulative Data File")
+    setup <- paste("coeffs <- read.table(", '"', "beta_", dvs[i], ".csv", '"', ", header=TRUE, sep = ", '"', ",", '"', ")", sep = "")
+    eval(parse(text = setup))
+
+    setwd("C:/Users/Public/Figures/")
+    
+    
+    betas <- coeffs[1:(length(coeffs[,1])-1),1]
+    lower <- coeffs[1:(length(coeffs[,2])-1),2]
+    upper <- coeffs[1:(length(coeffs[,3])-1),3]
+    
+
+    # Creating figure
+    setup <- paste("pdf(",'"',"anes_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+    eval(parse(text = setup))
+
+    y.lim <- c(1, length(betas))
+    x.step <- .25
+    x.lim <- c()
+    x.lim[1] <- round_any(min(lower), accuracy = x.step, f = floor)
+    x.lim[2] <- round_any(max(upper), accuracy = x.step, f = ceiling)
+
+    y.offset <- 0.15
+
+    # Creating figure
+    #par(las = 2, cex = 1.75)
+    par(mar=c(3,19,1,1))
+    plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+      type = "n",
+      axes = FALSE,
+      xlim = x.lim,
+      ylim = y.lim,
+      ylab = "",
+      xlab = ""
+    )
+
+    # vertical line at zero
+    abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+    abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+    points(betas, c(y.lim[2]:y.lim[1]), type = "p", pch = 23, col = "black", bg = "black")
+
+    segments(upper, c(y.lim[2]:y.lim[1]), lower, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+
+    # x-axis
+    axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+    # y-axis
+    axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+    dev.off()    
+}
+
+@
+
+\begin{figure}
+  \caption[Observational Effect of Moral Judgments on Voting]{\textbf{Observational Effect of Moral Judgments on Voting for President and U.S. House, 1984-2012}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; zero otherwise.}}\label{fig:anes_partisan_betas_vote}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_pres.pdf}
+      \caption{President Vote}
+      \label{fig:anes_partisan_betas_pres}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_house.pdf}
+      \caption{House Vote}
+      \label{fig:anes_partisan_betas_house}
+  \end{subfigure}
+\end{figure}
