@@ -1,6 +1,6 @@
 %\section{Additional Regression Analysis}
 
-\chapter{Appendix for Unmasking the Effects of Moral Judgments}\label{ch:conjoint_appendix}
+\chapter{Supplemental Materials for Unmasking the Effects of Moral Traits}\label{ch:conjoint_appendix}
 
 \section{Conjoint Survey Questionnaire Wordings and Examples}\label{sec:conjoint_wordings}
 
@@ -18,10 +18,11 @@
 \noindent \hrulefill
 
 \begin{figure}[h]
-  \caption[Example of Conjoint Table]{\textbf{Screenshot of Conjoint Table}\\ {\footnotesize \textit{Note}: This figure shows a sample of what participants saw on their screen for each of the five pairs of candidates they rated. The order of the traits was randomized as was the valence (yes or no) of the traits. Below the table on the same screen were the questions to select a preferred candidate, to rate the probability of supporting each candidate, and to rate the moral character}}\label{fig:example_table}
+  \caption[Example of Conjoint Table]{\textbf{Example of Conjoint Table}\\ {\footnotesize \textit{Note}: This figure shows a sample of what participants saw on their screen for each of the five pairs of candidates they rated. The order of the traits was randomized as was the valence (yes or no) of the traits. Below the table on the same screen were the questions to select a preferred candidate, to rate the probability of supporting each candidate, and to rate the moral character}}\label{fig:example_table}
   \centering
       \includegraphics[width=.75\textwidth]{conjoint_table_example2}
 \end{figure}
+\FloatBarrier
 
 \noindent \textbf{Preferred Candidate:} Which of these candidates would you be most likely to support for president? Candidate A or Candidate B
 
@@ -54,11 +55,11 @@
 
 \newpage
 \section{Diagnostics}\label{sec:conjoint_diagnostics}
-\setcounter{table}{0}
-\renewcommand*\thetable{\Alph{section}.\arabic{table}}
-
-\setcounter{figure}{0}
-\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
 
 %\subsection{Carry-over Effects}
 
@@ -75,7 +76,7 @@ prob.carryover <- carryover[, c(grep("prob_",names(carryover),value=TRUE))]
 moral.carryover <- carryover[, c(grep("moral_",names(carryover),value=TRUE))]
 
 dvs <- c("selected", "prob", "moral")
-ivs <- c("In-party Candidate", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+ivs <- c("In-party Candidate", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
 
 for (i in 1:length(dvs)) {
 
@@ -144,13 +145,13 @@ There are four instances where a trait's impact on candidate preference varied s
 \begin{figure}
   \caption[Carryover Effects by Round]{\textbf{Carryover Effects by Round}\\ {\footnotesize \textit{Note}: Figure reports the average effect for each trait by round.}}\label{fig:carryover}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{carryover_selected}
       \caption{Prefer Candidate for President}
       \label{fig:carryover_prefer}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{carryover_prob}
       \caption{Candidate Rating}
       \label{fig:carryover_rating}
@@ -173,7 +174,7 @@ prob.order <- order[, c(grep("prob_",names(order),value=TRUE))]
 moral.order <- order[, c(grep("moral_",names(order),value=TRUE))]
 
 dvs <- c("selected", "prob", "moral")
-ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+ivs <- c("Political Party", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
 
 for (i in 1:length(dvs)) {
 
@@ -241,13 +242,13 @@ The diagnostics for profile order effects test if it mattered whether the first 
 \begin{figure}
   \caption[Profile Order Effects]{\textbf{Profile Order Effects}\\ {\footnotesize \textit{Note}: }}\label{fig:order}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{order_selected}
       \caption{Prefer Candidate for President}
       \label{fig:order_prefer}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{order_prob}
       \caption{Candidate Rating}
       \label{fig:order_rating}
@@ -337,18 +338,18 @@ Finally, I ran diagnostics to ensure that the order in which traits appeared amo
 
 \newpage
 \section{Additional Figures}\label{sec:conjoint_additional_figs}
-\setcounter{table}{0}
-\renewcommand*\thetable{\Alph{section}.\arabic{table}}
-
-\setcounter{figure}{0}
-\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
 %\section{Effects by Party and Ideology}
 
 <<ols.regs.strpartisan,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
 setwd("C:/Users/Public/Figures")
 
 dvs <- c("selected", "prob_zero1", "moral_zero1")
-ivs <- c("In-party Candidate", "Lean Partisan", "Weak Partisan", "Strong Partisan", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced", "In-Cand. x Lean", "In-Cand. x Weak", "In-Cand. x Strong")
+ivs <- c("In-party Candidate", "Lean Partisan", "Weak Partisan", "Strong Partisan", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced", "In-Cand. x Lean", "In-Cand. x Weak", "In-Cand. x Strong")
 
 #groups <- c("dem", "gop", "ind")
 
@@ -414,34 +415,34 @@ for (i in 1:length(dvs)) {
 @
 
 \begin{figure}
-  \caption[Effect of Candidate Party by Strength of Partisanship]{\textbf{Effect of Candidate Party by Strength of Partisanship}\\ {\footnotesize \textit{Note}: Figure reports the coefficients with 95\% confidence intervals for effect of traits on candidate preference and ratings among strong partisans.}}\label{fig:str_partisan}
+  \caption[Effect of Candidate Party by Strength of Partisanship]{\textbf{Effect of Candidate Party by Strength of Partisanship}\\ {\footnotesize \textit{Note}: Figure reports the coefficients with 95\% confidence intervals for effect of traits on candidate preference and ratings among strong partisans.}}\label{fig:conjoint_str_partisan}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_ols_selected}
       \caption{Prefer Candidate for President}
-      \label{fig:str_selected_partisan}
+      \label{fig:conjoint_str_selected_partisan}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_ols_prob_zero1}
       \caption{Candidate Rating}
-      \label{fig:str_prob_partisan}
+      \label{fig:conjoint_str_prob_partisan}
   \end{subfigure}
 \end{figure}
 
 \begin{figure}
-  \caption{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:strparty_pp}
+  \caption{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:conjoint_strparty_pp}
   \centering
-    \begin{subfigure}[b]{.65\textwidth}
+    \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strparty_selected}
       \caption{Prefer Candidate for President}
-      \label{fig:strparty_selected}
+      \label{fig:conjoint_strparty_selected}
     \end{subfigure}
-    \\
-    \begin{subfigure}[b]{.65\textwidth}
+    \quad
+    \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strparty_prob_zero1}
       \caption{Candidate Rating}
-      \label{fig:strparty_prob}
+      \label{fig:conjoint_strparty_prob}
     \end{subfigure}
 \end{figure}
 
@@ -449,7 +450,7 @@ for (i in 1:length(dvs)) {
 
 
 <<pp.strpartisandiff.shifts,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
-ivs <- c("In-party\nCand.", "Really\ncares", "Honest", "Treats\nequally", "Respectful", "Loyal", "Sexually\nmoral", "Not disgusted\nhomosexuality", "Competent", "Experienced")
+ivs <- c("In-party\nCand.", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually\nmoral", "Not homophobic", "Competent", "Experienced")
 
 
 #####################################################################################################################
@@ -569,13 +570,13 @@ dev.off()
 \begin{figure}
   \caption{\textbf{Predicted Effect of Each Trait when Candidate Party Differs in a Round among Strong Partisans Only}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from no to yes for each trait among strong partisans \emph{when the partisanship of the two candidates in a round are different}.}}\label{fig:strpartisan_pp_diff}
   \centering
-    \begin{subfigure}[b]{.65\textwidth}
+    \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_pp_selected_diff}
       \caption{Prefer Candidate for President}
       \label{fig:strpartisan_selected_diff}
     \end{subfigure}
-    \\
-    \begin{subfigure}[b]{.65\textwidth}
+    \quad
+    \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_pp_prob_diff}
       \caption{Candidate Rating}
       \label{fig:strpartisan_prob_diff}
@@ -587,7 +588,7 @@ dev.off()
 setwd("C:/Users/Public/Figures")
 
 dvs <- c("selected", "prob_zero1", "moral_zero1")
-ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+ivs <- c("Political Party", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
 
 groups <- c("dem", "gop", "ind")
 
@@ -670,13 +671,13 @@ for (i in 1:length(dvs)) {
 %\begin{figure}
 %  \caption[Effect of Character Traits by Party]{\textbf{Effect of Character Traits by Party}\\ {\footnotesize \textit{Note}: }}\label{fig:h1_partisan}
 %  \centering
-%  \begin{subfigure}[b]{.65\textwidth}
+%  \begin{subfigure}[b]{.48\textwidth}
 %      \includegraphics[width=\textwidth]{partisan_ols_selected}
 %      \caption{Prefer Candidate for President}
 %      \label{fig:h1_selected_partisan}
 %  \end{subfigure}
-%  \\
-%  \begin{subfigure}[b]{.65\textwidth}
+%  \quad
+%  \begin{subfigure}[b]{.48\textwidth}
 %      \includegraphics[width=\textwidth]{partisan_ols_prob_zero1}
 %      \caption{Candidate Rating}
 %      \label{fig:h1_prob_partisan}
@@ -688,7 +689,7 @@ for (i in 1:length(dvs)) {
 setwd("C:/Users/Public/Figures")
 
 dvs <- c("selected", "prob_zero1", "moral_zero1")
-ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+ivs <- c("Political Party", "Empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
 
 groups <- c("lib", "con", "mod")
 
@@ -770,13 +771,13 @@ for (i in 1:length(dvs)) {
 %\begin{figure}
 %  \caption[Effect of Character Traits by Ideology]{\textbf{Effect of Character Traits by Ideology}\\ {\footnotesize \textit{Note}: }}\label{fig:h1_ideo}
 %  \centering
-%  \begin{subfigure}[b]{.65\textwidth}
+%  \begin{subfigure}[b]{.48\textwidth}
 %      \includegraphics[width=\textwidth]{ideology_ols_selected}
 %      \caption{Prefer Candidate for President}
 %      \label{fig:h1_selected_ideo}
 %  \end{subfigure}
-%  \\
-%  \begin{subfigure}[b]{.65\textwidth}
+%  \quad
+%  \begin{subfigure}[b]{.48\textwidth}
 %      \includegraphics[width=\textwidth]{ideology_ols_prob_zero1}
 %      \caption{Candidate Rating}
 %      \label{fig:h1_prob_ideo}
@@ -790,7 +791,7 @@ for (i in 1:length(dvs)) {
 setwd("C:/Users/Public/Figures")
 
 dvs <- c("selected", "prob_zero1", "moral_zero1")
-ivs <- c("Political Party", "Really cares\nabout other people", "Honest", "Treats everyone\nequally", "Respectful", "Loyal", "Sexually moral", "Not disgusted\nby homosexuality", "Competent", "Experienced")
+ivs <- c("Political Party", "empathetic", "Honest", "Egalitarian", "Respectful", "Loyal", "Sexually moral", "Not homophobic", "Competent", "Experienced")
 
 groups <- c(1, 2, 0)
 
@@ -871,18 +872,18 @@ for (i in 1:length(dvs)) {
 @
 
 \begin{figure}
-  \caption{\textbf{Effect of Character Traits by Candidate Partisanship}\\ {\footnotesize \textit{Note}: The figure reports the effect of each trait for Democratic, Republican, and Independent candidates separately (three separate models).}}\label{fig:cand_partisan}
+  \caption{\textbf{Effect of Character Traits by Candidate Partisanship}\\ {\footnotesize \textit{Note}: The figure reports the effect of each trait for Democratic, Republican, and Independent candidates separately (three separate models).}}\label{fig:conjoint_cand_partisan}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{cand_partisan_ols_selected}
       \caption{Prefer Candidate for President}
-      \label{fig:cand_selected_partisan}
+      \label{fig:conjoint_cand_selected_partisan}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{cand_partisan_ols_prob_zero1}
       \caption{Candidate Rating}
-      \label{fig:cand_prob_partisan}
+      \label{fig:conjoint_cand_prob_partisan}
   \end{subfigure}
 \end{figure}
 
@@ -892,18 +893,18 @@ for (i in 1:length(dvs)) {
 %\section{Additional Results of Interaction Models}
 
 \begin{figure}
-  \caption{\textbf{Effect of Interactions between Character Traits and Moral Foundations}\\ {\footnotesize \textit{Note}: The figures report the coefficients for each variable plus 95\% confidence intervals. The bottom eight rows in each panel show the coefficients for the interactions.}}\label{fig:interaction_betas}
+  \caption{\textbf{Effect of Interactions between Character Traits and Moral Foundations}\\ {\footnotesize \textit{Note}: The figures report the coefficients for each variable plus 95\% confidence intervals. The bottom eight rows in each panel show the coefficients for the interactions.}}\label{fig:conjoint_interaction_betas}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{interaction_selected}
       \caption{Prefer Candidate for President}
-      \label{fig:interaction_betas_selected}
+      \label{fig:conjoint_interaction_betas_selected}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{interaction_prob_zero1}
       \caption{Candidate Rating}
-      \label{fig:interaction_betas_prob}
+      \label{fig:conjoint_interaction_betas_prob}
   \end{subfigure}
 \end{figure}
 
@@ -912,7 +913,7 @@ for (i in 1:length(dvs)) {
 setwd("C:/Users/Public/Figures")
 
 dvs <- c("selected", "prob_zero1", "moral_zero1")
-ivs <- c("Not Disgusted x\nSanctity", "Not Disgusted x\nCare", "Not Disgusted x\nFairness")
+ivs <- c("Not homophobic x\nSanctity", "Not homophobic x\nCare", "Not homophobic x\nFairness")
 
 interact.found <- c("f.pure", "f.care", "f.fair")
 
@@ -990,7 +991,7 @@ for (i in 1:length(dvs)) {
 %\begin{figure}
 %  \caption{\textbf{Alternative Interactions with Homophobia}\\ {\footnotesize \textit{Note}: }}\label{fig:altinteract_homophobia}
 %  \centering
-%  \includegraphics[width=\textwidth]{alt_selected}
+%  \includegraphics[width=.48\textwidth]{alt_selected}
 %      \caption{Prefer Candidate for President}
 %      \label{fig:altinteract_selected}
 %  \end{subfigure}
@@ -1003,17 +1004,17 @@ for (i in 1:length(dvs)) {
 %\end{figure}
 
 \begin{figure}
-  \caption{\textbf{Alternative Interactions with Not Disgusted by Homosexuality}\\ {\footnotesize \textit{Note}: This figure reports the effect sizes (coefficients) plus 95\% confidence interval for alternative interactions between homophobia (``disgusted by homosexuality'') and a moral foundation. Only the interaction with sanctity is significant. The trait does not interact significantly with either care or fairness.}}\label{fig:alt}
+  \caption{\textbf{Alternative Interactions with Not Disgusted by Homosexuality}\\ {\footnotesize \textit{Note}: This figure reports the effect sizes (coefficients) plus 95\% confidence interval for alternative interactions between not homophobic (``disgusted by homosexuality'') and three moral foundations. Only the interaction with sanctity is significant. The trait does not interact significantly with either care or fairness.}}\label{fig:conjoint_alt}
   \centering
-  \begin{subfigure}[b]{.65\textwidth}
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{alt_selected}
       \caption{Prefer Candidate for President}
-      \label{fig:alt_selected}
+      \label{fig:conjoint_alt_selected}
   \end{subfigure}
-  \\
-  \begin{subfigure}[b]{.65\textwidth}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{alt_prob_zero1}
       \caption{Candidate Rating}
-      \label{fig:alt_prob}
+      \label{fig:conjoint_alt_prob}
   \end{subfigure}
 \end{figure}

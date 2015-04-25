@@ -1,8 +1,54 @@
-\chapter{Observational Chapter Appendix}\label{ch:anes_appendix}
+\chapter{Supplemental Materials for The Influence of Moral Judgments on Presidential Vote, 1984-2012}\label{ch:anes_appendix}
+<<anes.appendix.setup,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+    dat <- dat.anes
+@
 
 \section{Question Wordings}
-
+\begin{itemize}
+    \item \textbf{Character Traits}: (1984-2008, half sample in 2008) ``Think about (presidential candidate). In your opinion, does the phrase [trait] describe (candidate) extremely well, quite well, not too well or not well at all?" (half of 2008 and all of 2012) ``Think about (candidate). In your opinion, does the phrase [trait] describe (candidate) extremely well, very well, moderately well, slightly well, or not well at all?"
+        \begin{itemize}
+            \item \emph{Integrity}: ``moral''
+            \item \emph{Empathy}: ``really cares about people like you''
+            %\item \emph{Leadership}: ``provides strong leadership''
+            \item \emph{Competence}: ``knowledgeable''
+            \item \emph{Intelligent}: ``intelligent''
+        \end{itemize}
+    \item \textbf{Affect}: ``Now we would like to know something about the feelings you have toward (candidate). Has (candidate) -- because of the kind of person he is, or because of something he has done -- made you feel:''
+        \begin{itemize}
+            \item \emph{Anger}: ``angry''
+            \item \emph{Anxiety}: ``afraid (of him)''
+        \end{itemize}
+    \item \textbf{Other Controls}:
+    \begin{itemize}
+        \item \emph{Issue Index}: [All responses recoded into liberal direction for Democrats (e.g. pro-choice) and to conservative direction for Republicans (e.g. favoring smaller government] ``
+        \item 
+    \end{itemize}
+\end{itemize}
 \section{Descriptive Statistics}
+
+\section{Dimensions of Observed Character Judgment, 1984-2012}
+
+\begin{table}
+\centering
+\caption{Factor Analysis of Observed Character Traits, 1984-2012}\label{tab:anes_trait_factors}
+\begin{tabular}{lccc} \hline \hline
+ & Competence Factor & Morality Factor & Uniqueness \\ \hline
+\multicolumn{4}{l}{\textbf{Out-party}} \\
+Moral trait & & 0.56 & 0.56 \\
+Cares trait & & 0.73 & 0.48 \\
+Knowledgeable trait & 0.69 & & 0.39 \\
+Intelligent trait & 0.83 & & 0.34 \\ 
+\\ \hline
+\\
+\multicolumn{4}{l}{\textbf{In-party}} \\
+Moral trait & & 0.65 & 0.52 \\
+Cares trait & & 0.64 & 0.50 \\
+Knowledgeable trait & 0.72 & & 0.40 \\
+Intelligent trait & 0.72 & & 0.41 \\ \hline \hline
+\end{tabular}
+\end{table}
+
+
 
 \section{Additional Tables and Figures} 
 
@@ -18,12 +64,12 @@ for (i in 1:length(dvs)) {
     eval(parse(text = setup))
 
     setwd("C:/Users/Public/Figures/")
-    
-    
+
+
     betas <- coeffs[1:(length(coeffs[,1])-1),1]
     lower <- coeffs[1:(length(coeffs[,2])-1),2]
     upper <- coeffs[1:(length(coeffs[,3])-1),3]
-    
+
 
     # Creating figure
     setup <- paste("pdf(",'"',"anes_ols_", dvs[i],".pdf",'"', ", height = 8.5, width = 11)", sep = "")
@@ -63,7 +109,7 @@ for (i in 1:length(dvs)) {
     # y-axis
     axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
 
-    dev.off()    
+    dev.off()
 }
 
 @

@@ -1,4 +1,4 @@
-\chapter{Appendix for The Impact of Changes in Moral Judgments during the 2008 Presidential Election}\label{ch:anes_appendix}
+\chapter{Appendix for The Impact of Changes in Moral Judgments during the 2008 Presidential Election}\label{ch:naes_appendix}
 %\setcounter{table}{0}
 %\renewcommand*\thetable{\Alph{section}.\arabic{table}}
 

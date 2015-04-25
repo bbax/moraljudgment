@@ -980,7 +980,7 @@ My hypothesis for compromise is that immoral messages about the president will m
     \caption[Compromise Balance]{\textbf{Percentage of Respondents Wanting the In-Party to Receive at Least 75 percent of its Agenda in a Compromise}\\
     {\footnotesize \textit{Note}: The figure shows the percentage of respondents in each treatment group who wanted the in-party to receive 75 percent or more of its agenda in any political compromise with the out-party president. The difference is significant at the 0.05 level.}}\label{fig:vig_compromise_pairwise}
     \centering
-    {\includegraphics[width=.48\textwidth]{pairwise_compromise_Immoral_v_Incomp-1.pdf}}
+    {\includegraphics[width=.65\textwidth]{pairwise_compromise_Immoral_v_Incomp-1.pdf}}
 \end{figure}
 
 <<vig.compromise.ttest,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
@@ -995,7 +995,7 @@ My hypothesis for compromise is that immoral messages about the president will m
 
   # T-test of proportion that would never vote for out-party president (Mitchell)
   compromise.tt <- t.test(dat.all$comp_over75 ~ dat.all$immoralvincomp, alternative = "less")
-  
+
   dat.vig <- dat
 
 @

@@ -139,7 +139,6 @@ Where on this scale from zero to 100 do you think they should end up?
 \end{itemize}
 \end{singlespace}
 
-\newpage
 \section{Supplemental Tables and Figures}\label{sec:vig_supplemental_tablesandfigs}
 \setcounter{table}{0}
 \renewcommand*\thetable{\Alph{section}.\arabic{table}}
@@ -166,7 +165,7 @@ Where on this scale from zero to 100 do you think they should end up?
 \begin{table}[!htbp] \centering
   \caption{\textbf{Average Treatment Effects on Moral and Competence Indices} \newline {\footnotesize   \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the two indices measuring character judgments. Negative numbers indicate more positive judgments; positive numbers indicate more negative judgments relative to the control.}}
   \label{tab:vig_traits_ate}
-  \scalebox{.85}{
+  \scalebox{.75}{
 \begin{tabular}{@{\extracolsep{5pt}}lcc}
 \\[-1.8ex]\hline
  & Moral Index & Competent Index \\
@@ -202,7 +201,7 @@ R$^{2}$ & 0.60 & 0.56 \\
 \end{table}
 
 \FloatBarrier
-\newpage
+%\newpage
 \subsection{Presidential Support Supplemental Materials}\label{sec:vig_supplemental_president}
 <<descriptive.stats,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
 
