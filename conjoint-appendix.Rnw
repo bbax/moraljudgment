@@ -431,7 +431,7 @@ for (i in 1:length(dvs)) {
 \end{figure}
 
 \begin{figure}
-  \caption{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:conjoint_strparty_pp}
+  \caption[Predicted Effect of Strength of Partisanship]{\textbf{Predicted Effect of Strength of Partisanship}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from an out-party candidate to an in-party candidate by respondents' strength of partisanship. In the top panel, only the shift for strong partisans is significantly different than the shift for pure independents; in the second panel, both weak and strong partisans have significantly larger shifts than pure independents.}}\label{fig:conjoint_strparty_pp}
   \centering
     \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strparty_selected}
@@ -568,7 +568,7 @@ dev.off()
 @
 
 \begin{figure}
-  \caption{\textbf{Predicted Effect of Each Trait when Candidate Party Differs in a Round among Strong Partisans Only}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from no to yes for each trait among strong partisans \emph{when the partisanship of the two candidates in a round are different}.}}\label{fig:strpartisan_pp_diff}
+  \caption[Predicted Effect of Traits when Candidate Party Differs for Strong Partisans]{\textbf{Predicted Effect of Each Trait when Candidate Party Differs in a Round among Strong Partisans Only}\\ {\footnotesize \textit{Note}: The figure shows the shift in predicted outcomes for a switch from no to yes for each trait among strong partisans \emph{when the partisanship of the two candidates in a round are different}.}}\label{fig:strpartisan_pp_diff}
   \centering
     \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{strpartisan_pp_selected_diff}
@@ -872,7 +872,7 @@ for (i in 1:length(dvs)) {
 @
 
 \begin{figure}
-  \caption{\textbf{Effect of Character Traits by Candidate Partisanship}\\ {\footnotesize \textit{Note}: The figure reports the effect of each trait for Democratic, Republican, and Independent candidates separately (three separate models).}}\label{fig:conjoint_cand_partisan}
+  \caption[Effect of Character Traits by Candidate Partisanship]{\textbf{Effect of Character Traits by Candidate Partisanship}\\ {\footnotesize \textit{Note}: The figure reports the effect of each trait for Democratic, Republican, and Independent candidates separately (three separate models).}}\label{fig:conjoint_cand_partisan}
   \centering
   \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{cand_partisan_ols_selected}
@@ -893,7 +893,7 @@ for (i in 1:length(dvs)) {
 %\section{Additional Results of Interaction Models}
 
 \begin{figure}
-  \caption{\textbf{Effect of Interactions between Character Traits and Moral Foundations}\\ {\footnotesize \textit{Note}: The figures report the coefficients for each variable plus 95\% confidence intervals. The bottom eight rows in each panel show the coefficients for the interactions.}}\label{fig:conjoint_interaction_betas}
+  \caption[Effect of Interactions between Character Traits and Moral Foundations]{\textbf{Effect of Interactions between Character Traits and Moral Foundations}\\ {\footnotesize \textit{Note}: The figures report the coefficients for each variable plus 95\% confidence intervals. The bottom eight rows in each panel show the coefficients for the interactions.}}\label{fig:conjoint_interaction_betas}
   \centering
   \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{interaction_selected}
@@ -1004,7 +1004,7 @@ for (i in 1:length(dvs)) {
 %\end{figure}
 
 \begin{figure}
-  \caption{\textbf{Alternative Interactions with Not Disgusted by Homosexuality}\\ {\footnotesize \textit{Note}: This figure reports the effect sizes (coefficients) plus 95\% confidence interval for alternative interactions between not homophobic (``disgusted by homosexuality'') and three moral foundations. Only the interaction with sanctity is significant. The trait does not interact significantly with either care or fairness.}}\label{fig:conjoint_alt}
+  \caption[Alternative Interactions with Not Homophobic]{\textbf{Alternative Interactions with Not Homophobic}\\ {\footnotesize \textit{Note}: This figure reports the effect sizes (coefficients) plus 95\% confidence interval for alternative interactions between not homophobic (``disgusted by homosexuality'') and three moral foundations. Only the interaction with sanctity is significant. The trait does not interact significantly with either care or fairness.}}\label{fig:conjoint_alt}
   \centering
   \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{alt_selected}

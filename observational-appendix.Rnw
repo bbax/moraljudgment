@@ -21,12 +21,13 @@
     \item \textbf{Other Controls}:
     \begin{itemize}
         \item \emph{Issue Index}: [All responses recoded into liberal direction for Democrats (e.g. pro-choice) and to conservative direction for Republicans (e.g. favoring smaller government] ``
-        \item 
+        \item
     \end{itemize}
 \end{itemize}
-\section{Descriptive Statistics}
 
-\section{Dimensions of Observed Character Judgment, 1984-2012}
+
+
+\section{Descriptive Statistics}
 
 \begin{table}
 \centering
@@ -37,7 +38,7 @@
 Moral trait & & 0.56 & 0.56 \\
 Cares trait & & 0.73 & 0.48 \\
 Knowledgeable trait & 0.69 & & 0.39 \\
-Intelligent trait & 0.83 & & 0.34 \\ 
+Intelligent trait & 0.83 & & 0.34 \\
 \\ \hline
 \\
 \multicolumn{4}{l}{\textbf{In-party}} \\
@@ -50,7 +51,22 @@ Intelligent trait & 0.72 & & 0.41 \\ \hline \hline
 
 
 
-\section{Additional Tables and Figures} 
+\section{Additional Tables and Figures}
+\begin{figure}[htb]
+  \centering
+  \caption[Distribution of the Difference in Moral Judgment by Party]{\textbf{Distribution of the Difference in Moral Judgment by Party}\\\footnotesize \textit{Note}: The figure shows the distribution of the moral judgment and competence judgment indices among Republicans only. The indices combine all the negative ratings of the in-party and out-party candidates for president (positive ratings were set to zero), and subtracting the in-party rating from the out-party. The index was collapsed for ratings that either party's candidate was better than the other.}\label{fig:anes_distribution_moral_diff_gopdem}
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{moral_comp_distribution_gop.pdf}}
+      \caption{Republicans}
+      \label{fig:anes_distribution_moral_diff_gop}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
+      {\includegraphics[width=\textwidth]{moral_comp_distribution_dem.pdf}}
+      \caption{Democrats}
+      \label{fig:anes_distribution_moral_diff_dem}
+  \end{subfigure}
+\end{figure}
 
 <<anes.appendix.vote.regs,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
 dvs <- c("pres", "house")
@@ -115,11 +131,11 @@ for (i in 1:length(dvs)) {
 @
 
 \begin{figure}
-  \caption[Observational Effect of Moral Judgments on Voting]{\textbf{Observational Effect of Moral Judgments on Voting for President and U.S. House, 1984-2012}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; zero otherwise.}}\label{fig:anes_partisan_betas_vote}
+  \caption[Effect of Moral Judgments on Voting]{\textbf{Observational Effect of Moral Judgments on Voting for President and U.S. House, 1984-2012}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; zero otherwise. Effect is for all partisans (combines Republicans and Democrats).}}\label{fig:anes_partisan_betas_vote}
   \centering
   \begin{subfigure}[b]{.48\textwidth}
       \includegraphics[width=\textwidth]{anes_ols_pres.pdf}
-      \caption{President Vote}
+      \caption{Presidential Vote}
       \label{fig:anes_partisan_betas_pres}
   \end{subfigure}
   \quad
@@ -127,5 +143,129 @@ for (i in 1:length(dvs)) {
       \includegraphics[width=\textwidth]{anes_ols_house.pdf}
       \caption{House Vote}
       \label{fig:anes_partisan_betas_house}
+  \end{subfigure}
+\end{figure} 
+
+
+
+
+
+
+<<anes.appendix.vote.regs.ind,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+dvs <- c("pres", "house")
+
+group <- c("gop", "dem", "ind")
+
+ivs.gop <- c("Moral Judgment", "Competence Judgment", "Issue Index", "Out-incumbent", "Clinton", "South", "Age", "Age Squared", "Sex", "Race", "Strength of Partisanship", "Strength of Ideology", "Income", "Education", "Candidates' Ideology", "Interest in Election", "Care Who Wins")
+ivs.dem <- ivs.gop
+
+ivs.ind <- c("Moral Judgment", "Competence Judgment", "Issue Index", "Out-incumbent", "Clinton", "South", "Age", "Age Squared", "Sex", "Race", "Strength of Ideology", "Income", "Education", "Candidates' Ideology", "Interest in Election", "Care Who Wins")
+
+
+for (j in 1:length(group)) {
+    for (i in 1:length(dvs)) {
+        ## Importing predicted values for vote
+        setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/1980-2012 ANES Cumulative Data File")
+        setup <- paste("coeffs <- read.table(", '"', "beta_", dvs[i], "_", group[j], ".csv", '"', ", header=TRUE, sep = ", '"', ",", '"', ")", sep = "")
+        eval(parse(text = setup))
+
+        setwd("C:/Users/Public/Figures/")
+
+
+        betas <- coeffs[1:(length(coeffs[,1])-1),1]
+        lower <- coeffs[1:(length(coeffs[,2])-1),2]
+        upper <- coeffs[1:(length(coeffs[,3])-1),3]
+
+        setup <- paste("ivs <- ivs.", group[j], sep = "")
+        eval(parse(text = setup))
+
+        # Creating figure
+        setup <- paste("pdf(",'"',"anes_ols_", dvs[i],"_", group[j], ".pdf",'"', ", height = 8.5, width = 11)", sep = "")
+        eval(parse(text = setup))
+
+        y.lim <- c(1, length(betas))
+        x.step <- .25
+        x.lim <- c()
+        x.lim[1] <- round_any(min(lower), accuracy = x.step, f = floor)
+        x.lim[2] <- round_any(max(upper), accuracy = x.step, f = ceiling)
+
+        y.offset <- 0.15
+
+        # Creating figure
+        #par(las = 2, cex = 1.75)
+        par(mar=c(3,19,1,1))
+        plot(c(x.lim[1],x.lim[2]), c(y.lim[1], y.lim[2]),
+          type = "n",
+          axes = FALSE,
+          xlim = x.lim,
+          ylim = y.lim,
+          ylab = "",
+          xlab = ""
+        )
+
+        # vertical line at zero
+        abline(v = 0, lwd = 2, col = "lightgrey", lty = "longdash")
+        abline(h = y.lim[1]:y.lim[2], lwd = 1, col = "lightgrey", lty = "dashed")
+
+        points(betas, c(y.lim[2]:y.lim[1]), type = "p", pch = 23, col = "black", bg = "black")
+
+        segments(upper, c(y.lim[2]:y.lim[1]), lower, c(y.lim[2]:y.lim[1]), lwd = 2, col = "black")
+
+        # x-axis
+        axis(1, at = seq(x.lim[1], x.lim[2], by = x.step), lab = seq(x.lim[1], x.lim[2], by = x.step), cex.axis = cex.val)
+
+        # y-axis
+        axis(2, at = y.lim[2]:y.lim[1], lab = ivs, cex.axis = cex.val, las = 1)
+
+        dev.off()
+    }
+}
+@
+
+\begin{figure}
+  \caption[Effect of Moral Judgments on Voting among Republicans]{\textbf{Observational Effect of Moral Judgments on Voting among Republicans}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; one otherwise. Effect is for Republicans only.}}\label{fig:anes_partisan_betas_vote_gop}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_pres_gop.pdf}
+      \caption{Presidential Vote}
+      \label{fig:anes_partisan_betas_pres_gop}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_house_gop.pdf}
+      \caption{House Vote}
+      \label{fig:anes_partisan_betas_house_gop}
+  \end{subfigure}
+\end{figure} 
+
+\begin{figure}
+  \caption[Effect of Moral Judgments on Voting among Democrats]{\textbf{Observational Effect of Moral Judgments on Voting among Democrats}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; one otherwise. Effect is for Democrats only.}}\label{fig:anes_partisan_betas_vote_dem}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_pres_dem.pdf}
+      \caption{Presidential Vote}
+      \label{fig:anes_partisan_betas_pres_dem}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_house_dem.pdf}
+      \caption{House Vote}
+      \label{fig:anes_partisan_betas_house_dem}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}
+  \caption[Effect of Moral Judgments on Voting among Pure Independents]{\textbf{Observational Effect of Moral Judgments on Voting among Pure Independents}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for the Democratic; one if voted for the Republican. Moral and competence indices are coded so that zero means favoring the GOP candidate and one means favoring the Democrat. Issue index is coded so that zero means conservative attitudes, and one means liberal. Effect is for pure independents only. Strength of partisanship is dropped from covariates.}}\label{fig:anes_partisan_betas_vote_ind}
+  \centering
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_pres_ind.pdf}
+      \caption{Presidential Vote}
+      \label{fig:anes_partisan_betas_pres_ind}
+  \end{subfigure}
+  \quad
+  \begin{subfigure}[b]{.48\textwidth}
+      \includegraphics[width=\textwidth]{anes_ols_house_ind.pdf}
+      \caption{House Vote}
+      \label{fig:anes_partisan_betas_house_ind}
   \end{subfigure}
 \end{figure}

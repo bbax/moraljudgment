@@ -3,7 +3,8 @@
 <<child-settings, child='master_settings.Rnw'>>=
 @
 
-% ****************************************************************************************** % Dissertation template and document class for Princeton University
+% ****************************************************************************************** %
+% Dissertation template and document class for Princeton University
 % Author  : Jeffrey Scott Dwoskin <jdwoskin@princeton.edu>
 % Adapted from: http://www.math.princeton.edu/graduate/tex/puthesis.html
 % ****************************************************************************************** %

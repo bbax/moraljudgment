@@ -50,7 +50,7 @@ The last panel variable is an index of the changes in a battery of questions mea
 \section{2008 NAES Supplemental Tables and Figures}
 
 \begin{table}[htbp]\centering
-\caption{\label{tab:naes_iv_descriptives}
+\caption[Independent Variables' Descriptive Statistics]{\label{tab:naes_iv_descriptives}
 \textbf{Independent Variables' Descriptive Statistics} }\begin{tabular} {@{} l r r r r @{}} \\ \hline
  & \textbf{Mean} & \textbf{St. Dev.} & \textbf{Min.} & \textbf{Max.} \\
 \hline

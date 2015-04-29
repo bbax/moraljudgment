@@ -17,11 +17,11 @@
 \chapter{Appendix for Morality vs. Competence in Presidential Voting}\label{ch:vignettes_appendix}
 
 \section{Experimental Treatment Language}\label{sec:vig_experimental_language}
-\setcounter{table}{0}
-\renewcommand*\thetable{\Alph{section}.\arabic{table}}
-
-\setcounter{figure}{0}
-\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
 
 \begin{singlespace}
 
@@ -83,11 +83,11 @@
 
 
 \section{Dependent Variable Question Wordings}\label{sec:vig_wordings}
-\setcounter{table}{0}
-\renewcommand*\thetable{\Alph{section}.\arabic{table}}
-
-\setcounter{figure}{0}
-\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
 
 \noindent [\emph{Immediately after the treatment, respondents were asked the following. Respondents gave their answers using sliders that pined to integers. Candidates other than President Mitchell were given an orientation toward him in order to give the choices the focus on presidential incumbents that tend to dominate such elections. The order of the candidates was randomized}]
 
@@ -140,13 +140,13 @@ Where on this scale from zero to 100 do you think they should end up?
 \end{singlespace}
 
 \section{Supplemental Tables and Figures}\label{sec:vig_supplemental_tablesandfigs}
-\setcounter{table}{0}
-\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%\setcounter{table}{0}
+%\renewcommand*\thetable{\Alph{section}.\arabic{table}}
+%
+%\setcounter{figure}{0}
+%\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
 
-\setcounter{figure}{0}
-\renewcommand*\thefigure{\Alph{section}.\arabic{figure}}
-
-\subsection{Treatment Verification Supplemental Materials}\label{sec:vig_treatment_verification}
+%\subsection{Treatment Verification Supplemental Materials}\label{sec:vig_treatment_verification}
 
 
 <<verification.models,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
@@ -163,7 +163,7 @@ Where on this scale from zero to 100 do you think they should end up?
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Average Treatment Effects on Moral and Competence Indices} \newline {\footnotesize   \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the two indices measuring character judgments. Negative numbers indicate more positive judgments; positive numbers indicate more negative judgments relative to the control.}}
+  \caption[Average Treatment Effects on Moral and Competence Indices]{\textbf{Average Treatment Effects on Moral and Competence Indices} \newline {\footnotesize   \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the two indices measuring character judgments. Negative numbers indicate more positive judgments; positive numbers indicate more negative judgments relative to the control.}}
   \label{tab:vig_traits_ate}
   \scalebox{.75}{
 \begin{tabular}{@{\extracolsep{5pt}}lcc}
@@ -202,7 +202,7 @@ R$^{2}$ & 0.60 & 0.56 \\
 
 \FloatBarrier
 %\newpage
-\subsection{Presidential Support Supplemental Materials}\label{sec:vig_supplemental_president}
+%\subsection{Presidential Support Supplemental Materials}\label{sec:vig_supplemental_president}
 <<descriptive.stats,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
 
 gap <- tapply(dat$vote_pres_diff, dat$treatment2, mean)
@@ -228,7 +228,7 @@ names(summary.stats) <- c("Out-President", " ", "In-Challenger", " ", "Vote Gap"
 @
 
 \begin{table}[ht]
-\caption{\textbf{Descriptive Statistics for Presidential Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each presidential candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
+\caption[Descriptive Statistics for Presidential Vote Choice]{\textbf{Descriptive Statistics for Presidential Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each presidential candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
 \label{tab:vig_experiment_descriptives}
 \centering
 \begin{tabular}{lccccccc}
@@ -286,7 +286,7 @@ model.comp75 <- lm(as.numeric(comp_over75) ~ factor(treatment2), data = dat)
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Average Treatment Effects for the Eight Treatment Groups} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the major dependent variables. The constant is equal to the mean of the control group.}}
+  \caption[Average Treatment Effects for the Eight Treatment Groups]{\textbf{Average Treatment Effects for the Eight Treatment Groups} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the major dependent variables. The constant is equal to the mean of the control group.}}
   \label{tab:vig_regression_ate}
   \scalebox{.85}{
 \begin{tabular}{@{\extracolsep{5pt}}lcccccccc}
@@ -362,7 +362,7 @@ diffindiff <- data.frame(cbind(diffindiff.out.pres$coefficients, diffindiff.in.p
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Difference-in-difference Presidential Vote, House Vote, and Compromise}\newline {\footnotesize \textit{Note:} Table reports the average difference-in-difference between moral-immoral compared to competent-incompetent on key dependent variables. The key coefficient is labeled ``Difference-in-difference.'' This coefficient shows difference in going from moral to immoral compared to shifting from competence to incompetent. The coefficient labeled ``Negative Valence'' shows the effect of going from a positive trait to a negative, on average. Finally, the coefficient for ``Moral Dimension'' shows the effect of the moral dimension overall compared the the competence dimension. The constant is equal to the mean for the competence group.}}
+  \caption[Difference-in-difference for Key Dependent Variables]{\textbf{Difference-in-difference for Key Dependent Variables}\newline {\footnotesize \textit{Note:} Table reports the average difference-in-difference between moral-immoral compared to competent-incompetent on key dependent variables. The key coefficient is labeled ``Difference-in-difference.'' This coefficient shows difference in going from moral to immoral compared to shifting from competence to incompetent. The coefficient labeled ``Negative Valence'' shows the effect of going from a positive trait to a negative, on average. Finally, the coefficient for ``Moral Dimension'' shows the effect of the moral dimension overall compared the the competence dimension. The constant is equal to the mean for the competence group.}}
   \label{tab:vig_regression_diffindiff}
   \scalebox{.85}{
 \begin{tabular}{@{\extracolsep{5pt}}lcccccccc}
@@ -401,7 +401,7 @@ R$^{2}$ & 0.55 & 0.17 & 0.45 & 0.15 & 0.14 & 0.21 & 0.18 & 0.17 \\
 
 \FloatBarrier
 \newpage
-\subsection{Support for House Candidates}\label{sec:vig_house}
+%\subsection{Support for House Candidates}\label{sec:vig_house}
 <<descriptive.stats.house,echo=FALSE,results='asis'>>=
 
 gap <- tapply(dat$vote_cong_diff, dat$treatment2, mean)
@@ -429,7 +429,7 @@ row.names(summary.stats) <- x.label
 @
 
 \begin{table}[ht]
-\caption{\textbf{Descriptive Statistics for House Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each House candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
+\caption[Descriptive Statistics for House Vote Choice]{\textbf{Descriptive Statistics for House Vote Choice} \newline {\footnotesize \textit{Note}: Table reports the average support for each House candidate and the gap between the ratings. Higher numbers mean more likely to vote for that candidate. Standard deviation in parentheses}}
 \label{tab:vig_experiment_descriptives_house}
 \centering
 \begin{tabular}{lccccccc}
@@ -533,7 +533,7 @@ stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons", ti
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Direct Comparisons of House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support.}}
+  \caption[Direct Comparisons of House Support between Key Treatment Groups]{\textbf{Direct Comparisons of House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support.}}
   \label{tab:vig_comparisons_house}
 \begin{tabular}{@{\extracolsep{5pt}} lccc}
 \\[-1.8ex]\hline
@@ -586,7 +586,7 @@ Immoral+Comp. v. Moral+Incomp. & -0.22 & 0.42$^{*}$ & 0.65$^{*}$ \\
 
 
 \begin{figure}[htb]
-\caption[Polarized Support for U.S. House]{\textbf{The Proportion of Respondents with Polarized Vote Preferences by Treatment for U.S. House Vote}\\
+\caption[Polarized Support for U.S. House Candidates]{\textbf{The Proportion of Respondents with Polarized Vote Preferences by Treatment for U.S. House Vote}\\
     {\footnotesize \textit{Note}: The figures show the percentage of respondents in each treatment group who have completely polarized preferences, meaning they would always vote for the in-party candidate and never vote for the out-party candidate. Results shown for U.S. House vote only.}}\label{fig:vig_always_never_house}
   \centering
 %  \begin{subfigure}[b]{.48\textwidth}
@@ -665,7 +665,7 @@ stargazer(direct.comparisons, summary = FALSE, label = "tab:vig_comparisons", ti
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Comparisons of Polarized House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support at their poles.}}
+  \caption[Comparisons of Polarized House Support]{\textbf{Comparisons of Polarized House Support between Key Treatment Groups} \newline {\footnotesize \emph{Note}: Table reports the difference between key treatment groups for the three key variables of House support at their poles.}}
   \label{tab:vig_comparisons_house_polar}
 \begin{tabular}{@{\extracolsep{5pt}} lccc}
 \\[-1.8ex]\hline
@@ -698,7 +698,7 @@ Immoral+Comp. v. Moral+Incomp. & 0.01 & 0.03 & 0.02 \\
 
 
 
-\subsection{Polarized Presidential Vote Additional Materials}
+%\subsection{Polarized Presidential Vote Additional Materials}
 
 
 \begin{figure}[htb]
@@ -881,7 +881,7 @@ stargazer(model.out.pres, model.in.pres, model.gap.pres, model.out.cong, model.i
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Average Treatment Effects on Polarizing Presidential Support for the Eight Treatment Groups} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the extremes of the electoral support variables.}}
+  \caption[Average Treatment Effects on Polarizing Presidential Support by Treatment]{\textbf{Average Treatment Effects on Polarizing Presidential Support by Treatment Group} \newline {\footnotesize \textit{Note:} The table shows the average treatment effect for each treatment group compared to the control for the extremes of the electoral support variables.}}
   \label{tab:vig_regression_ate_polar}
   \scalebox{.85}{
 \begin{tabular}{@{\extracolsep{5pt}}lcccccc}
@@ -952,7 +952,7 @@ stargazer(diffindiff.out.pres, diffindiff.in.pres, diffindiff.gap.pres, diffindi
 @
 
 \begin{table}[!htbp] \centering
-  \caption{\textbf{Difference-in-difference of Polarized Support for President and House: Net Change of Moral--Immoral Compared to Competent--Incompetent}\newline {\footnotesize \emph{Note:} Table reports the average difference-in-difference between moral--immoral compared to competent--incompetent for the polarized support variables.}}
+  \caption[Difference-in-difference of Polarized Support for President and House]{\textbf{Difference-in-difference of Polarized Support for President and House: Net Change of Moral--Immoral Compared to Competent--Incompetent}\newline {\footnotesize \emph{Note:} Table reports the average difference-in-difference between moral--immoral compared to competent--incompetent for the polarized support variables.}}
   \label{tab:vig_regression_diffindiff_polar}
   \scalebox{.85}{
 \begin{tabular}{@{\extracolsep{5pt}}lcccccc}
@@ -988,7 +988,7 @@ R$^{2}$ & 0.25 & 0.13 & 0.15 & 0.10 & 0.09 & 0.09 \\
 
 \FloatBarrier
 \newpage
-\subsection{Compromise}
+%\subsection{Compromise}
 <<descriptive.stats.comp,echo=FALSE,results='asis'>>=
 
 comp <- tapply(dat$compromise_balance, dat$treatment2, mean)
@@ -1012,7 +1012,7 @@ row.names(summary.stats) <- x.label
 @
 
 \begin{table}[ht]
-\caption{\textbf{Descriptive Statistics for Political Compromise Preference} \newline {\footnotesize \textit{Note}: Table reports the average support for compromise between the in-party and the out-party president as well as the percentage of respondents who wanted a compromise above 75 favoring their own party. Higher numbers mean more likely to want a compromise to favor their own party; lower numbers mean favoring more balance. Standard deviation in parentheses}}
+\caption[Descriptive Statistics for Political Compromise Preference]{\textbf{Descriptive Statistics for Political Compromise Preference} \newline {\footnotesize \textit{Note}: Table reports the average support for compromise between the in-party and the out-party president as well as the percentage of respondents who wanted a compromise above 75 favoring their own party. Higher numbers mean more likely to want a compromise to favor their own party; lower numbers mean favoring more balance. Standard deviation in parentheses}}
 \label{tab:vig_experiment_descriptives_comp}
 \centering
 \begin{tabular}{lccccc}
@@ -1034,7 +1034,7 @@ Control & 54.39 & (19.04) & 0.17 & (0.38) & 137 \\
 \end{table}
 
 \begin{figure}[htb]
-\caption[Compromise Balance]{\textbf{Proportion of Respondents Wanting the In-Party to Receive at Least 75 percent of its Agenda in a Compromise, by Treatment}\\
+\caption[Compromise Balance by Treatment]{\textbf{Proportion of Respondents Wanting the In-Party to Receive at Least 75 percent of its Agenda in a Compromise, by Treatment}\\
     {\footnotesize \textit{Note}: The figure shows the percentage of respondents in each treatment group who wanted the in-party to receive 75 percent or more of its agenda in any political compromise with the out-party president.}}\label{fig:vig_compromise}
   \centering
       {\includegraphics[width=.48\textwidth]{compromise_balance_75plus_all.pdf}}

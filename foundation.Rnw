@@ -10,7 +10,8 @@ Individuals encounter new politicians with underdeveloped schemata that develop 
 
 %Attitudes toward candidates and presidents matter. \citeasnoun{ParkerBarreto2013} find that negative attitudes toward President Obama are one of the strongest predictors of identifying with the Tea Party. Believing that President Obama is a socialist---which is a morally charged judgment---increases identification with the Tea Party. The Tea Party has had major impacts on political life since its emergence in 2009 \cite{SkocpolWilliamson2011}. Similarly, Republicans and conservatives who dislike President Obama are more likely to say they think he is a Muslim, regardless of sophistication \cite{HartmanNewmark2012}. They more readily accept information if it confirms their negative predispositions. To understand how morals impact politics, the judgments individuals make of actors should compliment theories of morality aimed at issues and policies.
 
-
+\section{Aversion vs. Anxiety}
+The emotional component of the moral judgment index comes from a question that asks whether or not respondents have felt anger toward the candidates for the presidency ``because of the kind of person he is, or because of something he has done.'' Aversion is the emotion of prejudice, of stimuli that we have conditioned responses to \cite[164]{Marcusetal2000}. It is the emotion of moral approbation when our core values are threatened or denigrated \cite{Petersen2010,SteenbergenEllis2006}. However, aversion is often indistinguishable from the other negative emotion of anxiety \cite{HuddyFeldmanCassese2007}. The two negative emotions collapse into a single dimension. In other circumstances, aversion is entirely absent. \cite{Marcusetal2000} find that people felt there was an emotional dimension of aversion in attitudes toward the incumbent Bill Clinton, but aversion was absent from emotions toward the GOP nominee, Bob Dole.
 
 \section{Measurement Validation with Observational Data}\label{sec:foundation_validation}
 As discussed above in \ref{sec:theory}, I hypothesize a connection between moral or ``suitability'' traits and moral emotion. Study 1 uses observational data to see if trait attributions along moral traits are connected with aversion. I recruited 306 respondents who were asked to rate a prominent politician from the other party on eleven traits. I randomly assigned pure independents to rate a Republican or a Democrat. The respondents were asked to identify who they thought has ``the most influence over the [out-party's] values and goals.'' Democrats and the Independents assigned with them rated whoever they thought was the leader of the Republican party. The vast majority of respondents identified John Boehner as the leader of the GOP (71\%), with Senator Ted Cruz and Representative Paul Ryan tying for second at 7.5\%.\footnote{The analysis below pools trait ratings among the Democratic portion of the sample, regardless of the actor rated. The results are statistically and substantively the same if the data are restricted to just those who rated Speaker Boehner.} All Republicans and one half of the Independents rated President Obama.\footnote{75\% of the respondents in this sample said President Obama was the leader of the Democratic Party; 13\% said it was Senator Harry Reid; and the rest chose a smattering of other actors.}
@@ -65,7 +66,7 @@ Figure \vref{fig:study1_emotion_allpartisan} shows the average aversion and anxi
 
 \begin{figure}[htb]
   \centering
-  \caption{\textbf{Average Negative Aversion and Anxiety by Partisanship}\\
+  \caption[Average Negative Aversion and Anxiety by Partisanship]{\textbf{Average Negative Aversion and Anxiety by Partisanship}\\
     {\footnotesize \textit{Note}: Figure shows the average level of the aversion and anxiety for moral traits and competence traits. The points are the means with their 95\% confidence intervals. The y-axis is the weighted mean of the three individual emotions that compose each index. The results are shown for all respondents and for partisans only.}}\label{fig:study1_emotion_allpartisan}
   {\includegraphics[width=0.65\textwidth]{Validation_Average_Emotions_allpartisan.pdf}}
 \end{figure}
@@ -76,7 +77,7 @@ Moral emotions results in higher levels of aversion; however, breaking down the 
 
 \begin{figure}[htb]
   \centering
-  \caption{\textbf{Average Negative Aversion and Anxiety by Type of Trait}\\
+  \caption[Average Negative Aversion and Anxiety by Type of Trait]{\textbf{Average Negative Aversion and Anxiety by Type of Trait}\\
     {\footnotesize \textit{Note}: Figure shows the average level of the aversion and anxiety for moral traits and competence traits. The points are the means with their 95\% confidence intervals. The y-axis is the weighted mean of the three individual emotions that compose each index. The results are shown for Republicans, Democrats, and pure independents.}}\label{fig:study1_emotion_GOPDEM}
   {\includegraphics[width=0.65\textwidth]{Validation_Average_Emotions_GOPDEM.pdf}}
 \end{figure}
