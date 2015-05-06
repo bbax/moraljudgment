@@ -27,8 +27,10 @@
 
 
 
-\section{Descriptive Statistics}
+%\section{Descriptive Statistics}
 
+
+\section{Additional Tables and Figures}
 \begin{table}
 \centering
 \caption{Factor Analysis of Observed Character Traits, 1984-2012}\label{tab:anes_trait_factors}
@@ -50,8 +52,6 @@ Intelligent trait & 0.72 & & 0.41 \\ \hline \hline
 \end{table}
 
 
-
-\section{Additional Tables and Figures}
 \begin{figure}[htb]
   \centering
   \caption[Distribution of the Difference in Moral Judgment by Party]{\textbf{Distribution of the Difference in Moral Judgment by Party}\\\footnotesize \textit{Note}: The figure shows the distribution of the moral judgment and competence judgment indices among Republicans only. The indices combine all the negative ratings of the in-party and out-party candidates for president (positive ratings were set to zero), and subtracting the in-party rating from the out-party. The index was collapsed for ratings that either party's candidate was better than the other.}\label{fig:anes_distribution_moral_diff_gopdem}
@@ -144,7 +144,7 @@ for (i in 1:length(dvs)) {
       \caption{House Vote}
       \label{fig:anes_partisan_betas_house}
   \end{subfigure}
-\end{figure} 
+\end{figure}
 
 
 
@@ -236,7 +236,7 @@ for (j in 1:length(group)) {
       \caption{House Vote}
       \label{fig:anes_partisan_betas_house_gop}
   \end{subfigure}
-\end{figure} 
+\end{figure}
 
 \begin{figure}
   \caption[Effect of Moral Judgments on Voting among Democrats]{\textbf{Observational Effect of Moral Judgments on Voting among Democrats}\\ {\footnotesize \textit{Note}: Figure reports the coefficients and 95\% confidence intervals for logit models of vote choice. The dependent variable is coded zero if respondents voted for their party's candidate; one otherwise. Effect is for Democrats only.}}\label{fig:anes_partisan_betas_vote_dem}
@@ -268,4 +268,4 @@ for (j in 1:length(group)) {
       \caption{House Vote}
       \label{fig:anes_partisan_betas_house_ind}
   \end{subfigure}
-\end{figure}
+\end{figure} 

@@ -60,6 +60,114 @@ Eigenvalues & 7.15 & 0.69 &  \\
 
 \section{Emotional Foundations of Moral Judgments}
 
+<<validation.figure,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/2014 Validation Survey")
+valid.dat <- read.dta("2014 Validation Pre Test.dta")
+valid.gop <- valid.dat[which(valid.dat$gop == 1),]
+valid.dem <- valid.dat[which(valid.dat$dem == 1),]
+valid.ind <- valid.dat[which(valid.dat$partisan != 1),]
+valid.partisan <- valid.dat[which(valid.dat$partisan == 1),]
+valid.all <- valid.dat
+
+
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+######################################## Partisans Only
+moral.x.all <- c(seq(1, 2, by = 1)-.1)
+comp.x.all <- c(seq(1, 2, by = 1)+.1)
+
+moral.x <- c(moral.x.all)
+comp.x <- c(comp.x.all)
+
+all.moral.mean <- c(mean(valid.all$scaled_aver_m),mean(valid.all$scaled_anx_m))
+all.comp.mean <- c(mean(valid.all$scaled_aver_c),mean(valid.all$scaled_anx_c))
+all.moral.sd <- c(sd(valid.all$scaled_aver_m),sd(valid.all$scaled_anx_m))
+all.comp.sd <- c(sd(valid.all$scaled_aver_c),sd(valid.all$scaled_anx_c))
+all.moral.upper <- all.moral.mean + (qnorm(.975) * (all.moral.sd / sqrt(length(valid.all$scaled_aver_m))))
+all.moral.lower <- all.moral.mean - (qnorm(.975) * (all.moral.sd / sqrt(length(valid.all$scaled_aver_m))))
+all.comp.upper <- all.comp.mean + (qnorm(.975) * (all.comp.sd / sqrt(length(valid.all$scaled_aver_m))))
+all.comp.lower <- all.comp.mean - (qnorm(.975) * (all.comp.sd / sqrt(length(valid.all$scaled_aver_m))))
+
+moral.mean <- c(all.moral.mean)
+moral.upper <- c(all.moral.upper)
+moral.lower <- c(all.moral.lower)
+
+comp.mean <- c(all.comp.mean)
+comp.upper <- c(all.comp.upper)
+comp.lower <- c(all.comp.lower)
+
+results <- c()
+results[1] <- 0
+results[seq(2, 6,by = 4)] <- moral.mean
+results[seq(3, 7,by = 4)] <- comp.mean
+results[4:5] <- 0
+results[length(results)+1] <- 0
+#results[length(results)+2] <- 0
+
+y.lim <- c(0, .32)
+setwd("C:/Users/Public/Figures")
+
+for (z in 0:1) {
+    setup <- paste("pdf(",'"',"Validation_Average_Emotions_all-",z,".pdf",'"',", height = 8.5, width = 11)", sep = "")
+    #setup <- paste("jpeg(",'"',"Validation_Average_Emotions_all-",z,".jpg",'"',", height = 700, width = 700)", sep = "")
+    eval(parse(text = setup))
+
+    par(mar=c(5,7,1,2))
+    barplot(results,
+        axes = FALSE,
+        xlab = "",
+        ylab = "",
+        names.arg = "",
+        space = 0,
+        ylim = y.lim,
+        density = 500,
+        col = c("black", col.moral, col.comp, "black")
+    )
+
+    axis(1, at = c(2,6), labels = c("",""), tick = TRUE, las = 0, cex.axis = 1.5)
+    mtext(c("Angry/Hostile/\nDisgusted", "Nervous/Scared/\nAfraid"), side = 1, line = 2.75, at = c(2, 6), cex = cex.val)
+
+    axis(2, at = seq(y.lim[1], y.lim[2]-.02, by = .1), tick = TRUE, las = 2, cex.axis = 2)
+    mtext("Weighted Emotional Reaction", side = 2, line = 3.75, at = .15, cex = 2)
+
+    text(c(1.5, 5.5), moral.mean, labels = round(moral.mean, 2), pos = 3, cex = cex.val)
+    text(c(2.5, 6.5), comp.mean, labels = round(comp.mean, 2), pos = 3, cex = cex.val)
+
+    legend("topright", c("Moral","Competent"), bty = "n", cex = cex.val, fill = c(col.moral,col.comp),
+        density = c(density.moral, density.comp))
+
+    if (z > 0) {
+        segments(3.2, results[3], 3.2, results[2], col = "red", lwd = 2)
+        segments(3.05, results[3], 3.2, results[3], col = "red", lwd = 2)
+        segments(3.05, results[2], 3.2, results[2], col = "red", lwd = 2)
+        difference <- floor((results[2] - results[3])*100)*.01
+        y1 <- valid.all$scaled_aver_m
+        y2 <- valid.all$scaled_aver_c
+        ttest <- t.test(y1, y2, alternative = "greater")
+        p.symb <- report.pval.symbol(ttest$p.value)
+        text(3.2, results[3] + ((results[2] - results[3]) / 2), labels = paste(difference, p.symb, sep = ""), col = "red",
+            cex = cex.val-.2, pos = 4)
+
+        segments(7.2, results[7], 7.2, results[6], col = "red", lwd = 2)
+        segments(7.05, results[7], 7.2, results[7], col = "red", lwd = 2)
+        segments(7.05, results[6], 7.2, results[6], col = "red", lwd = 2)
+        difference <- round((results[6] - results[7]), 2)
+        y1 <- valid.all$scaled_anx_m
+        y2 <- valid.all$scaled_anx_c
+        ttest <- t.test(y1, y2, alternative = "greater")
+        p.symb <- report.pval.symbol(ttest$p.value)
+        text(7.2, results[7] + ((results[6] - results[7]) / 2), labels = paste(difference, p.symb, sep = ""), col = "red",
+            cex = cex.val-.2, pos = 4)
+    }
+
+    dev.off()
+}
+
+@
+
 Now I turn my attention to the emotions that respondents attach to their negative trait judgments. As mentioned above, I recoded the emotional reactions to zero for respondents who did not rate a trait negatively along a dimension. So if a Republican respondent thought President Obama had positive or neutral competence traits, then her aversion scale is set to zero. Because of this approach, the scale's averages are lower than they should be if they only included ratings for negative judgments. The proportion of respondents who gave negative trait ratings and who also felt aversion or anxiety is higher than the values in these figures. The results are essentially the same if I set the emotional index to missing for respondents who didn't judge a trait negatively. I create separate indices for the three aversion and three anxiety traits across the seven moral traits and the four competence traits. The indices are scaled between zero and one and weighted to reflect the number of traits in each dimension.
 
 Figure \vref{fig:study1_emotion_allpartisan} shows the average aversion and anxiety for each type of traits for all 306 respondents and also for the 259 partisans (including leaners). The average level of aversion is statistically higher for moral traits among both groups ($t$ = 10.34 on 305 d.f., $p <$ 0.0001 among all respondents; $t$ = 10.34 on 258 d.f., $p <$ 0.0001 among partisans). The results support the hypothesized relationship between moral traits and moral emotions. Of the three emotions that compose the aversion dimension, the most commonly felt was ``disgust'' with ``angry'' following closely behind.
@@ -88,6 +196,132 @@ The results of Study 1 support both of my hypotheses. The moral traits load on a
 
 
 \section{Anger and the Formation of Moral Judgments: Observational Evidence}\label{sec:foundation_observational}
+<<anes.setup.mediation,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+### Figures for Dissertation
+
+library(foreign)
+library(stargazer)
+library(apsrtable)
+library(Hmisc)
+library(MASS)
+library(reshape2)
+library(plyr)
+library(survey)
+library(qdap)
+
+#rm(list=ls())
+
+## ANES Cumulative Data File, 1980 to 2008
+setwd("C:/Users/John Baxter Oliphant/SkyDrive/Dissertation/Data/1980-2012 ANES Cumulative Data File")
+#setwd("/Users/oliphant/MACOSXFILES/Desktop") # Computer cluster location
+
+dat <- read.dta("ANES Cleaned old format new data.dta")
+
+dat$participated <- as.numeric(dat$participated) - 1
+dat$cheap <- as.numeric(dat$cheap) - 1
+dat$costly <- as.numeric(dat$costly) - 1
+
+# Creating indicator variables for predicted probabilities
+dat$income2.34to67 <- ifelse(dat$income2 == "34 to 67 percentile", 1, 0)
+dat$income2.68to100 <- ifelse(dat$income2 == "68 to 100 percentile", 1, 0)
+dat$income2.refused <- ifelse(dat$income2 == "Refused", 1, 0)
+
+dat$education2.some <- ifelse(dat$education2 == "Some college", 1, 0)
+dat$education2.plus <- ifelse(dat$education2 == "College plus", 1, 0)
+
+pres.year <- seq(1984, 2012, by = 4)
+
+dat.gop <- dat[which(dat$gop == 1),]
+dat.dem <- dat[which(dat$dem == 1),]
+dat.partisan <- dat[which(dat$partisan == 1),]
+dat.ind <- dat[which(dat$partisan != 1),]
+
+#dat.partisan.2008 <- dat.partisan[which(dat.partisan$year == 2008),]
+
+setwd("C:/Users/Public/Figures/")
+@
+
+
+<<mediation.analysis,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE,results='hide'>>=
+dat.partisan <- dat.partisan[which(!is.na(dat.partisan$pres_vote_defect)),]
+
+
+
+model.m <- lm(diff_moral_index_trunc ~ str_party2 + str_ideology2 + outparty_angry + outparty_afraid + issue_index, dat = dat.partisan)
+model.y <- glm(pres_vote_defect ~ str_party2 + str_ideology2 + diff_moral_index_trunc + outparty_angry + outparty_afraid + issue_index, family = binomial(link = "logit"), data = dat.partisan)
+out.angry <- mediate(model.m, model.y, sims = 1000, treat = "outparty_angry", mediator = "diff_moral_index_trunc")
+
+model.m.2 <- lm(diff_moral_index_trunc ~ str_party2 + str_ideology2 + outparty_angry + outparty_afraid + issue_index, dat = dat.partisan)
+model.y.2 <- glm(pres_vote_defect ~ str_party2 + str_ideology2 + diff_moral_index_trunc + outparty_angry + outparty_afraid + issue_index, family = binomial(link = "logit"), data = dat.partisan)
+out.afraid <- mediate(model.m.2, model.y.2, sims = 1000, treat = "outparty_afraid", mediator = "diff_moral_index_trunc")
+
+
+
+#Coefficients for both mediation models are stored in "OneDrive\Dissertation\Data\1980-2012 ANES Cumulative File\Mediation Coefficients.xlsx"
+
+## Mediation Figure for Anger
+Moral <- round(c(0,0.1961133,0,0), 2)
+Anger <- round(c(0,0,0,0), 2)
+Vote <- round(c(2.79116,0.5190611,0,1.581716), 2)
+Comp <- round(c(0,0.1395278,0,0), 2)
+
+anger.model <- matrix(c(Moral, Anger, Vote, Comp), nrow = 4, ncol = 4, byrow = TRUE, dimnames = list(c("Moral", "Anger", "Vote", "Comp"), c("Moral", "Anger", "Vote", "Comp")))
+
+names <- c("Moral\nJudgment", "Anger", "Presidential\nVote", "Competence\nJudgment")
+curves <- matrix(nrow = ncol(anger.model), ncol = ncol(anger.model), 0)
+
+
+## Figure
+pdf("mediation_figure_anger.pdf", height = 8.5, width = 11)
+
+par(mar=c(1, 1, 1, 1))
+plotmat(anger.model, pos = c(1, 2, 1), curve = curves,
+    name = names, lwd = 1, box.lwd = 2,
+    cex.txt = 1.1, box.cex = 1.1, box.size = 0.11, arr.type = "triangle",
+    arr.length = 0.5, box.type = "rect", box.prop = .7,
+    shadow.size = 0, my = .05, mx = -0.01,
+    relsize = 1)
+text(1,.04, labels = "proportion of total effect mediated = 0.60\nratio of indirect to direct effect = 1.48\nratio of total to direct effect = 2.48", pos = 2)
+
+dev.off()
+
+
+
+## Mediation Figure for Anger
+Moral <- round(c(0,0.1709969,0,0), 2)
+Anxiety <- round(c(0,0,0,0), 2)
+Vote <- round(c(2.797743,0.6059346,0,1.575776), 2)
+Comp <- round(c(0,0.1280275,0,0), 2)
+
+anger.model <- matrix(c(Moral, Anxiety, Vote, Comp), nrow = 4, ncol = 4, byrow = TRUE, dimnames = list(c("Moral", "Anxiety", "Vote", "Comp"), c("Moral", "Anxiety", "Vote", "Comp")))
+
+names <- c("Moral\nJudgment", "Afraid", "Presidential\nVote", "Competence\nJudgment")
+curves <- matrix(nrow = ncol(anger.model), ncol = ncol(anger.model), 0)
+
+
+## Figure
+pdf("mediation_figure_afraid.pdf", height = 8.5, width = 11)
+
+par(mar=c(1, 1, 1, 1))
+plotmat(anger.model, pos = c(1, 2, 1), curve = curves,
+    name = names, lwd = 1, box.lwd = 2,
+    cex.txt = 1.1, box.cex = 1.1, box.size = 0.11, arr.type = "triangle",
+    arr.length = 0.5, box.type = "rect", box.prop = .7,
+    shadow.size = 0, my = .05, mx = -0.01,
+    relsize = 1)
+text(1,.04, labels = "proportion of total effect mediated = 0.53\nratio of indirect to direct effect = 1.12\nratio of total to direct effect = 2.12", pos = 2)
+
+dev.off()
+
+@
+
+\begin{figure}[htb]
+  \centering
+  \caption[Mediation of Anger on Presidential Vote]{\textbf{Mediation of Anger through Moral Judgments on Presidential Vote}\\
+    {\footnotesize \textit{Note}: Mediation of the moral emotion of anger through moral and competence judgments. About half of the total effect of anger is mediated through morality; only a small portion is mediated through competence.}}\label{fig:mediation_anger}
+  {\includegraphics[width=0.65\textwidth]{mediation_figure_anger.pdf}}
+\end{figure}
+
 
 
 \section{Conclusion}\label{sec:foundation_conclusion}

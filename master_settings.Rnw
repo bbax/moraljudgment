@@ -1,5 +1,18 @@
 <<universals,echo=FALSE,warning=FALSE,message=FALSE>>=
 library(knitr)
+library(foreign)
+library(stargazer)
+library(Hmisc)
+library(MASS)
+library(reshape2)
+library(qdap)
+library(xtable)
+library(plyr)
+library(ggplot2)
+library(apsrtable)
+library(survey)
+library(diagram)
+
 
 # Function to return standardized p-values for reporting significance tests
 report.pval <- function(pval){

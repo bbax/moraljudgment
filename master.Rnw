@@ -279,6 +279,8 @@
 \appendix % all chapters following will be labeled as appendices
 \begin{singlespace}
 %\include{experimental-appendix}
+<<child-foundation2, child='foundation-appendix.Rnw'>>=
+@
 <<child-experimental2, child='experimental-appendix.Rnw'>>=
 @
 <<child-conjoint2, child='conjoint-appendix.Rnw'>>=

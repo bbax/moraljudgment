@@ -1,0 +1,80 @@
+\chapter{Supplemental Materials for The Emotional Foundations of Moral Judgments}\label{ch:appendix_foundation}
+
+\section{Validation Study Supplemental Materials}
+
+\noindent \textbf{[GOP LEADER asked of Democrats and 1/2 of pure independents]} 
+
+\noindent Thinking about the Republican Party, who is the leader of the Republican Party with the most influence over the party's values and goals? [ORDER OF NAMES RANDOMIZED]
+\begin{itemize}
+    \item Speaker of the U.S. House of Representatives John Boehner from Ohio
+    \item Senator Ted Cruz from Texas
+    \item Senator Rand Paul from Kentucky
+    \item Senate Minority Leader Mitch McConnell from Kentucky
+    \item New Jersey Governor Chris Christie
+    \item Representative Paul Ryan from Wisconsin
+    \item Senator Marco Rubio from Florida
+    \item Former-Governor of Alaska Sarah Palin
+\end{itemize}
+
+\noindent \textbf{[DEM LEADER asked of Republicans and 1/2 of pure independents]}
+
+\noindent Thinking about the Democratic Party, who is the leader of the Democratic Party with the most influence over the party's values and goals? [ORDER OF NAMES RANDOMIZED]
+\begin{itemize}
+    \item President Barack Obama
+    \item Former-Secretary of State Hilary Clinton
+    \item Former-President Bill Clinton
+    \item Senate Majority Leader Harry Reid from Nevada
+    \item Senator Elizabeth Warren from Massachusetts
+    \item U.S. House Minority Leader Nancy Pelosi of California
+\end{itemize}
+
+\vspace{4mm}
+\noindent \hrulefill
+
+\vspace{4mm}
+\noindent Below you will see a list of words and phrases people may use to describe political figures.
+
+\vspace{4mm}
+\noindent Think about (CHOSEN OUT-PARTY LEADER). In your opinion, how well do the phrases below describe (CHOSEN OUT-PARTY LEADER)? Not well at all; slightly well; moderately well; very well; or extremely well. (ORDER OF TRAITS RANDOMIZED)
+\begin{itemize}
+    \item Moral
+    \item Has good values
+    \item Really cares about other people
+    \item Trustworthy
+    \item Honest
+    \item Tolerant
+    \item Provides strong leadership
+    \item Competent
+    \item Kind
+    \item Knowledgeable
+    \item Intelligent
+\end{itemize}
+
+\vspace{4mm}
+\noindent \hrulefill
+
+\noindent \textbf{ASKED OF RESPONDENTS WHO RATED TRAIT ``NOT WELL AT ALL'' OR ``SLIGHTLY WELL''}
+\noindent In the previous question, you said that "(TRAIT)" (does not describe/describes) (ACTOR) (well at all/slightly well). We are interested in how it makes you feel that a (OUT-PARTY) political leader (does not have/only slightly has) the character trait "(TRAIT)".
+
+\vspace{4mm}
+\noindent How much do you feel any of the following emotions because "(TRAIT)" (does not describe/describes) (LEADER) (well at all/slightly well)? (ORDER OF EMOTIONS RANDOMIZED)
+
+\begin{itemize}
+    \item Angry
+    \item Hostile
+    \item Disgusted
+    \item Nervous
+    \item Scared
+    \item Afraid
+    \item Enthusiastic
+    \item Proud
+    \item Hopeful
+\end{itemize}
+
+\section{ANES Mediation Analysis Supplemental Materials}
+\begin{figure}[htb]
+  \centering
+  \caption[Mediation of Fear on Presidential Vote]{\textbf{Mediation of Fear through Moral Judgments on Presidential Vote}\\
+    {\footnotesize \textit{Note}: Mediation of the less-moral emotion of fear through moral and competence judgments. There is a much weaker mediation effect for fear through these judgments than for anger.}}\label{fig:mediation_afraid}
+  {\includegraphics[width=0.65\textwidth]{mediation_figure_afraid.pdf}}
+\end{figure}
